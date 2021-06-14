@@ -5,6 +5,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:kios_epes/Map/DataPegawai.dart';
 import 'package:kios_epes/Map/DataTahun.dart';
 import 'package:http/http.dart' as http;
+import 'package:kios_epes/User/Kasir.dart';
 
 class TabHome extends StatefulWidget {
   @override
@@ -180,7 +181,10 @@ class _TabHomeState extends State<TabHome> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15)),
                             color: Color.fromRGBO(76, 177, 247, 1),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(new MaterialPageRoute(
+                        builder: (BuildContext context) => new User_Kasir()));
+                            },
                             child: const Text('Buat Order',
                                 style: TextStyle(
                                     fontSize: 20, color: Colors.black))),

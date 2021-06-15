@@ -133,6 +133,9 @@ class _User_KasirState extends State<User_Kasir> {
                               ),
                             )
                           ],
+                        ),
+                        Column(
+                          children: [Container()],
                         )
                       ],
                     ),

@@ -80,21 +80,27 @@ class _TabHomeState extends State<TabHome> {
           Row(
             children: [
               Flexible(
-                  flex: 2,
-                  fit: FlexFit.tight,
-                  child: Container(
-                    margin: const EdgeInsets.all(20),
-                    height: 100,
-                    color: Colors.cyan,
-                  )),
+                flex: 2,
+                fit: FlexFit.tight,
+                child: Container(
+                  margin: const EdgeInsets.all(20),
+                  height: 100,
+                  child: Placeholder(
+                    color: Colors.black,
+                  ),
+                )
+              ),
               Flexible(
-                  flex: 2,
-                  fit: FlexFit.tight,
-                  child: Container(
-                    margin: const EdgeInsets.all(20),
-                    height: 100,
-                    color: Colors.yellow,
-                  ))
+                flex: 2,
+                fit: FlexFit.tight,
+                child: Container(
+                  margin: const EdgeInsets.all(20),
+                  height: 100,
+                  child: Placeholder(
+                    color: Colors.black,
+                  ),
+                )
+              )
             ],
           ),
           Row(
@@ -105,7 +111,9 @@ class _TabHomeState extends State<TabHome> {
                   child: Container(
                     margin: const EdgeInsets.all(20),
                     height: 100,
-                    color: Colors.cyan,
+                    child: Placeholder(
+                    color: Colors.black,
+                  ),
                   )),
               Flexible(
                   flex: 2,
@@ -113,7 +121,9 @@ class _TabHomeState extends State<TabHome> {
                   child: Container(
                     margin: const EdgeInsets.all(20),
                     height: 100,
-                    color: Colors.yellow,
+                    child: Placeholder(
+                    color: Colors.black,
+                  ),
                   ))
             ],
           ),

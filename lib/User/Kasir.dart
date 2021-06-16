@@ -13,7 +13,7 @@ class User_Kasir extends StatefulWidget {
 class _User_KasirState extends State<User_Kasir> {
   Future<List> getData() async {
     final response =
-        await http.get(Uri.parse("http://timothy.buzz/juljol/get.php"));
+        await http.get(Uri.parse("http://timothy.buzz/juljol/get_barang.php"));
     return json.decode(response.body);
   }
 
@@ -32,22 +32,23 @@ class _User_KasirState extends State<User_Kasir> {
                   textAlign: TextAlign.center,
                   // controller: search,
                   decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      filled: true,
-                      fillColor: Colors.white,
-                      prefixIcon: Icon(
-                        Icons.qr_code_scanner,
-                        color: Colors.black,
-                      ),
-                      suffixIcon: Icon(Icons.search, color: Colors.black),
-                      hintStyle: new TextStyle(color: Colors.black38),
-                      hintText: "Search"),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    filled: true,
+                    fillColor: Colors.white,
+                    prefixIcon: Icon(
+                      Icons.qr_code_scanner,
+                      color: Colors.black,
+                    ),
+                    suffixIcon: Icon(Icons.search, color: Colors.black),
+                    hintStyle: new TextStyle(color: Colors.black38),
+                    hintText: "Search"
+                  ),
                 ),
               ),
               Expanded(
                   child: Container(
-                margin: const EdgeInsets.only(top: 50, left: 20.0, right: 20.0),
+                margin: const EdgeInsets.only(top: 20, left: 10.0, right: 10.0),
                 child: FutureBuilder<List>(
                     future: getData(),
                     builder: (context, snapshot) {
@@ -58,89 +59,61 @@ class _User_KasirState extends State<User_Kasir> {
                                 return Container(
                                     padding: const EdgeInsets.all(10.0),
                                     child: new Card(
-                                        child: Container(
-                                            child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                        child: Row(
                                       children: <Widget>[
                                         Expanded(
-                                          child: new ListTile(
+                                          child: ListTile(
+                                            leading: Icon(Icons.book),
                                             title: new Text(
-                                              snapshot.data[i]['Alamat'],
-                                              style: TextStyle(
-                                                  fontSize: 25.0,
-                                                  color: Colors.black),
+                                              snapshot.data[i]['Nama']
                                             ),
-                                            // subtitle: new Text(
-                                            //   "Pengantar : ${snapshot.data[i]['NamaPekerja']}",
-                                            //   style: TextStyle(
-                                            //       fontSize: 20.0,
-                                            //       color: Colors.black),
-                                            // ),
+                                            subtitle: Text(
+                                              snapshot.data[i]['Harga']
+                                            ),
                                           ),
                                         ),
+                                        Column(
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.only(right: 10),
+                                              child: new Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceEvenly,
+                                                children: <Widget>[
+                                                  new IconButton(
+                                                    icon: const Icon(Icons.remove), 
+                                                    // iconSize: 50,
+                                                    onPressed: (){}
+                                                  ),
+                                                  new Container(
+                                                    // margin: const EdgeInsets.only(
+                                                    //     left: 10, right: 10),
+                                                    child: Text(snapshot.data[i]['nilai_awal'],
+                                                        style: new TextStyle(
+                                                            fontSize: 20.0)),
+                                                  ),
+                                                  new IconButton(
+                                                    icon: const Icon(Icons.add), 
+                                                    // iconSize: 50,
+                                                    onPressed: (){}
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        )
                                       ],
-                                    ))));
+                                    )
+                                  )
+                                );
                               },
                             )
                           : new Center(
                               child: new CircularProgressIndicator(),
                             );
-                    }),
-              )),
-              Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        Column(
-                          children: [
-                            new Container(
-                              width: 40,
-                              height: 40,
-                              child: FloatingActionButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(15.0))),
-                                heroTag: null,
-                                onPressed: () {},
-                                child: new Icon(
-                                  Icons.add,
-                                  color: Colors.black,
-                                ),
-                                backgroundColor: Colors.white,
-                              ),
-                            ),
-                            new Container(
-                              margin:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              child: Text("1",
-                                  style: new TextStyle(fontSize: 35.0)),
-                            ),
-                            new Container(
-                              width: 40,
-                              height: 40,
-                              child: FloatingActionButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(15.0))),
-                                heroTag: null,
-                                onPressed: () {},
-                                child:
-                                    new Icon(Icons.remove, color: Colors.black),
-                                backgroundColor: Colors.white,
-                              ),
-                            )
-                          ],
-                        ),
-                        Column(
-                          children: [Container()],
-                        )
-                      ],
-                    ),
+                    }
                   ),
-                ],
+                )
               ),
               Container(
                 child: Row(

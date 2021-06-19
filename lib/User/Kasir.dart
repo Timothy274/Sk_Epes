@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kios_epes/Map/DataBarang.dart';
@@ -158,36 +156,44 @@ class _User_KasirState extends State<User_Kasir> {
                                             subtitle: Text(_filtered[i].Harga),
                                           ),
                                         ),
-                                        Column(
-                                          children: [
-                                            Container(
-                                              margin: const EdgeInsets.only(right: 10),
-                                              child: new Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                children: <Widget>[
-                                                  new IconButton(
-                                                      icon: const Icon(Icons.remove),
-                                                      // iconSize: 50,
-                                                      onPressed: () => minus(nilai_awal[i], i)),
-                                                  new Container(
-                                                    // margin: const EdgeInsets.only(
-                                                    //     left: 10, right: 10),
-                                                    child: Text(nilai_awal[i],
-                                                        style: new TextStyle(fontSize: 20.0)),
-                                                  ),
-                                                  new IconButton(
-                                                      icon: const Icon(Icons.add),
-                                                      // iconSize: 50,
-                                                      onPressed: () => add(nilai_awal[i], i)),
-                                                ],
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.only(right: 10),
-                                              child: Text("Rp." + nilai_awal_harga[i]),
-                                            )
-                                          ],
+                                        Container(
+                                          margin: const EdgeInsets.only(right: 10),
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                _settingModalBottomSheet(context);
+                                              },
+                                              child: Text("Pilih")),
                                         )
+                                        // Column(
+                                        //   children: [
+                                        //     Container(
+                                        //       margin: const EdgeInsets.only(right: 10),
+                                        //       child: new Row(
+                                        //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        //         children: <Widget>[
+                                        //           new IconButton(
+                                        //               icon: const Icon(Icons.remove),
+                                        //               // iconSize: 50,
+                                        //               onPressed: () => minus(nilai_awal[i], i)),
+                                        //           new Container(
+                                        //             // margin: const EdgeInsets.only(
+                                        //             //     left: 10, right: 10),
+                                        //             child: Text(nilai_awal[i],
+                                        //                 style: new TextStyle(fontSize: 20.0)),
+                                        //           ),
+                                        //           new IconButton(
+                                        //               icon: const Icon(Icons.add),
+                                        //               // iconSize: 50,
+                                        //               onPressed: () => add(nilai_awal[i], i)),
+                                        //         ],
+                                        //       ),
+                                        //     ),
+                                        //     Container(
+                                        //       margin: const EdgeInsets.only(right: 10),
+                                        //       child: Text("Rp." + nilai_awal_harga[i]),
+                                        //     )
+                                        //   ],
+                                        // )
                                       ],
                                     )));
                               },
@@ -205,5 +211,59 @@ class _User_KasirState extends State<User_Kasir> {
             ],
           ),
         ));
+  }
+
+  void _settingModalBottomSheet(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            child: new Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [Text("Nama"), Text("Aqua")],
+                    )),
+                Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [Text("Harga Per Item"), Text("Rp.100000")],
+                    )),
+                Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [Text("Total"), Text("Rp.100000")],
+                    )),
+                Container(
+                  margin: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    "Qty",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    new IconButton(icon: const Icon(Icons.remove), iconSize: 35, onPressed: () {}),
+                    new Container(
+                      margin: const EdgeInsets.only(left: 20, right: 20),
+                      child: Text(
+                        "1",
+                        style: TextStyle(fontSize: 35),
+                      ),
+                    ),
+                    new IconButton(icon: const Icon(Icons.add), iconSize: 35, onPressed: () {}),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

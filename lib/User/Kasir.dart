@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kios_epes/Map/DataBarang.dart';
+import 'package:kios_epes/User/Kasir_lanjutan.dart';
 
 class User_Kasir extends StatefulWidget {
   const User_Kasir({Key key}) : super(key: key);
@@ -12,11 +13,12 @@ class User_Kasir extends StatefulWidget {
 
 class _User_KasirState extends State<User_Kasir> {
   List<DataBarang> _dataBarang = [];
-  List<String> nilai_harga = [];
-  List<String> nilai_awal = [];
-  List<String> nilai_awal_harga = [];
+  List<int> nilai_harga = [];
+  List<int> nilai_awal = [];
+  List<int> nilai_awal_harga = [];
   List<DataBarang> _filtered = [];
   List<DataBarang> _null_filtered = [];
+  List<DataBarang> kirim_data = [];
 
   TextEditingController search = new TextEditingController();
 
@@ -62,208 +64,192 @@ class _User_KasirState extends State<User_Kasir> {
         nilai_awal_harga.add(DataBarang.nilai_awal);
         nilai_harga.add(DataBarang.Harga);
       });
-      // nilai_awal.forEach((e) => print(e));
-      // for (int a = 0; a < nilai_awal.length; a++) {
-      //   print(nilai_awal[a]);
-      // }
     });
     return responseJson;
   }
 
-  void add(array, i) {
+  void add(nilai_awal, i, harga_awal) {
     setState(() {
-      int num, awal, akhir;
-      num = int.parse(array);
-      num++;
-      int hrg = int.parse(nilai_harga[i]) * num;
-      // print(harga);
-      String harga = hrg.toString();
-      String angka = num.toString();
-      awal = i;
-      akhir = awal + 1;
-      nilai_awal.replaceRange(awal, akhir, [angka]);
-      nilai_awal_harga.replaceRange(awal, akhir, [harga]);
+      // int harga = int.parse(harga_awal.toString());
+      // int total = int.parse(nilai_awal.toString());
+      nilai_awal++;
+      harga_awal = harga_awal * nilai_awal;
+      for (int a = 0; a < _filtered.length; a++) {
+        if (_filtered[a].id_barang == i) {
+          _filtered[a].nilai_awal = nilai_awal;
+          _filtered[a].Harga = harga_awal;
+        }
+      }
     });
   }
 
-  void minus(array, i) {
+  void minus(nilai_awal, i, harga_awal) {
     setState(() {
-      int num, awal, akhir;
-      num = int.parse(array);
-      if (num != 0) {
-        num--;
-        int hrg = int.parse(nilai_harga[i]) * num;
-        // print(harga);
-        String harga = hrg.toString();
-        String angka = num.toString();
-        awal = i;
-        akhir = awal + 1;
-        nilai_awal.replaceRange(awal, akhir, [angka]);
-        nilai_awal_harga.replaceRange(awal, akhir, [harga]);
+      if (nilai_awal != 0) {
+        nilai_awal--;
+        harga_awal = harga_awal * nilai_awal;
+        for (int a = 0; a < _filtered.length; a++) {
+          if (_filtered[a].id_barang == i) {
+            _filtered[a].nilai_awal = nilai_awal;
+            _filtered[a].Harga = harga_awal;
+          }
+        }
       }
     });
+  }
+
+  void confirmation() {
+    for (int a = 0; a < _filtered.length; a++) {
+      if (_filtered[a].nilai_awal != 0) {
+        kirim_data.add(_filtered[a]);
+      }
+    }
+    if (kirim_data.isEmpty) {
+      _showDialogPilihan();
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => User_kasir_Lanjutan(
+                    data: kirim_data,
+                  )));
+    }
+  }
+
+  void _showDialogPilihan() {
+// flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+// return object of type Dialog
+        return AlertDialog(
+          title: new Text("Data kosong"),
+          content: new Text(
+              "Mohon periksa kembali data yang anda masukkan, pastikan sudah memasukkan semua data yang dibutuhkan"),
+          actions: <Widget>[
+// usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Kios Epes'),
-        ),
-        body: Center(
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-                child: TextField(
-                  textAlign: TextAlign.left,
-                  controller: search,
-                  onChanged: (value) {
-                    _alterfilter(value);
-                  },
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      filled: true,
-                      fillColor: Colors.white,
-                      // prefixIcon: Icon(
-                      //   Icons.qr_code_scanner,
-                      //   color: Colors.black,
-                      // ),
-                      suffixIcon: Icon(Icons.search, color: Colors.black),
-                      hintStyle: new TextStyle(color: Colors.black38),
-                      hintText: "Search"),
-                ),
+      appBar: AppBar(
+        title: const Text('Kios Epes'),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+              child: TextField(
+                textAlign: TextAlign.left,
+                controller: search,
+                onChanged: (value) {
+                  _alterfilter(value);
+                },
+                decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    filled: true,
+                    fillColor: Colors.white,
+                    // prefixIcon: Icon(
+                    //   Icons.qr_code_scanner,
+                    //   color: Colors.black,
+                    // ),
+                    suffixIcon: Icon(Icons.search, color: Colors.black),
+                    hintStyle: new TextStyle(color: Colors.black38),
+                    hintText: "Search"),
               ),
-              Expanded(
-                  child: Container(
-                margin: const EdgeInsets.only(top: 20, left: 10.0, right: 10.0),
-                child: FutureBuilder<List>(
-                    future: getData(),
-                    builder: (context, snapshot) {
-                      return snapshot.hasData
-                          ? new ListView.builder(
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (context, i) {
-                                return Container(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: new Card(
-                                        child: Row(
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: ListTile(
-                                            leading: Icon(Icons.book),
-                                            title: new Text(_filtered[i].Nama),
-                                            subtitle: Text(_filtered[i].Harga),
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: const EdgeInsets.only(right: 10),
-                                          child: ElevatedButton(
-                                              onPressed: () {
-                                                _settingModalBottomSheet(context);
-                                              },
-                                              child: Text("Pilih")),
-                                        )
-                                        // Column(
-                                        //   children: [
-                                        //     Container(
-                                        //       margin: const EdgeInsets.only(right: 10),
-                                        //       child: new Row(
-                                        //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        //         children: <Widget>[
-                                        //           new IconButton(
-                                        //               icon: const Icon(Icons.remove),
-                                        //               // iconSize: 50,
-                                        //               onPressed: () => minus(nilai_awal[i], i)),
-                                        //           new Container(
-                                        //             // margin: const EdgeInsets.only(
-                                        //             //     left: 10, right: 10),
-                                        //             child: Text(nilai_awal[i],
-                                        //                 style: new TextStyle(fontSize: 20.0)),
-                                        //           ),
-                                        //           new IconButton(
-                                        //               icon: const Icon(Icons.add),
-                                        //               // iconSize: 50,
-                                        //               onPressed: () => add(nilai_awal[i], i)),
-                                        //         ],
-                                        //       ),
-                                        //     ),
-                                        //     Container(
-                                        //       margin: const EdgeInsets.only(right: 10),
-                                        //       child: Text("Rp." + nilai_awal_harga[i]),
-                                        //     )
-                                        //   ],
-                                        // )
-                                      ],
-                                    )));
-                              },
-                            )
-                          : new Center(
-                              child: new CircularProgressIndicator(),
-                            );
-                    }),
-              )),
-              Container(
-                child: Row(
-                  children: [Container()],
-                ),
-              )
-            ],
-          ),
-        ));
-  }
-
-  void _settingModalBottomSheet(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return Container(
-            child: new Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [Text("Nama"), Text("Aqua")],
-                    )),
-                Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [Text("Harga Per Item"), Text("Rp.100000")],
-                    )),
-                Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [Text("Total"), Text("Rp.100000")],
-                    )),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: Text(
-                    "Qty",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    new IconButton(icon: const Icon(Icons.remove), iconSize: 35, onPressed: () {}),
-                    new Container(
-                      margin: const EdgeInsets.only(left: 20, right: 20),
-                      child: Text(
-                        "1",
-                        style: TextStyle(fontSize: 35),
-                      ),
-                    ),
-                    new IconButton(icon: const Icon(Icons.add), iconSize: 35, onPressed: () {}),
-                  ],
-                ),
-              ],
             ),
-          );
-        });
+          ),
+          Expanded(
+              flex: 8,
+              child: Container(
+                  margin: const EdgeInsets.only(top: 20, left: 10.0, right: 10.0),
+                  child: ListView.builder(
+                    itemCount: _filtered.length,
+                    itemBuilder: (context, i) {
+                      return Container(
+                          padding: const EdgeInsets.all(10.0),
+                          child: new Card(
+                              child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: ListTile(
+                                  leading: Icon(Icons.book),
+                                  title: new Text(_filtered[i].Nama),
+                                  subtitle: Text(_filtered[i].Harga_Tetap.toString()),
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(right: 10),
+                                    child: new Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        new IconButton(
+                                            icon: const Icon(Icons.remove),
+                                            // iconSize: 50,
+                                            onPressed: () => minus(_filtered[i].nilai_awal,
+                                                _filtered[i].id_barang, _filtered[i].Harga_Tetap)),
+                                        new Container(
+                                          // margin: const EdgeInsets.only(
+                                          //     left: 10, right: 10),
+                                          child: Text(_filtered[i].nilai_awal.toString(),
+                                              style: new TextStyle(fontSize: 20.0)),
+                                        ),
+                                        new IconButton(
+                                            icon: const Icon(Icons.add),
+                                            // iconSize: 50,
+                                            onPressed: () => add(_filtered[i].nilai_awal,
+                                                _filtered[i].id_barang, _filtered[i].Harga_Tetap)),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(right: 10),
+                                    child: Text("Rp." + _filtered[i].Harga.toString()),
+                                  )
+                                ],
+                              )
+                            ],
+                          )));
+                    },
+                  ))),
+          Expanded(
+              flex: 1,
+              child: Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                    onPressed: () {
+                      confirmation();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.shopping_cart,
+                          color: Colors.white,
+                        ),
+                        Text(
+                          "Keranjang",
+                          style: TextStyle(fontSize: 15),
+                        )
+                      ],
+                    )),
+              ))
+        ],
+      ),
+    );
   }
 }

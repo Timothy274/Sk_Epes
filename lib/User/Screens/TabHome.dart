@@ -22,8 +22,8 @@ class _TabHomeState extends State<TabHome> {
   List _pekerja = List();
   List<DataPegawai> _caripekerja = [];
   Future<String> getSWData() async {
-    final response = await http
-        .get(Uri.parse("http://timothy.buzz/juljol/get_pegawai_except_p.php"));
+    final response =
+        await http.get(Uri.parse("http://timothy.buzz/juljol/get_pegawai_except_p.php"));
     final responseJson = json.decode(response.body);
     setState(() {
       _pekerja = responseJson;
@@ -34,8 +34,7 @@ class _TabHomeState extends State<TabHome> {
   }
 
   Future<String> getTahun() async {
-    final response =
-        await http.get(Uri.parse("http://timothy.buzz/juljol/get_tahun.php"));
+    final response = await http.get(Uri.parse("http://timothy.buzz/juljol/get_tahun.php"));
     final responseJson = json.decode(response.body);
     setState(() {
       for (Map Data in responseJson) {
@@ -80,27 +79,25 @@ class _TabHomeState extends State<TabHome> {
           Row(
             children: [
               Flexible(
-                flex: 2,
-                fit: FlexFit.tight,
-                child: Container(
-                  margin: const EdgeInsets.all(20),
-                  height: 100,
-                  child: Placeholder(
-                    color: Colors.black,
-                  ),
-                )
-              ),
+                  flex: 2,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    margin: const EdgeInsets.all(20),
+                    height: 100,
+                    child: Placeholder(
+                      color: Colors.black,
+                    ),
+                  )),
               Flexible(
-                flex: 2,
-                fit: FlexFit.tight,
-                child: Container(
-                  margin: const EdgeInsets.all(20),
-                  height: 100,
-                  child: Placeholder(
-                    color: Colors.black,
-                  ),
-                )
-              )
+                  flex: 2,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    margin: const EdgeInsets.all(20),
+                    height: 100,
+                    child: Placeholder(
+                      color: Colors.black,
+                    ),
+                  ))
             ],
           ),
           Row(
@@ -112,8 +109,8 @@ class _TabHomeState extends State<TabHome> {
                     margin: const EdgeInsets.all(20),
                     height: 100,
                     child: Placeholder(
-                    color: Colors.black,
-                  ),
+                      color: Colors.black,
+                    ),
                   )),
               Flexible(
                   flex: 2,
@@ -122,8 +119,8 @@ class _TabHomeState extends State<TabHome> {
                     margin: const EdgeInsets.all(20),
                     height: 100,
                     child: Placeholder(
-                    color: Colors.black,
-                  ),
+                      color: Colors.black,
+                    ),
                   ))
             ],
           ),
@@ -144,11 +141,10 @@ class _TabHomeState extends State<TabHome> {
                   ),
                   TextFormField(
                       textCapitalization: TextCapitalization.sentences,
-                      // controller: alamat,
+                      controller: alamat,
                       keyboardType: TextInputType.text,
                       decoration: new InputDecoration(labelText: "Alamat"),
-                      validator: (val) =>
-                          val.length == 1 ? "Masukkan alamat" : null),
+                      validator: (val) => val.length == 1 ? "Masukkan alamat" : null),
                   new Container(
                     height: 50.0,
                   ),
@@ -188,16 +184,14 @@ class _TabHomeState extends State<TabHome> {
                       child: new SizedBox(
                         width: double.infinity,
                         child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                             color: Color.fromRGBO(76, 177, 247, 1),
                             onPressed: () {
                               Navigator.of(context).push(new MaterialPageRoute(
-                        builder: (BuildContext context) => new User_Kasir()));
+                                  builder: (BuildContext context) => new User_Kasir()));
                             },
                             child: const Text('Buat Order',
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.black))),
+                                style: TextStyle(fontSize: 20, color: Colors.black))),
                       )),
                 ],
               ),

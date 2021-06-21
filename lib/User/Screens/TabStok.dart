@@ -64,42 +64,41 @@ class _TabStokState extends State<TabStok> {
     return Column(
       children: [
         Container(
+          child: Container(
+            margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+            child: Text(
+              'Stock',
+              style: new TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+            ),
+          ),
+        ),
+        Container(
+            margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+            child: TextField(
+              textAlign: TextAlign.left,
+              controller: search,
+              onChanged: (value) {
+                _alterfilter(value);
+              },
+              decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  filled: true,
+                  fillColor: Colors.white,
+                  // prefixIcon: Icon(
+                  //   Icons.qr_code_scanner,
+                  //   color: Colors.black,
+                  // ),
+                  suffixIcon: Icon(Icons.search, color: Colors.black),
+                  hintStyle: new TextStyle(color: Colors.black38),
+                  hintText: "Search"),
+            )),
+        Container(
             color: Color(0xffffff),
             child: Stack(children: <Widget>[
               SingleChildScrollView(
                 child: Center(
                   child: Column(
                     children: <Widget>[
-                      Container(
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-                          child: Text(
-                            'Stock',
-                            style: new TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                        child: TextField(
-                          textAlign: TextAlign.left,
-                          controller: search,
-                          onChanged: (value) {
-                            _alterfilter(value);
-                          },
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                              filled: true,
-                              fillColor: Colors.white,
-                              // prefixIcon: Icon(
-                              //   Icons.qr_code_scanner,
-                              //   color: Colors.black,
-                              // ),
-                              suffixIcon: Icon(Icons.search, color: Colors.black),
-                              hintStyle: new TextStyle(color: Colors.black38),
-                              hintText: "Search"),
-                        ),
-                      ),
                       Container(
                           // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
                           // height: screenHeight,

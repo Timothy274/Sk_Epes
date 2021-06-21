@@ -13,8 +13,9 @@ class TabStok extends StatefulWidget {
 
 class _TabStokState extends State<TabStok> {
   List<DataBarang> _dataBarang = [];
-  List<DataBarang> _cek1 = [];
-  List<DataBarang> _cek2 = [];
+  List<DataBarang> _filtered = [];
+  List<DataBarang> _null_filtered = [];
+  TextEditingController search = new TextEditingController();
 
   Future<List<DataBarang>> getBarang() async {
     final response = await http.get(Uri.parse("http://timothy.buzz/juljol/get_barang.php"));
@@ -23,30 +24,37 @@ class _TabStokState extends State<TabStok> {
       for (Map Data in responseJson) {
         _dataBarang.add(DataBarang.fromJson(Data));
       }
+      _filtered.addAll(_dataBarang);
+      _null_filtered.addAll(_dataBarang);
     });
   }
 
-  Future<List<DataBarang>> getCek() async {
-    final responseA =
-        await http.get(Uri.parse("http://timothy.buzz/juljol/get_odr_msk_join_odr_msk_detail.php"));
-    final responseJsonA = json.decode(responseA.body);
-    final responseB = await http
-        .get(Uri.parse("http://timothy.buzz/juljol/get_pemesanan_detail_only_proses.php"));
-    final responseJsonB = json.decode(responseB.body);
-    setState(() {
-      for (Map Data in responseJsonA) {
-        _cek1.add(DataBarang.fromJson(Data));
-      }
-      for (Map Data in responseJsonB) {
-        _cek2.add(DataBarang.fromJson(Data));
-      }
-    });
+  void _alterfilter(String query) {
+    List<DataBarang> dummySearchList = [];
+    dummySearchList.addAll(_filtered);
+    if (query.isNotEmpty) {
+      List<DataBarang> dummyListData = [];
+      dummySearchList.forEach((item) {
+        if (item.Nama.contains(query)) {
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        _filtered.clear();
+        _filtered.addAll(dummyListData);
+      });
+      return;
+    } else {
+      setState(() {
+        _filtered.clear();
+        _filtered.addAll(_null_filtered);
+      });
+    }
   }
 
   void initState() {
     super.initState();
     getBarang();
-    getCek();
   }
 
   @override
@@ -67,15 +75,36 @@ class _TabStokState extends State<TabStok> {
                           margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                           child: Text(
                             'Stock',
-                            style: new TextStyle(fontSize: 20),
+                            style: new TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                           ),
                         ),
                       ),
                       Container(
-                          margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+                        margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                        child: TextField(
+                          textAlign: TextAlign.left,
+                          controller: search,
+                          onChanged: (value) {
+                            _alterfilter(value);
+                          },
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                              filled: true,
+                              fillColor: Colors.white,
+                              // prefixIcon: Icon(
+                              //   Icons.qr_code_scanner,
+                              //   color: Colors.black,
+                              // ),
+                              suffixIcon: Icon(Icons.search, color: Colors.black),
+                              hintStyle: new TextStyle(color: Colors.black38),
+                              hintText: "Search"),
+                        ),
+                      ),
+                      Container(
+                          // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
                           // height: screenHeight,
                           width: screenWidth,
-                          color: Color.fromRGBO(76, 177, 247, 1),
+                          // color: Color.fromRGBO(76, 177, 247, 1),
                           // margin: const EdgeInsets.only(
                           //     left: 20.0, right: 20.0, bottom: 150.0),
                           child: SingleChildScrollView(
@@ -88,7 +117,7 @@ class _TabStokState extends State<TabStok> {
                                     DataColumn(label: Text('Harga')),
                                     DataColumn(label: Text('Hapus'))
                                   ],
-                                  rows: _dataBarang
+                                  rows: _filtered
                                       .map((barang) => DataRow(cells: [
                                             DataCell(
                                               Text(barang.Nama),

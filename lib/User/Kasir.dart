@@ -179,51 +179,51 @@ class _User_KasirState extends State<User_Kasir> {
                     itemCount: _filtered.length,
                     itemBuilder: (context, i) {
                       return Container(
-                          padding: const EdgeInsets.all(10.0),
+                          // padding: const EdgeInsets.all(10.0),
                           child: new Card(
                               child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: ListTile(
-                                  leading: Icon(Icons.book),
-                                  title: new Text(_filtered[i].Nama),
-                                  subtitle: Text(_filtered[i].Harga_Tetap.toString()),
+                        children: <Widget>[
+                          Expanded(
+                            child: ListTile(
+                              leading: Icon(Icons.book),
+                              title: new Text(_filtered[i].Nama),
+                              subtitle: Text(_filtered[i].Harga_Tetap.toString()),
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(right: 10),
+                                child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    new IconButton(
+                                        icon: const Icon(Icons.remove),
+                                        // iconSize: 50,
+                                        onPressed: () => minus(_filtered[i].nilai_awal,
+                                            _filtered[i].id_barang, _filtered[i].Harga_Tetap)),
+                                    new Container(
+                                      // margin: const EdgeInsets.only(
+                                      //     left: 10, right: 10),
+                                      child: Text(_filtered[i].nilai_awal.toString(),
+                                          style: new TextStyle(fontSize: 20.0)),
+                                    ),
+                                    new IconButton(
+                                        icon: const Icon(Icons.add),
+                                        // iconSize: 50,
+                                        onPressed: () => add(_filtered[i].nilai_awal,
+                                            _filtered[i].id_barang, _filtered[i].Harga_Tetap)),
+                                  ],
                                 ),
                               ),
-                              Column(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(right: 10),
-                                    child: new Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: <Widget>[
-                                        new IconButton(
-                                            icon: const Icon(Icons.remove),
-                                            // iconSize: 50,
-                                            onPressed: () => minus(_filtered[i].nilai_awal,
-                                                _filtered[i].id_barang, _filtered[i].Harga_Tetap)),
-                                        new Container(
-                                          // margin: const EdgeInsets.only(
-                                          //     left: 10, right: 10),
-                                          child: Text(_filtered[i].nilai_awal.toString(),
-                                              style: new TextStyle(fontSize: 20.0)),
-                                        ),
-                                        new IconButton(
-                                            icon: const Icon(Icons.add),
-                                            // iconSize: 50,
-                                            onPressed: () => add(_filtered[i].nilai_awal,
-                                                _filtered[i].id_barang, _filtered[i].Harga_Tetap)),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(right: 10),
-                                    child: Text("Rp." + _filtered[i].Harga.toString()),
-                                  )
-                                ],
+                              Container(
+                                margin: const EdgeInsets.only(right: 10),
+                                child: Text("Rp." + _filtered[i].Harga.toString()),
                               )
                             ],
-                          )));
+                          )
+                        ],
+                      )));
                     },
                   ))),
           Expanded(

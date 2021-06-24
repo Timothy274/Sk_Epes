@@ -1,22 +1,24 @@
+import 'package:flutter/material.dart';
+import 'package:kios_epes/Model/DataBarang.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:kios_epes/Admin/Screens/TabHome.dart';
-import 'package:kios_epes/Admin/Screens/TabPegawai.dart';
-import 'package:kios_epes/Admin/Screens/TabProgress.dart';
-import 'package:kios_epes/Admin/Screens/TabSettings.dart';
-import 'package:kios_epes/Admin/Screens/TabStok.dart';
-import 'package:kios_epes/Map/DataBarang.dart';
-import 'package:http/http.dart' as http;
+import 'Screens/TabHome.dart';
+import 'Screens/TabProgress.dart';
+import 'Screens/TabSettings.dart';
+import 'Screens/TabStok.dart';
 
-class Home_Admin extends StatefulWidget {
-  const Home_Admin({Key key}) : super(key: key);
+class Home_User extends StatefulWidget {
+  const Home_User({Key key}) : super(key: key);
 
   @override
-  _Home_AdminState createState() => _Home_AdminState();
+  _Home_UserState createState() => _Home_UserState();
 }
 
-class _Home_AdminState extends State<Home_Admin> {
+GlobalKey<_Home_UserState> _home_key = GlobalKey();
+
+class _Home_UserState extends State<Home_User> {
   int tabIndex = 0;
   List<DataBarang> _dataBarang = [];
   List<DataBarang> _cek1 = [];
@@ -25,18 +27,11 @@ class _Home_AdminState extends State<Home_Admin> {
 
   void initState() {
     super.initState();
-    listScreen = [
-      Tab_Home_Admin(),
-      Tab_Pegawai_Dart(),
-      Tab_Progress_Admin(),
-      Tab_Settings_Admin(),
-      Tab_Stok_Admin()
-    ];
+    listScreen = [TabHome(), TabProgress(), TabStok(), TabSettings()];
   }
 
   Future<List<DataBarang>> getBarang() async {
-    final response =
-        await http.get(Uri.parse("http://timothy.buzz/juljol/get_barang.php"));
+    final response = await http.get(Uri.parse("http://timothy.buzz/juljol/get_barang.php"));
     final responseJson = json.decode(response.body);
     setState(() {
       for (Map Data in responseJson) {
@@ -46,11 +41,11 @@ class _Home_AdminState extends State<Home_Admin> {
   }
 
   Future<List<DataBarang>> getCek() async {
-    final responseA = await http.get(Uri.parse(
-        "http://timothy.buzz/juljol/get_odr_msk_join_odr_msk_detail.php"));
+    final responseA =
+        await http.get(Uri.parse("http://timothy.buzz/juljol/get_odr_msk_join_odr_msk_detail.php"));
     final responseJsonA = json.decode(responseA.body);
-    final responseB = await http.get(Uri.parse(
-        "http://timothy.buzz/juljol/get_pemesanan_detail_only_proses.php"));
+    final responseB = await http
+        .get(Uri.parse("http://timothy.buzz/juljol/get_pemesanan_detail_only_proses.php"));
     final responseJsonB = json.decode(responseB.body);
     setState(() {
       for (Map Data in responseJsonA) {
@@ -62,8 +57,7 @@ class _Home_AdminState extends State<Home_Admin> {
     });
   }
 
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   void _onItemTapped(int index) {
     setState(() {
@@ -79,9 +73,7 @@ class _Home_AdminState extends State<Home_Admin> {
         title: const Text('Kios Epes'),
       ),
       body: Center(
-        child: SingleChildScrollView(
-          child: listScreen[tabIndex],
-        ),
+        child: listScreen[tabIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -92,10 +84,6 @@ class _Home_AdminState extends State<Home_Admin> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Progress',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Pegawai',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.school),

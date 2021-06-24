@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kios_epes/Map/DataBarang.dart';
+import 'package:kios_epes/Model/DataBarang.dart';
 
 class User_kasir_Lanjutan extends StatefulWidget {
   final List<DataBarang> data;

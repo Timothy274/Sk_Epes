@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kios_epes/Admin/Home.dart';
-import 'package:kios_epes/User/Home.dart';
+import 'package:kios_epes/View/Admin/Home.dart';
+import 'package:kios_epes/View/User/Home.dart';
 
 void main() {
   runApp(MyApp());

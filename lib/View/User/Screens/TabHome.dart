@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:kios_epes/Map/DataPegawai.dart';
-import 'package:kios_epes/Map/DataTahun.dart';
+import 'package:kios_epes/Model/DataPegawai.dart';
+import 'package:kios_epes/Model/DataTahun.dart';
 import 'package:http/http.dart' as http;
-import 'package:kios_epes/User/Kasir.dart';
+import 'package:kios_epes/View/User/Kasir.dart';
 
 class TabHome extends StatefulWidget {
   @override

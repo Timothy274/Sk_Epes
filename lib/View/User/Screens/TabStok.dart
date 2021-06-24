@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:kios_epes/Map/DataBarang.dart';
+import 'package:kios_epes/Controller/FutureDataBarang.dart';
+import 'package:kios_epes/Model/DataBarang.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 
 class TabStok extends StatefulWidget {
-  const TabStok({Key key}) : super(key: key);
+  final List<DataBarang> data;
+  const TabStok({Key key, this.data}) : super(key: key);
 
   @override
   _TabStokState createState() => _TabStokState();
@@ -16,9 +18,18 @@ class _TabStokState extends State<TabStok> {
   List<DataBarang> _dataBarang = [];
   List<DataBarang> _filtered = [];
   List<DataBarang> _null_filtered = [];
+
+  static const int sortName = 0;
+  static const int sortStatus = 1;
+  bool isAscending = true;
+  int sortType = sortName;
+  futureDataBarang _futureDataBarang = futureDataBarang();
+
   TextEditingController search = new TextEditingController();
 
   Future<List<DataBarang>> getBarang() async {
+    _futureDataBarang.getBarang();
+
     final response = await http.get(Uri.parse("http://timothy.buzz/juljol/get_barang.php"));
     final responseJson = json.decode(response.body);
     setState(() {
@@ -105,57 +116,17 @@ class _TabStokState extends State<TabStok> {
             width: screenWidth,
             color: Color(0xffffff),
             child: HorizontalDataTable(
+              leftHandSideColumnWidth: 100,
+              rightHandSideColumnWidth: 600,
               isFixedHeader: true,
+              headerWidgets: _getTitledWidget(),
+              itemCount: _filtered.length,
+              leftSideItemBuilder: _generateFirstColumnRow,
+              rightSideItemBuilder: _generateRightHandSideColumnRow,
+              leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
+              rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
             ),
-            // child: Stack(children: <Widget>[
-            //   SingleChildScrollView(
-            //     child: Center(
-            //       child: Column(
-            //         children: <Widget>[
-            //           Container(
-            //               // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-            //               // height: screenHeight,
-            //               width: screenWidth,
-            //               // color: Color.fromRGBO(76, 177, 247, 1),
-            //               // margin: const EdgeInsets.only(
-            //               //     left: 20.0, right: 20.0, bottom: 150.0),
-            //               child: SingleChildScrollView(
-            //                   scrollDirection: Axis.horizontal,
-            //                   child: Container(
-            //                     child: DataTable(
-            //                       columns: [
-            //                         DataColumn(label: Text('Barang')),
-            //                         DataColumn(label: Text('Stock')),
-            //                         DataColumn(label: Text('Harga')),
-            //                         DataColumn(label: Text('Hapus'))
-            //                       ],
-            //                       rows: _filtered
-            //                           .map((barang) => DataRow(cells: [
-            //                                 DataCell(
-            //                                   Text(barang.Nama),
-            //                                   onTap: () {},
-            //                                 ),
-            //                                 DataCell(
-            //                                   Text(barang.Stock.toString()),
-            //                                   onTap: () {},
-            //                                 ),
-            //                                 DataCell(
-            //                                   Text(barang.Harga.toString()),
-            //                                   onTap: () {},
-            //                                 ),
-            //                                 DataCell(
-            //                                   Text('Hapus'),
-            //                                   onTap: () {},
-            //                                 )
-            //                               ]))
-            //                           .toList(),
-            //                     ),
-            //                   ))),
-            //         ],
-            //       ),
-            //     ),
-            //   )
-            // ])),
+            
           ),
         ),
         Expanded(
@@ -184,7 +155,62 @@ class _TabStokState extends State<TabStok> {
     );
   }
 
-  List<Widget> _getTitled() {
-    return [];
+  List<Widget> _getTitledWidget() {
+    return [
+      TextButton(onPressed: (){}, child: _getTitleItemWidget("Nama"+ (sortType == sortName ? (isAscending ? '↓' : '↑') : ''), 100)),
+      TextButton(onPressed: (){}, child: _getTitleItemWidget("Stock", 100)),
+      TextButton(onPressed: (){}, child: _getTitleItemWidget("Harga", 100)),
+      TextButton(onPressed: (){}, child: _getTitleItemWidget("Hapus", 100))
+    ];
   }
+
+  Widget _getTitleItemWidget(String label, double width) {
+    return Container(
+      child: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+      width: width,
+      height: 56,
+      padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+      alignment: Alignment.centerLeft,
+    );
+  }
+
+  Widget _generateFirstColumnRow(BuildContext context, int index) {
+    return Container(
+      child: Text(_filtered[index].Nama),
+      width: 100,
+      height: 52,
+      padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+      alignment: Alignment.centerLeft,
+    );
+  }
+
+  Widget _generateRightHandSideColumnRow(BuildContext context, int index){
+    return Row(
+      children: [
+        Container(
+          child: Text(_filtered[index].Stock.toString()),
+          width: 200,
+          height: 52,
+          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+          alignment: Alignment.centerLeft,
+        ),
+        Container(
+          child: Text(_filtered[index].Harga_Tetap.toString()),
+          width: 200,
+          height: 52,
+          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+          alignment: Alignment.centerLeft,
+        ),
+        Container(
+          width: 200,
+          height: 52,
+          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+          alignment: Alignment.centerLeft,
+          child:FlatButton(onPressed: (){}, child:  Text(_filtered[index].Harga_Tetap.toString()),
+          )
+        ),
+      ],
+    );
+  }
+
 }

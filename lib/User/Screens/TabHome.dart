@@ -73,7 +73,8 @@ class _TabHomeState extends State<TabHome> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    return Container(
+    return SingleChildScrollView(
+        child: Container(
       child: Column(
         children: [
           Row(
@@ -199,6 +200,6 @@ class _TabHomeState extends State<TabHome> {
           )
         ],
       ),
-    );
+    ));
   }
 }

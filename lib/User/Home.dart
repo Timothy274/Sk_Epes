@@ -31,8 +31,7 @@ class _Home_UserState extends State<Home_User> {
   }
 
   Future<List<DataBarang>> getBarang() async {
-    final response =
-        await http.get(Uri.parse("http://timothy.buzz/juljol/get_barang.php"));
+    final response = await http.get(Uri.parse("http://timothy.buzz/juljol/get_barang.php"));
     final responseJson = json.decode(response.body);
     setState(() {
       for (Map Data in responseJson) {
@@ -42,11 +41,11 @@ class _Home_UserState extends State<Home_User> {
   }
 
   Future<List<DataBarang>> getCek() async {
-    final responseA = await http.get(Uri.parse(
-        "http://timothy.buzz/juljol/get_odr_msk_join_odr_msk_detail.php"));
+    final responseA =
+        await http.get(Uri.parse("http://timothy.buzz/juljol/get_odr_msk_join_odr_msk_detail.php"));
     final responseJsonA = json.decode(responseA.body);
-    final responseB = await http.get(Uri.parse(
-        "http://timothy.buzz/juljol/get_pemesanan_detail_only_proses.php"));
+    final responseB = await http
+        .get(Uri.parse("http://timothy.buzz/juljol/get_pemesanan_detail_only_proses.php"));
     final responseJsonB = json.decode(responseB.body);
     setState(() {
       for (Map Data in responseJsonA) {
@@ -58,8 +57,7 @@ class _Home_UserState extends State<Home_User> {
     });
   }
 
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   void _onItemTapped(int index) {
     setState(() {
@@ -75,9 +73,7 @@ class _Home_UserState extends State<Home_User> {
         title: const Text('Kios Epes'),
       ),
       body: Center(
-        child: SingleChildScrollView(
-          child: listScreen[tabIndex],
-        ),
+        child: listScreen[tabIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

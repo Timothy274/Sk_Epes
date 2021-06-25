@@ -5,7 +5,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:kios_epes/Model/DataPegawai.dart';
 import 'package:kios_epes/Model/DataTahun.dart';
 import 'package:http/http.dart' as http;
-import 'package:kios_epes/View/User/Kasir.dart';
+import 'package:kios_epes/View/User/Kasir/Kasir.dart';
 
 class TabHome extends StatefulWidget {
   @override

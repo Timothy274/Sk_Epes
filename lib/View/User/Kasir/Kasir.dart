@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kios_epes/Model/DataBarang.dart';
-import 'package:kios_epes/View/User/Kasir_lanjutan.dart';
+import 'package:kios_epes/View/User/Kasir/Kasir_lanjutan.dart';
 
 class User_Kasir extends StatefulWidget {
   const User_Kasir({Key key}) : super(key: key);

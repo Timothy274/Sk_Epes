@@ -4,7 +4,9 @@ import 'package:kios_epes/Model/DataBarang.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-import 'package:horizontal_data_table/horizontal_data_table.dart';
+// import 'package:horizontal_data_table/horizontal_data_table.dart';
+import 'package:data_table_2/data_table_2.dart';
+import 'package:kios_epes/View/User/Stok/Tambah_Stok.dart';
 
 class TabStok extends StatefulWidget {
   final List<DataBarang> data;
@@ -115,18 +117,45 @@ class _TabStokState extends State<TabStok> {
           child: Container(
             width: screenWidth,
             color: Color(0xffffff),
-            child: HorizontalDataTable(
-              leftHandSideColumnWidth: 100,
-              rightHandSideColumnWidth: 600,
-              isFixedHeader: true,
-              headerWidgets: _getTitledWidget(),
-              itemCount: _filtered.length,
-              leftSideItemBuilder: _generateFirstColumnRow,
-              rightSideItemBuilder: _generateRightHandSideColumnRow,
-              leftHandSideColBackgroundColor: Color(0xFFFFFFFF),
-              rightHandSideColBackgroundColor: Color(0xFFFFFFFF),
-            ),
-            
+            child: DataTable2(
+                columnSpacing: 12,
+                horizontalMargin: 12,
+                minWidth: 600,
+                columns: [
+                  DataColumn2(
+                    label: Text('Nama'),
+                    size: ColumnSize.L,
+                  ),
+                  DataColumn(
+                    label: Text('Stok'),
+                  ),
+                  DataColumn(
+                    label: Text('Harga'),
+                  ),
+                  DataColumn(
+                    label: Text('Hapus'),
+                  ),
+                ],
+                rows: List<DataRow>.generate(
+                    _filtered.length,
+                    (i) => DataRow(cells: [
+                          DataCell(
+                            Text(_filtered[i].Nama),
+                            onTap: () {},
+                          ),
+                          DataCell(
+                            Text(_filtered[i].Stock.toString()),
+                            onTap: () {},
+                          ),
+                          DataCell(
+                            Text(_filtered[i].Harga_Tetap.toString()),
+                            onTap: () {},
+                          ),
+                          DataCell(TextButton(
+                            child: Text('Hapus'),
+                            onPressed: () {},
+                          ))
+                        ]))),
           ),
         ),
         Expanded(
@@ -136,6 +165,8 @@ class _TabStokState extends State<TabStok> {
               child: ElevatedButton(
                   onPressed: () {
                     // confirmation();
+                    Navigator.of(context).push(new MaterialPageRoute(
+                        builder: (BuildContext context) => new User_Add_Stock()));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -155,62 +186,65 @@ class _TabStokState extends State<TabStok> {
     );
   }
 
-  List<Widget> _getTitledWidget() {
-    return [
-      TextButton(onPressed: (){}, child: _getTitleItemWidget("Nama"+ (sortType == sortName ? (isAscending ? '↓' : '↑') : ''), 100)),
-      TextButton(onPressed: (){}, child: _getTitleItemWidget("Stock", 100)),
-      TextButton(onPressed: (){}, child: _getTitleItemWidget("Harga", 100)),
-      TextButton(onPressed: (){}, child: _getTitleItemWidget("Hapus", 100))
-    ];
-  }
+  // List<Widget> _getTitledWidget() {
+  //   return [
+  //     TextButton(
+  //         onPressed: () {},
+  //         child: _getTitleItemWidget(
+  //             "Nama" + (sortType == sortName ? (isAscending ? '↓' : '↑') : ''), 50)),
+  //     TextButton(onPressed: () {}, child: _getTitleItemWidget("Stock", 50)),
+  //     TextButton(onPressed: () {}, child: _getTitleItemWidget("Harga", 50)),
+  //     TextButton(onPressed: () {}, child: _getTitleItemWidget("Hapus", 50))
+  //   ];
+  // }
 
-  Widget _getTitleItemWidget(String label, double width) {
-    return Container(
-      child: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
-      width: width,
-      height: 56,
-      padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-      alignment: Alignment.centerLeft,
-    );
-  }
+  // Widget _getTitleItemWidget(String label, double width) {
+  //   return Container(
+  //     child: Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+  //     width: width,
+  //     height: 56,
+  //     padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+  //     alignment: Alignment.centerLeft,
+  //   );
+  // }
 
-  Widget _generateFirstColumnRow(BuildContext context, int index) {
-    return Container(
-      child: Text(_filtered[index].Nama),
-      width: 100,
-      height: 52,
-      padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-      alignment: Alignment.centerLeft,
-    );
-  }
+  // Widget _generateFirstColumnRow(BuildContext context, int index) {
+  //   return Container(
+  //     child: Text(_filtered[index].Nama),
+  //     width: 100,
+  //     height: 52,
+  //     padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+  //     alignment: Alignment.centerLeft,
+  //   );
+  // }
 
-  Widget _generateRightHandSideColumnRow(BuildContext context, int index){
-    return Row(
-      children: [
-        Container(
-          child: Text(_filtered[index].Stock.toString()),
-          width: 200,
-          height: 52,
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-        ),
-        Container(
-          child: Text(_filtered[index].Harga_Tetap.toString()),
-          width: 200,
-          height: 52,
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-        ),
-        Container(
-          width: 200,
-          height: 52,
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          child:FlatButton(onPressed: (){}, child:  Text(_filtered[index].Harga_Tetap.toString()),
-          )
-        ),
-      ],
-    );
-  }
-
+  // Widget _generateRightHandSideColumnRow(BuildContext context, int index) {
+  //   return Row(
+  //     children: [
+  //       Container(
+  //         child: Text(_filtered[index].Stock.toString()),
+  //         width: 50,
+  //         height: 52,
+  //         padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+  //         alignment: Alignment.centerLeft,
+  //       ),
+  //       Container(
+  //         child: Text(_filtered[index].Harga_Tetap.toString()),
+  //         width: 50,
+  //         height: 52,
+  //         padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+  //         alignment: Alignment.centerLeft,
+  //       ),
+  //       Container(
+  //           width: 50,
+  //           height: 52,
+  //           padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+  //           alignment: Alignment.centerLeft,
+  //           child: FlatButton(
+  //             onPressed: () {},
+  //             child: Text(_filtered[index].Harga_Tetap.toString()),
+  //           )),
+  //     ],
+  //   );
+  // }
 }

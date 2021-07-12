@@ -25,14 +25,14 @@ class _TabStokState extends State<TabStok> {
   static const int sortStatus = 1;
   bool isAscending = true;
   int sortType = sortName;
-  futureDataBarang _futureDataBarang = futureDataBarang();
+  // futureDataBarang _futureDataBarang = futureDataBarang();
 
   TextEditingController search = new TextEditingController();
 
   Future<List<DataBarang>> getBarang() async {
-    _futureDataBarang.getBarang();
+    // _futureDataBarang.getBarang();
 
-    final response = await http.get(Uri.parse("http://timothy.buzz/juljol/get_barang.php"));
+    final response = await http.get(Uri.parse("http://timothy.buzz/kios_epes/Stok/get_barang.php"));
     final responseJson = json.decode(response.body);
     setState(() {
       for (Map Data in responseJson) {

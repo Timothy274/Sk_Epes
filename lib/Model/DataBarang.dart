@@ -17,10 +17,10 @@ class DataBarang {
   factory DataBarang.fromJson(Map<dynamic, dynamic> json) {
     return DataBarang(
         id_barang: json['id_barang'],
-        Nama: json['Nama'],
+        Nama: json['nama'],
         Harga: int.parse(json['nilai_awal']),
-        Harga_Tetap: int.parse(json['Harga']),
-        Stock: int.parse(json['Stok']),
+        Harga_Tetap: int.parse(json['harga']),
+        Stock: int.parse(json['stok']),
         nilai_awal: int.parse(json['nilai_awal']),
         id_Brg: json['id_Barang']);
   }

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class TabProgress extends StatefulWidget {
   const TabProgress({Key key}) : super(key: key);
@@ -7,9 +10,16 @@ class TabProgress extends StatefulWidget {
   _TabProgressState createState() => _TabProgressState();
 }
 
-class _TabProgressState extends State<TabProgress>
-    with TickerProviderStateMixin {
+class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin {
   TabController _nestedTabController;
+  List _selectedId = [];
+
+  Future<List> getData() async {
+    final response =
+        await http.get(Uri.parse("http://timothy.buzz/kios_epes/Pesanan/get_pesanan.php"));
+    return json.decode(response.body);
+  }
+
   void initState() {
     super.initState();
     _nestedTabController = new TabController(length: 2, vsync: this);
@@ -61,11 +71,58 @@ class _TabProgressState extends State<TabProgress>
   }
 
   Widget _inheritedqueue() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0),
-        color: Colors.blueGrey[300],
+    return Expanded(
+        child: Container(
+      child: FutureBuilder<List>(
+        future: getData(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
+          return snapshot.hasData
+              ? new ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, i) {
+                    return new Container(
+                      padding: const EdgeInsets.all(10.0),
+                      child: new GestureDetector(
+                        onTap: () {},
+                        child: new Card(
+                            child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
+                                child: new ListTile(
+                                  title: new Text(
+                                    snapshot.data[i]['alamat'],
+                                    style: TextStyle(fontSize: 25.0, color: Colors.black),
+                                  ),
+                                  subtitle: new Text(
+                                    "Pengantar : ${snapshot.data[i]['nama_pegawai']}",
+                                    style: TextStyle(fontSize: 20.0, color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(right: 20.0),
+                                child: Checkbox(
+                                  value: _selectedId.contains(snapshot.data[i]['id_pemesanan']),
+                                  onChanged: (bool selected) {},
+                                ),
+                                alignment: Alignment.centerRight,
+                              ),
+                            ],
+                          ),
+                        )),
+                      ),
+                    );
+                  },
+                )
+              : new Center(
+                  child: new CircularProgressIndicator(),
+                );
+          ;
+        },
       ),
-    );
+    ));
   }
 }

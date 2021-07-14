@@ -50,7 +50,7 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
       }
       for (int a = 0; a < _caripekerja.length; a++) {
         if (widget.pegawai == _caripekerja[a].id_pegawai) {
-          nama_pegawai = _caripekerja[a].Nama;
+          nama_pegawai = _caripekerja[a].nama_pegawai;
         }
       }
     });
@@ -166,15 +166,6 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
   void kirim() {
     String id;
     id = tanggal + bulan + year + jam + menit + detik + widget.alamat + widget.pegawai;
-    // print(id);
-    // print(widget.alamat);
-    // print(widget.pegawai);
-    // print(nama_pegawai);
-    // print(tahun);
-    // print(total_hitung);
-    // print(kembalian_hitung);
-    // print(modal_hitung);
-    // print(widget.catatan);
     var url = (Uri.parse("https://timothy.buzz/kios_epes/Pesanan/add_pesanan.php"));
     http.post(url, body: {
       "id_pemesanan": id,

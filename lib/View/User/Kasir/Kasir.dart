@@ -5,8 +5,8 @@ import 'package:kios_epes/Model/DataBarang.dart';
 import 'package:kios_epes/View/User/Kasir/Kasir_lanjutan.dart';
 
 class User_Kasir extends StatefulWidget {
-  String alamat, pegawai, catatan;
-  User_Kasir({Key key, this.alamat, this.catatan, this.pegawai}) : super(key: key);
+  String alamat, catatan;
+  User_Kasir({Key key, this.alamat, this.catatan}) : super(key: key);
 
   @override
   _User_KasirState createState() => _User_KasirState();
@@ -114,7 +114,6 @@ class _User_KasirState extends State<User_Kasir> {
               builder: (context) => User_kasir_Lanjutan(
                     data: kirim_data,
                     alamat: widget.alamat,
-                    pegawai: widget.pegawai,
                     catatan: widget.catatan,
                   )));
     }

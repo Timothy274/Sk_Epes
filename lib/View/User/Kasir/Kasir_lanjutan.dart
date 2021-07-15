@@ -9,18 +9,14 @@ import '../Home.dart';
 
 class User_kasir_Lanjutan extends StatefulWidget {
   final List<DataBarang> data;
-  final String alamat, pegawai, catatan;
-  const User_kasir_Lanjutan({Key key, this.data, this.alamat, this.pegawai, this.catatan})
-      : super(key: key);
+  final String alamat, catatan;
+  const User_kasir_Lanjutan({Key key, this.data, this.alamat, this.catatan}) : super(key: key);
 
   @override
   _User_kasir_LanjutanState createState() => _User_kasir_LanjutanState();
 }
 
 class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
-  List _pekerja = [];
-  List<DataPegawai> _caripekerja = [];
-  String nama_pegawai = "";
   int total_hitung = 0;
   int kembalian_hitung = 0;
   int modal_hitung = 0;
@@ -36,25 +32,25 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
 
   void initState() {
     super.initState();
-    getSWData();
+    // getSWData();
     total();
   }
 
-  Future<String> getSWData() async {
-    final response =
-        await http.get(Uri.parse("http://timothy.buzz/juljol/get_pegawai_except_p.php"));
-    final responseJson = json.decode(response.body);
-    setState(() {
-      for (Map Data in responseJson) {
-        _caripekerja.add(DataPegawai.fromJson(Data));
-      }
-      for (int a = 0; a < _caripekerja.length; a++) {
-        if (widget.pegawai == _caripekerja[a].id_pegawai) {
-          nama_pegawai = _caripekerja[a].nama_pegawai;
-        }
-      }
-    });
-  }
+  // Future<String> getSWData() async {
+  //   final response =
+  //       await http.get(Uri.parse("http://timothy.buzz/kios_epes/Pegawai/get_pegawai.php"));
+  //   final responseJson = json.decode(response.body);
+  //   setState(() {
+  //     for (Map Data in responseJson) {
+  //       _caripekerja.add(DataPegawai.fromJson(Data));
+  //     }
+  //     for (int a = 0; a < _caripekerja.length; a++) {
+  //       if (widget.pegawai == _caripekerja[a].id_pegawai) {
+  //         nama_pegawai = _caripekerja[a].nama_pegawai;
+  //       }
+  //     }
+  //   });
+  // }
 
   void deactivate() {
     super.deactivate();
@@ -165,13 +161,11 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
 
   void kirim() {
     String id;
-    id = tanggal + bulan + year + jam + menit + detik + widget.alamat + widget.pegawai;
+    id = tanggal + bulan + year + jam + menit + detik + widget.alamat;
     var url = (Uri.parse("https://timothy.buzz/kios_epes/Pesanan/add_pesanan.php"));
     http.post(url, body: {
       "id_pemesanan": id,
       "alamat": widget.alamat,
-      "id_pegawai": widget.pegawai,
-      "nama_pegawai": nama_pegawai,
       "tanggal": tahun,
       "total": total_hitung.toString(),
       "kembalian": kembalian_hitung.toString(),
@@ -182,7 +176,7 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
 
   void kirim_detail() {
     String id;
-    id = tanggal + bulan + year + jam + menit + detik + widget.alamat + widget.pegawai;
+    id = tanggal + bulan + year + jam + menit + detik + widget.alamat;
     for (int a = 0; a < widget.data.length; a++) {
       var url = (Uri.parse("https://timothy.buzz/kios_epes/Pesanan/add_pesanan_detail.php"));
       http.post(url, body: {
@@ -220,10 +214,6 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
                     Text(
                       widget.alamat,
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      nama_pegawai,
-                      style: TextStyle(fontSize: 18),
                     ),
                     Align(
                         alignment: Alignment.centerRight,
@@ -309,7 +299,7 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     border: Border.all(color: Colors.blue, width: 2.0)),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
                       margin: EdgeInsets.only(left: 15),
@@ -477,20 +467,6 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
                 ),
                 Text(
                   widget.alamat,
-                  style: new TextStyle(fontSize: 15.0),
-                ),
-              ]),
-              TableRow(children: [
-                Text(
-                  'Pegawai',
-                  style: new TextStyle(fontSize: 15.0),
-                ),
-                Text(
-                  ':',
-                  style: new TextStyle(fontSize: 15.0),
-                ),
-                Text(
-                  widget.pegawai,
                   style: new TextStyle(fontSize: 15.0),
                 ),
               ]),

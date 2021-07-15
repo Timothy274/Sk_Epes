@@ -14,39 +14,6 @@ class TabHome extends StatefulWidget {
 
 class _TabHomeState extends State<TabHome> {
   final _formKey = new GlobalKey<FormState>();
-  String _mySelection;
-  // List<DataTahun> _tahunnosort = [];
-  // List<String> _tahun = [];
-  // List<String> _sorttahun = [];
-  // List<String> _tahunset = [];
-  // List<String> _tahunnocut = [];
-  List _pekerja = List();
-  List<DataPegawai> _caripekerja = [];
-  Future<String> getSWData() async {
-    final response =
-        await http.get(Uri.parse("http://timothy.buzz/juljol/get_pegawai_except_p.php"));
-    final responseJson = json.decode(response.body);
-    setState(() {
-      _pekerja = responseJson;
-      for (Map Data in responseJson) {
-        _caripekerja.add(DataPegawai.fromJson(Data));
-      }
-    });
-  }
-
-  // Future<String> getTahun() async {
-  //   final response = await http.get(Uri.parse("http://timothy.buzz/juljol/get_tahun.php"));
-  //   final responseJson = json.decode(response.body);
-  //   setState(() {
-  //     for (Map Data in responseJson) {
-  //       _tahunnosort.add(DataTahun.fromJson(Data));
-  //     }
-  //     for (int a = 0; a < _tahunnosort.length; a++) {
-  //       _tahun.add(_tahunnosort[a].Tahun);
-  //     }
-  //     _sorttahun = _tahun.toSet().toList();
-  //   });
-  // }
 
   final alamat = TextEditingController();
   final catatan = TextEditingController();
@@ -59,7 +26,7 @@ class _TabHomeState extends State<TabHome> {
 
   void initState() {
     super.initState();
-    getSWData();
+    // getSWData();
     // getTahun();
   }
 
@@ -150,35 +117,8 @@ class _TabHomeState extends State<TabHome> {
                     new Container(
                       height: 50.0,
                     ),
-                    Container(
-                      width: screenWidth,
-                      child: DropdownButtonFormField<String>(
-                        validator: (val2) {
-                          if (val2 == null || val2.isEmpty) {
-                            return "Masukkan Pegawai";
-                          }
-                          return null;
-                        },
-                        items: _pekerja.map((item) {
-                          return DropdownMenuItem<String>(
-                            value: item['id_pegawai'],
-                            child: Text(item['Nama']),
-                          );
-                        }).toList(),
-                        onChanged: (String newValueSelected) {
-                          setState(() {
-                            this._mySelection = newValueSelected;
-                          });
-                        },
-                        hint: Text('Pegawai'),
-                        value: _mySelection,
-                      ),
-                    ),
-                    new Container(
-                      height: 20.0,
-                    ),
                     TextField(
-                        // controller: catatan,
+                        controller: catatan,
                         maxLength: 100,
                         maxLines: 4,
                         decoration: new InputDecoration(labelText: "Catatan")),
@@ -200,7 +140,6 @@ class _TabHomeState extends State<TabHome> {
                                   Navigator.of(context).push(new MaterialPageRoute(
                                       builder: (BuildContext context) => new User_Kasir(
                                             alamat: alamat.text,
-                                            pegawai: _mySelection,
                                             catatan: catatan.text,
                                           )));
                                 }

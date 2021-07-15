@@ -86,15 +86,15 @@ class _Home_AdminState extends State<Home_Admin> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.timelapse),
             label: 'Progress',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.people),
             label: 'Pegawai',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.workspaces_filled),
             label: 'Stok',
           ),
           BottomNavigationBarItem(

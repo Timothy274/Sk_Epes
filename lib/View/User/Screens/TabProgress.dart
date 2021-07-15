@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:kios_epes/View/User/Progress/on_queue_detail.dart';
 
 class TabProgress extends StatefulWidget {
   const TabProgress({Key key}) : super(key: key);
@@ -84,7 +85,15 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
                     return new Container(
                       padding: const EdgeInsets.all(10.0),
                       child: new GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).push(new MaterialPageRoute(
+                              builder: (BuildContext context) => new on_queue_detail(
+                                    id_pemesanan: snapshot.data[i]["id_pemesanan"],
+                                    alamat: snapshot.data[i]["alamat"],
+                                    tanggal: snapshot.data[i]["tanggal"],
+                                    catatan: snapshot.data[i]["catatan"],
+                                  )));
+                        },
                         child: new Card(
                             child: Container(
                           child: Row(

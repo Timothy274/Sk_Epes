@@ -82,11 +82,11 @@ class _Home_UserState extends State<Home_User> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.timelapse),
             label: 'Progress',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.workspaces_filled),
             label: 'Stok',
           ),
           BottomNavigationBarItem(

@@ -249,7 +249,7 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
                         children: <Widget>[
                           Expanded(
                             child: ListTile(
-                              leading: Icon(Icons.book),
+                              leading: Icon(Icons.workspaces_filled),
                               title: new Text(widget.data[i].Nama, style: TextStyle(fontSize: 18)),
                               subtitle: Text(widget.data[i].Harga_Tetap.toString(),
                                   style: TextStyle(fontSize: 13)),

@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:kios_epes/Model/DataBarang.dart';
 import 'package:kios_epes/Model/DataPesanan.dart';
 import 'package:kios_epes/View/User/Progress/on_queue_detail_edit_alamat.dart';
+import 'package:kios_epes/View/User/Progress/on_queue_detail_edit_pesanan.dart';
 
 class on_queue_detail extends StatefulWidget {
   String id_pemesanan, alamat, tanggal, catatan;
@@ -17,10 +19,27 @@ class on_queue_detail extends StatefulWidget {
 class _on_queue_detailState extends State<on_queue_detail> {
   List<DataPesanan> _dataPesanan = [];
   List<DataPesanan> _dataPesananFiltered = [];
+  List<DataBarang> _dataBarang = [];
+  Map<String, int> array_barang = {};
 
   void initState() {
     super.initState();
     getData();
+    getDataBarang();
+  }
+
+  Future<List<DataBarang>> getDataBarang() async {
+    final response = await http.get(Uri.parse("http://timothy.buzz/kios_epes/Stok/get_barang.php"));
+    final responseJson = json.decode(response.body);
+
+    setState(() {
+      for (Map Data in responseJson) {
+        _dataBarang.add(DataBarang.fromJson(Data));
+      }
+      _dataBarang.forEach((DataBarang) {
+        array_barang[DataBarang.id_barang] = DataBarang.nilai_awal;
+      });
+    });
   }
 
   Future<List> getData() async {
@@ -37,6 +56,12 @@ class _on_queue_detailState extends State<on_queue_detail> {
         }
       }
     });
+  }
+
+  void Detail_Barang() {
+    for (var i = 0; i < _dataPesananFiltered.length; i++) {
+      array_barang[_dataPesananFiltered[i].id_barang] = _dataPesananFiltered[i].jumlah;
+    }
   }
 
   @override
@@ -193,7 +218,15 @@ class _on_queue_detailState extends State<on_queue_detail> {
               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))),
           new OutlineButton(
               child: new Text("Ubah Pesanan"),
-              onPressed: () {},
+              onPressed: () {
+                Detail_Barang();
+                Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) => new on_queue_detail_edit_pemesanan(
+                    array_barang: array_barang,
+                    id_pemesanan: widget.id_pemesanan,
+                  ),
+                ));
+              },
               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)))
         ],
       ),

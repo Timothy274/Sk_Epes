@@ -189,7 +189,7 @@ class _User_KasirState extends State<User_Kasir> {
                         children: <Widget>[
                           Expanded(
                             child: ListTile(
-                              leading: Icon(Icons.book),
+                              leading: Icon(Icons.workspaces_filled),
                               title: new Text(_filtered[i].Nama),
                               subtitle: Text(_filtered[i].Harga_Tetap.toString()),
                             ),

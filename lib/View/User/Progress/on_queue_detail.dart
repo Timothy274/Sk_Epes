@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kios_epes/Model/DataBarang.dart';
 import 'package:kios_epes/Model/DataPesanan.dart';
+import 'package:kios_epes/View/User/Home.dart';
 import 'package:kios_epes/View/User/Progress/on_queue_detail_edit_alamat.dart';
 import 'package:kios_epes/View/User/Progress/on_queue_detail_edit_pesanan.dart';
 
@@ -58,10 +59,59 @@ class _on_queue_detailState extends State<on_queue_detail> {
     });
   }
 
-  void Detail_Barang() {
+  void detail_barang() {
     for (var i = 0; i < _dataPesananFiltered.length; i++) {
       array_barang[_dataPesananFiltered[i].id_barang] = _dataPesananFiltered[i].jumlah;
     }
+  }
+
+  void _showDialogHapus() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Hapus Data"),
+          content: new Text("Apakah anda yakin ingin menghapus data berikut ?"),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text(
+                "Hapus",
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                hapus_pesanan();
+                hapus_pesanan_detail();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (BuildContext context) => new Home_User()),
+                  (Route<dynamic> route) => false,
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void hapus_pesanan() {
+    var url = (Uri.parse("https://timothy.buzz/kios_epes/Pesanan/delete_pesanan.php"));
+    http.post(url, body: {
+      "id_pemesanan": widget.id_pemesanan,
+    });
+  }
+
+  void hapus_pesanan_detail() {
+    var url = (Uri.parse("https://timothy.buzz/kios_epes/Pesanan/delete_pesanan_detail.php"));
+    http.post(url, body: {
+      "id_pemesanan": widget.id_pemesanan,
+    });
   }
 
   @override
@@ -211,6 +261,7 @@ class _on_queue_detailState extends State<on_queue_detail> {
               child: new Text("Ubah Alamat"),
               onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
                     builder: (BuildContext context) => new on_queue_detail_edit_alamat(
+                      id_pemesanan: widget.id_pemesanan,
                       alamat: widget.alamat,
                       catatan: widget.catatan,
                     ),
@@ -219,7 +270,7 @@ class _on_queue_detailState extends State<on_queue_detail> {
           new OutlineButton(
               child: new Text("Ubah Pesanan"),
               onPressed: () {
-                Detail_Barang();
+                detail_barang();
                 Navigator.of(context).push(new MaterialPageRoute(
                   builder: (BuildContext context) => new on_queue_detail_edit_pemesanan(
                     array_barang: array_barang,
@@ -227,7 +278,18 @@ class _on_queue_detailState extends State<on_queue_detail> {
                   ),
                 ));
               },
-              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)))
+              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))),
+          new OutlineButton(
+              child: new Text(
+                "Hapus Pesanan",
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                _showDialogHapus();
+              },
+              shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(30.0),
+              ))
         ],
       ),
     );

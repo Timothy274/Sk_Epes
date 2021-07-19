@@ -103,7 +103,7 @@ class _TabHomeState extends State<TabHome> {
                       height: 20.0,
                     ),
                     TextFormField(
-                      textCapitalization: TextCapitalization.sentences,
+                      textCapitalization: TextCapitalization.words,
                       controller: alamat,
                       keyboardType: TextInputType.text,
                       decoration: new InputDecoration(labelText: "Alamat"),
@@ -118,6 +118,7 @@ class _TabHomeState extends State<TabHome> {
                       height: 50.0,
                     ),
                     TextField(
+                        textCapitalization: TextCapitalization.sentences,
                         controller: catatan,
                         maxLength: 100,
                         maxLines: 4,

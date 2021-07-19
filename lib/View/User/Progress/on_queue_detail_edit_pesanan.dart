@@ -229,13 +229,13 @@ class _on_queue_detail_edit_pemesananState extends State<on_queue_detail_edit_pe
   }
 
   void kirim() {
-    // var url = (Uri.parse("https://timothy.buzz/kios_epes/Pesanan/update_pesanan.php"));
-    // http.post(url, body: {
-    //   "id_pemesanan": widget.id_pemesanan,
-    //   "total": total_hitung.toString(),
-    //   "kembalian": kembalian_hitung.toString(),
-    //   "modal": modal_hitung.toString(),
-    // });
+    var url = (Uri.parse("https://timothy.buzz/kios_epes/Pesanan/update_pesanan.php"));
+    http.post(url, body: {
+      "id_pemesanan": widget.id_pemesanan,
+      "total": total_hitung.toString(),
+      "kembalian": kembalian_hitung.toString(),
+      "modal": modal_hitung.toString(),
+    });
   }
 
   void kirim_detail() {

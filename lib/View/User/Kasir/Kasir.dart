@@ -120,17 +120,14 @@ class _User_KasirState extends State<User_Kasir> {
   }
 
   void _showDialogPilihan() {
-// flutter defined function
     showDialog(
       context: context,
       builder: (BuildContext context) {
-// return object of type Dialog
         return AlertDialog(
           title: new Text("Data kosong"),
           content: new Text(
               "Mohon periksa kembali data yang anda masukkan, pastikan sudah memasukkan semua data yang dibutuhkan"),
           actions: <Widget>[
-// usually buttons at the bottom of the dialog
             new FlatButton(
               child: new Text("Close"),
               onPressed: () {

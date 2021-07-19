@@ -26,16 +26,16 @@ class DataPesanan {
 
   factory DataPesanan.fromJson(Map<dynamic, dynamic> json) {
     return DataPesanan(
-        id_pemesanan: json['id_pemesanan'],
-        id_barang: json['id_barang'],
-        alamat: json['alamat'],
-        nama_barang: json['nama_barang'],
-        tanggal: json['tanggal'],
-        catatan: json['catatan'],
-        status: json['status'],
-        total: int.parse(json['total']),
-        kembalian: int.parse(json['kembalian']),
-        modal: int.parse(json['modal']),
-        jumlah: int.parse(json['jumlah']));
+      id_pemesanan: json['id_pemesanan'],
+      id_barang: json['id_barang'],
+      alamat: json['alamat'],
+      nama_barang: json['nama_barang'],
+      tanggal: json['tanggal'],
+      catatan: json['catatan'],
+      status: json['status'],
+      total: int.parse(json['total']),
+      kembalian: int.parse(json['kembalian']),
+      modal: int.parse(json['modal']),
+    );
   }
 }

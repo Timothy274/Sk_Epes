@@ -20,6 +20,7 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
   int total_hitung = 0;
   int kembalian_hitung = 0;
   int modal_hitung = 0;
+  String id;
 
   var tahun = Jiffy().format("yyyy-MM-dd");
   var waktu = Jiffy().format("HH:mm:SS");
@@ -34,6 +35,7 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
     super.initState();
     // getSWData();
     total();
+    id_pemesanan();
   }
 
   // Future<String> getSWData() async {
@@ -159,9 +161,12 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
     });
   }
 
+  void id_pemesanan() {
+    String alamat = widget.alamat.replaceAll(" ", "");
+    id = tanggal + bulan + year + jam + menit + detik + alamat.toLowerCase();
+  }
+
   void kirim() {
-    String id;
-    id = tanggal + bulan + year + jam + menit + detik + widget.alamat;
     var url = (Uri.parse("https://timothy.buzz/kios_epes/Pesanan/add_pesanan.php"));
     http.post(url, body: {
       "id_pemesanan": id,
@@ -175,8 +180,6 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
   }
 
   void kirim_detail() {
-    String id;
-    id = tanggal + bulan + year + jam + menit + detik + widget.alamat;
     for (int a = 0; a < widget.data.length; a++) {
       var url = (Uri.parse("https://timothy.buzz/kios_epes/Pesanan/add_pesanan_detail.php"));
       http.post(url, body: {

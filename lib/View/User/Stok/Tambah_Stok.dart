@@ -64,32 +64,35 @@ class _User_Add_StockState extends State<User_Add_Stock> {
     }
 
     void push_db() {
+      String id_barang_2;
       String _nama = nama.text;
       int id = 0;
       id_barang(String words) => words.replaceAllMapped(
           new RegExp(r'\b(\w*?)([aeiou]\w*)', caseSensitive: false),
           (Match m) => "${m[2]}${m[1]}${m[1].isEmpty ? 'way' : 'ay'}");
       var id_barang_1 = id_barang("$_nama");
+      id_barang_2 = id_barang_1.replaceAll(" ", "");
       for (int a = 0; a < _dataBarang.length; a++) {
-        if (_dataBarang[a].id_barang == id_barang_1) {
-          id = id + 1;
+        if (_dataBarang[a].id_barang == id_barang_2) {
+          test_peringatan();
         } else if (_dataBarang[a].Nama == _nama) {
           test_peringatan();
         }
       }
-      // print(id_barang_1.toString());
-      // print(nama.text);
-      // print(harga.text);
-      // print(stok.text);
 
-      var url = (Uri.parse("https://timothy.buzz/kios_epes/Stok/add_barang.php"));
-      http.post(url, body: {
-        "id_barang": id_barang_1.toString(),
-        "nama": nama.text,
-        "harga": harga.text,
-        "stok": stok.text,
-        "nilai": "0",
-      });
+      print(id_barang_2.toLowerCase());
+      print(nama.text);
+      print(harga.text);
+      print(stok.text);
+
+      // var url = (Uri.parse("https://timothy.buzz/kios_epes/Stok/add_barang.php"));
+      // http.post(url, body: {
+      //   "id_barang": id_barang_1.toString(),
+      //   "nama": nama.text,
+      //   "harga": harga.text,
+      //   "stok": stok.text,
+      //   "nilai": "0",
+      // });
     }
 
     return Scaffold(

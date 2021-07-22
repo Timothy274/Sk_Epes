@@ -20,6 +20,7 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
   int total_hitung = 0;
   int kembalian_hitung = 0;
   int modal_hitung = 0;
+  List<DataBarang> _dataBarang = [];
   String id;
 
   var tahun = Jiffy().format("yyyy-MM-dd");
@@ -38,25 +39,40 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
     id_pemesanan();
   }
 
-  // Future<String> getSWData() async {
-  //   final response =
-  //       await http.get(Uri.parse("http://timothy.buzz/kios_epes/Pegawai/get_pegawai.php"));
-  //   final responseJson = json.decode(response.body);
-  //   setState(() {
-  //     for (Map Data in responseJson) {
-  //       _caripekerja.add(DataPegawai.fromJson(Data));
-  //     }
-  //     for (int a = 0; a < _caripekerja.length; a++) {
-  //       if (widget.pegawai == _caripekerja[a].id_pegawai) {
-  //         nama_pegawai = _caripekerja[a].nama_pegawai;
-  //       }
-  //     }
-  //   });
-  // }
+  Future<String> getSWData() async {
+    final response = await http.get(Uri.parse("http://timothy.buzz/kios_epes/Stok/get_barang.php"));
+    final responseJson = json.decode(response.body);
+    setState(() {
+      for (Map Data in responseJson) {
+        _dataBarang.add(DataBarang.fromJson(Data));
+      }
+    });
+  }
 
   void deactivate() {
     super.deactivate();
     widget.data.clear();
+  }
+
+  void _showDialogErrorStok() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Stok Habis"),
+          content:
+              new Text("Mohon periksa kembali stok, mohon untuk menambah stok terlebih dahulu"),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void kembalian() {
@@ -128,6 +144,7 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
   }
 
   void add(nilai_awal, i, harga_awal) {
+    int stok_awal = 1;
     setState(() {
       // int harga = int.parse(harga_awal.toString());
       // int total = int.parse(nilai_awal.toString());
@@ -135,8 +152,13 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
       harga_awal = harga_awal * nilai_awal;
       for (int a = 0; a < widget.data.length; a++) {
         if (widget.data[a].id_barang == i) {
-          widget.data[a].nilai_awal = nilai_awal;
-          widget.data[a].Harga = harga_awal;
+          if (widget.data[a].Stock != 0) {
+            widget.data[a].Stock = widget.data[a].Stock - stok_awal;
+            widget.data[a].nilai_awal = nilai_awal;
+            widget.data[a].Harga = harga_awal;
+          } else {
+            _showDialogErrorStok();
+          }
         }
       }
       total();
@@ -145,12 +167,14 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
   }
 
   void minus(nilai_awal, i, harga_awal) {
+    int stok_awal = 1;
     setState(() {
       if (nilai_awal != 0) {
         nilai_awal--;
         harga_awal = harga_awal * nilai_awal;
         for (int a = 0; a < widget.data.length; a++) {
           if (widget.data[a].id_barang == i) {
+            widget.data[a].Stock = widget.data[a].Stock + stok_awal;
             widget.data[a].nilai_awal = nilai_awal;
             widget.data[a].Harga = harga_awal;
           }
@@ -187,7 +211,8 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
         "id_barang": widget.data[a].id_barang,
         "nama_barang": widget.data[a].Nama,
         "jumlah": widget.data[a].nilai_awal.toString(),
-        "harga": widget.data[a].Harga.toString()
+        "harga": widget.data[a].Harga.toString(),
+        "stok": widget.data[a].Stock.toString(),
       });
     }
   }
@@ -254,8 +279,17 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
                             child: ListTile(
                               leading: Icon(Icons.workspaces_filled),
                               title: new Text(widget.data[i].Nama, style: TextStyle(fontSize: 18)),
-                              subtitle: Text(widget.data[i].Harga_Tetap.toString(),
-                                  style: TextStyle(fontSize: 13)),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Harga : ${widget.data[i].Harga_Tetap.toString()}",
+                                  ),
+                                  Text(
+                                    "Stok : ${widget.data[i].Stock.toString()}",
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                           Column(

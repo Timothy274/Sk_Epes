@@ -9,16 +9,16 @@ import 'package:kios_epes/View/User/Home.dart';
 import 'package:kios_epes/View/User/Progress/on_queue_detail_edit_alamat.dart';
 import 'package:kios_epes/View/User/Progress/on_queue_detail_edit_pesanan.dart';
 
-class on_queue_detail extends StatefulWidget {
+class on_going_detail_pesanan extends StatefulWidget {
   String id_pemesanan, alamat, tanggal, catatan;
-  on_queue_detail({Key key, this.id_pemesanan, this.alamat, this.tanggal, this.catatan})
+  on_going_detail_pesanan({Key key, this.id_pemesanan, this.alamat, this.tanggal, this.catatan})
       : super(key: key);
 
   @override
-  _on_queue_detailState createState() => _on_queue_detailState();
+  _on_going_detail_pesananState createState() => _on_going_detail_pesananState();
 }
 
-class _on_queue_detailState extends State<on_queue_detail> {
+class _on_going_detail_pesananState extends State<on_going_detail_pesanan> {
   List<DataPesananLengkap> _dataPesanan = [];
   List<DataPesananLengkap> _dataPesananFiltered = [];
   List<DataBarang> _dataBarang = [];
@@ -102,24 +102,10 @@ class _on_queue_detailState extends State<on_queue_detail> {
   }
 
   void hapus_pesanan() {
-    int stok_awal = 0;
-    int stok = 0;
-    var url1 = (Uri.parse("https://timothy.buzz/kios_epes/Pesanan/delete_pesanan.php"));
-    var url2 = (Uri.parse("https://timothy.buzz/kios_epes/Stok/update_stok.php"));
-    http.post(url1, body: {
+    var url = (Uri.parse("https://timothy.buzz/kios_epes/Pesanan/delete_pesanan.php"));
+    http.post(url, body: {
       "id_pemesanan": widget.id_pemesanan,
     });
-    for (int a = 0; a < _dataPesananFiltered.length; a++) {
-      for (int b = 0; b < _dataBarang.length; b++) {
-        if (_dataPesananFiltered[a].id_barang == _dataBarang[b].id_barang) {
-          stok_awal = _dataBarang[b].Stock;
-        }
-      }
-
-      stok = _dataPesananFiltered[a].jumlah + stok_awal;
-      http.post(url2,
-          body: {"id_barang": _dataPesananFiltered[a].id_barang, "stok": stok.toString()});
-    }
   }
 
   void hapus_pesanan_detail() {
@@ -168,15 +154,15 @@ class _on_queue_detailState extends State<on_queue_detail> {
                       TableRow(children: [
                         Text(
                           'Tanggal',
-                          style: new TextStyle(fontSize: 25.0),
+                          style: new TextStyle(fontSize: 18.0),
                         ),
                         Text(
                           ':',
-                          style: new TextStyle(fontSize: 25.0),
+                          style: new TextStyle(fontSize: 18.0),
                         ),
                         Text(
                           widget.tanggal,
-                          style: new TextStyle(fontSize: 25.0),
+                          style: new TextStyle(fontSize: 18.0),
                         ),
                       ]),
                     ],
@@ -222,89 +208,6 @@ class _on_queue_detailState extends State<on_queue_detail> {
                   },
                 )),
           ),
-          Expanded(
-              flex: 1,
-              child: Container(
-                width: double.infinity,
-                child: ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => _accDialog(context),
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                        ),
-                        new Container(
-                          width: 20.0,
-                        ),
-                        Text(
-                          "Edit",
-                          style: TextStyle(fontSize: 15),
-                        )
-                      ],
-                    )),
-              )),
-        ],
-      ),
-    );
-  }
-
-  Widget _accDialog(BuildContext context) {
-    return new AlertDialog(
-      title: const Text('Edit Data'),
-      content: new Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _buildAccInput(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAccInput() {
-    return new Center(
-      child: Column(
-        children: <Widget>[
-          new OutlineButton(
-              child: new Text("Ubah Alamat"),
-              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
-                    builder: (BuildContext context) => new on_queue_detail_edit_alamat(
-                      id_pemesanan: widget.id_pemesanan,
-                      alamat: widget.alamat,
-                      catatan: widget.catatan,
-                    ),
-                  )),
-              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))),
-          new OutlineButton(
-              child: new Text("Ubah Pesanan"),
-              onPressed: () {
-                detail_barang();
-                Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => new on_queue_detail_edit_pemesanan(
-                    array_barang: array_barang,
-                    id_pemesanan: widget.id_pemesanan,
-                  ),
-                ));
-              },
-              shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0))),
-          new OutlineButton(
-              child: new Text(
-                "Hapus Pesanan",
-                style: TextStyle(color: Colors.red),
-              ),
-              onPressed: () {
-                _showDialogHapus();
-              },
-              shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0),
-              ))
         ],
       ),
     );

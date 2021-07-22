@@ -45,7 +45,7 @@ class _TabStokState extends State<TabStok> {
 
   void _alterfilter(String query) {
     List<DataBarang> dummySearchList = [];
-    dummySearchList.addAll(_filtered);
+    dummySearchList.addAll(_null_filtered);
     if (query.isNotEmpty) {
       List<DataBarang> dummyListData = [];
       dummySearchList.forEach((item) {

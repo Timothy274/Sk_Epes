@@ -19,7 +19,7 @@ class _Tab_Pegawai_DartState extends State<Tab_Pegawai_Dart> {
 
   void _alterfilter(String query) {
     List<DataPegawai> dummySearchList = [];
-    dummySearchList.addAll(_filtered);
+    dummySearchList.addAll(_null_filtered);
     if (query.isNotEmpty) {
       List<DataPegawai> dummyListData = [];
       dummySearchList.forEach((item) {

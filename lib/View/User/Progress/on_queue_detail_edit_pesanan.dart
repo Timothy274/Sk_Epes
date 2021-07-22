@@ -21,6 +21,7 @@ class _on_queue_detail_edit_pemesananState extends State<on_queue_detail_edit_pe
   List<String> id_barang = [];
   List<String> nama = [];
   List<int> harga = [];
+  List<int> stock = [];
   List<int> harga_tetap = [];
   List<String> nilai_awal = [];
   int total_hitung = 0;
@@ -149,6 +150,7 @@ class _on_queue_detail_edit_pemesananState extends State<on_queue_detail_edit_pe
         nama.add(DataBarang.Nama);
         harga.add(DataBarang.Harga);
         harga_tetap.add(DataBarang.Harga_Tetap);
+        stock.add(DataBarang.Stock);
         nilai_awal.add(DataBarang.nilai_awal.toString());
       });
 
@@ -170,6 +172,7 @@ class _on_queue_detail_edit_pemesananState extends State<on_queue_detail_edit_pe
             id_barang: id_barang[a],
             Nama: nama[a],
             Harga: harga[a],
+            Stock: stock[a],
             Harga_Tetap: _dataBarang[a].Harga,
             nilai_awal: int.parse(nilai_awal[a])));
       }
@@ -179,27 +182,33 @@ class _on_queue_detail_edit_pemesananState extends State<on_queue_detail_edit_pe
   }
 
   void add(nilai_awal, i, harga_awal) {
+    int stok_awal = 1;
     setState(() {
-      // int harga = int.parse(harga_awal.toString());
-      // int total = int.parse(nilai_awal.toString());
       nilai_awal++;
       harga_awal = harga_awal * nilai_awal;
       for (int a = 0; a < _filtered.length; a++) {
         if (_filtered[a].id_barang == i) {
-          _filtered[a].nilai_awal = nilai_awal;
-          _filtered[a].Harga = harga_awal;
+          if (_filtered[a].Stock != 0) {
+            _filtered[a].Stock = _filtered[a].Stock - stok_awal;
+            _filtered[a].nilai_awal = nilai_awal;
+            _filtered[a].Harga = harga_awal;
+          } else {
+            _showDialogErrorStok();
+          }
         }
       }
     });
   }
 
   void minus(nilai_awal, i, harga_awal) {
+    int stok_awal = 1;
     setState(() {
       if (nilai_awal != 0) {
         nilai_awal--;
         harga_awal = harga_awal * nilai_awal;
         for (int a = 0; a < _filtered.length; a++) {
           if (_filtered[a].id_barang == i) {
+            _filtered[a].Stock = _filtered[a].Stock + stok_awal;
             _filtered[a].nilai_awal = nilai_awal;
             _filtered[a].Harga = harga_awal;
           }
@@ -252,7 +261,8 @@ class _on_queue_detail_edit_pemesananState extends State<on_queue_detail_edit_pe
         "id_barang": _filtered[a].id_barang,
         "nama_barang": _filtered[a].Nama,
         "jumlah": _filtered[a].nilai_awal.toString(),
-        "harga": _filtered[a].Harga.toString()
+        "harga": _filtered[a].Harga.toString(),
+        "stok": _filtered[a].Stock.toString(),
       });
     }
   }
@@ -269,6 +279,27 @@ class _on_queue_detail_edit_pemesananState extends State<on_queue_detail_edit_pe
               "Mohon periksa kembali data yang anda masukkan, pastikan sudah memasukkan semua data yang dibutuhkan"),
           actions: <Widget>[
 // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDialogErrorStok() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Stok Habis"),
+          content:
+              new Text("Mohon periksa kembali stok, mohon untuk menambah stok terlebih dahulu"),
+          actions: <Widget>[
             new FlatButton(
               child: new Text("Close"),
               onPressed: () {
@@ -329,7 +360,17 @@ class _on_queue_detail_edit_pemesananState extends State<on_queue_detail_edit_pe
                             child: ListTile(
                               leading: Icon(Icons.workspaces_filled),
                               title: new Text(_filtered[i].Nama),
-                              subtitle: Text(_filtered[i].Harga_Tetap.toString()),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Harga : ${_filtered[i].Harga_Tetap.toString()}",
+                                  ),
+                                  Text(
+                                    "Stok : ${_filtered[i].Stock.toString()}",
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                           Column(

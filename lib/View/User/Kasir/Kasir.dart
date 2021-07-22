@@ -30,7 +30,7 @@ class _User_KasirState extends State<User_Kasir> {
 
   void _alterfilter(String query) {
     List<DataBarang> dummySearchList = [];
-    dummySearchList.addAll(_filtered);
+    dummySearchList.addAll(_null_filtered);
     if (query.isNotEmpty) {
       List<DataBarang> dummyListData = [];
       dummySearchList.forEach((item) {
@@ -70,27 +70,34 @@ class _User_KasirState extends State<User_Kasir> {
   }
 
   void add(nilai_awal, i, harga_awal) {
+    int stok_awal = 1;
     setState(() {
-      // int harga = int.parse(harga_awal.toString());
-      // int total = int.parse(nilai_awal.toString());
       nilai_awal++;
       harga_awal = harga_awal * nilai_awal;
+
       for (int a = 0; a < _filtered.length; a++) {
         if (_filtered[a].id_barang == i) {
-          _filtered[a].nilai_awal = nilai_awal;
-          _filtered[a].Harga = harga_awal;
+          if (_filtered[a].Stock != 0) {
+            _filtered[a].Stock = _filtered[a].Stock - stok_awal;
+            _filtered[a].nilai_awal = nilai_awal;
+            _filtered[a].Harga = harga_awal;
+          } else {
+            _showDialogErrorStok();
+          }
         }
       }
     });
   }
 
   void minus(nilai_awal, i, harga_awal) {
+    int stok_awal = 1;
     setState(() {
       if (nilai_awal != 0) {
         nilai_awal--;
         harga_awal = harga_awal * nilai_awal;
         for (int a = 0; a < _filtered.length; a++) {
           if (_filtered[a].id_barang == i) {
+            _filtered[a].Stock = _filtered[a].Stock + stok_awal;
             _filtered[a].nilai_awal = nilai_awal;
             _filtered[a].Harga = harga_awal;
           }
@@ -127,6 +134,27 @@ class _User_KasirState extends State<User_Kasir> {
           title: new Text("Data kosong"),
           content: new Text(
               "Mohon periksa kembali data yang anda masukkan, pastikan sudah memasukkan semua data yang dibutuhkan"),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDialogErrorStok() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Stok Habis"),
+          content:
+              new Text("Mohon periksa kembali stok, mohon untuk menambah stok terlebih dahulu"),
           actions: <Widget>[
             new FlatButton(
               child: new Text("Close"),
@@ -188,7 +216,17 @@ class _User_KasirState extends State<User_Kasir> {
                             child: ListTile(
                               leading: Icon(Icons.workspaces_filled),
                               title: new Text(_filtered[i].Nama),
-                              subtitle: Text(_filtered[i].Harga_Tetap.toString()),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Harga : ${_filtered[i].Harga_Tetap.toString()}",
+                                  ),
+                                  Text(
+                                    "Stok : ${_filtered[i].Stock.toString()}",
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                           Column(

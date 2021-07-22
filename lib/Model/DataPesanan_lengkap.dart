@@ -1,4 +1,4 @@
-class DataPesanan {
+class DataPesananLengkap {
   String id_pemesanan;
   String id_barang;
   String alamat;
@@ -11,7 +11,7 @@ class DataPesanan {
   int modal;
   int jumlah;
 
-  DataPesanan(
+  DataPesananLengkap(
       {this.id_pemesanan,
       this.id_barang,
       this.alamat,
@@ -24,8 +24,8 @@ class DataPesanan {
       this.modal,
       this.jumlah});
 
-  factory DataPesanan.fromJson(Map<dynamic, dynamic> json) {
-    return DataPesanan(
+  factory DataPesananLengkap.fromJson(Map<dynamic, dynamic> json) {
+    return DataPesananLengkap(
       id_pemesanan: json['id_pemesanan'],
       id_barang: json['id_barang'],
       alamat: json['alamat'],
@@ -36,7 +36,7 @@ class DataPesanan {
       total: int.parse(json['total']),
       kembalian: int.parse(json['kembalian']),
       modal: int.parse(json['modal']),
-      // jumlah: int.parse(json['jumlah']),
+      jumlah: int.parse(json['jumlah']),
     );
   }
 }

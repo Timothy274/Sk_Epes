@@ -4,6 +4,7 @@ import 'package:kios_epes/Model/DataPegawai.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:jiffy/jiffy.dart';
+import 'package:kios_epes/Model/DataPengiriman.dart';
 
 import 'package:kios_epes/Model/DataPesanan.dart';
 import 'package:kios_epes/View/User/Home.dart';
@@ -20,6 +21,7 @@ class _On_Queue_KirimState extends State<On_Queue_Kirim> {
   List<DataPesanan> _dataPesanan = [];
   List<DataPesanan> _dataPesananFiltered = [];
   List<DataPegawai> _dataPekerja = [];
+  List<DataPengiriman> _dataPengiriman = [];
   String _mySelection2;
   String id;
   int total = 0;
@@ -39,6 +41,7 @@ class _On_Queue_KirimState extends State<On_Queue_Kirim> {
     super.initState();
     getDataPesanan();
     getDataPegawai();
+    getdataPengiriman();
   }
 
   void deactivate() {
@@ -81,6 +84,17 @@ class _On_Queue_KirimState extends State<On_Queue_Kirim> {
     });
   }
 
+  Future<List> getdataPengiriman() async {
+    final response = await http
+        .get(Uri.parse("http://timothy.buzz/kios_epes/Pengiriman/get_pengiriman_only_proses.php"));
+    final responseJson = json.decode(response.body);
+    setState(() {
+      for (Map Data in responseJson) {
+        _dataPengiriman.add(DataPengiriman.fromJson(Data));
+      }
+    });
+  }
+
   void id_pemesanan() {
     int num = total + kembalian + modal + _dataPesananFiltered.length;
     id = tanggal + bulan + year + jam + menit + detik + num.toString();
@@ -101,7 +115,7 @@ class _On_Queue_KirimState extends State<On_Queue_Kirim> {
     // print(total.toString());
     // print(kembalian.toString());
     // print(modal.toString());
-    var url = (Uri.parse("https://timothy.buzz/kios_epes/Pesanan/add_pengiriman.php"));
+    var url = (Uri.parse("https://timothy.buzz/kios_epes/Pengiriman/add_pengiriman.php"));
     http.post(url, body: {
       "id_pengiriman": id,
       "id_pegawai": _mySelection2,
@@ -118,7 +132,7 @@ class _On_Queue_KirimState extends State<On_Queue_Kirim> {
     for (int a = 0; a < _dataPesananFiltered.length; a++) {
       // print(id);
       // print(_dataPesananFiltered[a].id_pemesanan);
-      var url = (Uri.parse("https://timothy.buzz/kios_epes/Pesanan/add_pengiriman_detail.php"));
+      var url = (Uri.parse("https://timothy.buzz/kios_epes/Pengiriman/add_pengiriman_detail.php"));
       http.post(url, body: {
         "id_pengiriman": id,
         "id_pemesanan": _dataPesananFiltered[a].id_pemesanan,
@@ -134,6 +148,26 @@ class _On_Queue_KirimState extends State<On_Queue_Kirim> {
           title: new Text("Belum Memilih Pegawai"),
           content: new Text(
               "Mohon periksa kembali data yang anda masukkan, pastikan sudah memilih pegawai"),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDialogErrorPegawai() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Pegawai Sedang Bertugas"),
+          content: new Text("Mohon pilih pegawai lain untuk melakukan pengiriman barang"),
           actions: <Widget>[
             new FlatButton(
               child: new Text("Close"),
@@ -402,14 +436,32 @@ class _On_Queue_KirimState extends State<On_Queue_Kirim> {
                       if (_mySelection2 == null) {
                         _showDialogPilihan();
                       } else {
-                        id_pemesanan();
-                        kirim();
-                        kirim_detail();
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (BuildContext context) => new Home_User()),
-                          (Route<dynamic> route) => false,
-                        );
+                        if (_dataPengiriman.length == 0) {
+                          id_pemesanan();
+                          kirim();
+                          kirim_detail();
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (BuildContext context) => new Home_User()),
+                            (Route<dynamic> route) => false,
+                          );
+                        } else {
+                          for (int a = 0; a < _dataPengiriman.length; a++) {
+                            if (_dataPengiriman[a].id_pegawai == _mySelection2) {
+                              _showDialogErrorPegawai();
+                            } else {
+                              id_pemesanan();
+                              kirim();
+                              kirim_detail();
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) => new Home_User()),
+                                (Route<dynamic> route) => false,
+                              );
+                            }
+                          }
+                        }
                       }
                     },
                     child: Row(

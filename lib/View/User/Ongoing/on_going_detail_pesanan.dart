@@ -6,12 +6,22 @@ import 'package:kios_epes/Model/DataBarang.dart';
 import 'package:kios_epes/Model/DataPesanan.dart';
 import 'package:kios_epes/Model/DataPesanan_lengkap.dart';
 import 'package:kios_epes/View/User/Home.dart';
+import 'package:intl/intl.dart';
 import 'package:kios_epes/View/User/Progress/on_queue_detail_edit_alamat.dart';
 import 'package:kios_epes/View/User/Progress/on_queue_detail_edit_pesanan.dart';
 
 class on_going_detail_pesanan extends StatefulWidget {
   String id_pemesanan, alamat, tanggal, catatan;
-  on_going_detail_pesanan({Key key, this.id_pemesanan, this.alamat, this.tanggal, this.catatan})
+  int total, kembalian, modal;
+  on_going_detail_pesanan(
+      {Key key,
+      this.id_pemesanan,
+      this.alamat,
+      this.tanggal,
+      this.catatan,
+      this.kembalian,
+      this.modal,
+      this.total})
       : super(key: key);
 
   @override
@@ -23,6 +33,7 @@ class _on_going_detail_pesananState extends State<on_going_detail_pesanan> {
   List<DataPesananLengkap> _dataPesananFiltered = [];
   List<DataBarang> _dataBarang = [];
   Map<String, int> array_barang = {};
+  final oCcy = new NumberFormat.currency(locale: 'id');
 
   void initState() {
     super.initState();
@@ -165,6 +176,48 @@ class _on_going_detail_pesananState extends State<on_going_detail_pesanan> {
                           style: new TextStyle(fontSize: 18.0),
                         ),
                       ]),
+                      TableRow(children: [
+                        Text(
+                          'Total',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          ':',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          oCcy.format(widget.total),
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                      ]),
+                      TableRow(children: [
+                        Text(
+                          'Kembalian',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          ':',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          oCcy.format(widget.kembalian),
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                      ]),
+                      TableRow(children: [
+                        Text(
+                          'Modal',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          ':',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          oCcy.format(widget.modal),
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                      ]),
                     ],
                   ),
                 ),
@@ -191,6 +244,7 @@ class _on_going_detail_pesananState extends State<on_going_detail_pesanan> {
                               child: ListTile(
                                 title: new Text(_dataPesananFiltered[i].nama_barang,
                                     style: TextStyle(fontSize: 18)),
+                                subtitle: Text('Total : ${_dataPesananFiltered[i].harga}'),
                               ),
                             ),
                             Container(

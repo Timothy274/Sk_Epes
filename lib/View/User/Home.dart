@@ -68,7 +68,7 @@ class _Home_UserState extends State<Home_User> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: const Text('Kios Epes'),
       ),

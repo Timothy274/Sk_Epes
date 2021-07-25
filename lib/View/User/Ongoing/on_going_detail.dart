@@ -7,6 +7,7 @@ import 'package:kios_epes/Model/DataPesanan_lengkap.dart';
 import 'package:kios_epes/View/User/Home.dart';
 import 'dart:convert';
 import 'package:jiffy/jiffy.dart';
+import 'package:intl/intl.dart';
 
 import 'package:kios_epes/View/User/Ongoing/on_going_detail_pesanan.dart';
 import 'package:kios_epes/View/User/Screens/TabProgress.dart';
@@ -32,6 +33,7 @@ class on_going_detail extends StatefulWidget {
 }
 
 class _on_going_detailState extends State<on_going_detail> {
+  final oCcy = new NumberFormat.currency(locale: 'id');
   List _selectedId = [];
   String id;
   List<DataPengiriman> _dataPengirimanDetail = [];
@@ -180,10 +182,6 @@ class _on_going_detailState extends State<on_going_detail> {
                       (Route<dynamic> route) => false,
                     );
                   }
-                  // hapus_pesanan();
-                  // hapus_pesanan_detail();
-                  // hapus_pengiriman_semua();
-                  // hapus_pengiriman_detail();
                 },
               ),
             ],
@@ -301,7 +299,6 @@ class _on_going_detailState extends State<on_going_detail> {
                 child: new Text("Konfirmasi"),
                 onPressed: () {
                   if (_selectedId.length == _dataPengirimanFilteredDetail.length) {
-                    id_hutang();
                     tambah_hutang();
                     update_status_hutang();
                     update_status_hutang_pengiriman();
@@ -311,7 +308,6 @@ class _on_going_detailState extends State<on_going_detail> {
                       (Route<dynamic> route) => false,
                     );
                   } else {
-                    id_hutang();
                     tambah_hutang();
                     update_status_hutang();
                     Navigator.pushAndRemoveUntil(
@@ -389,6 +385,7 @@ class _on_going_detailState extends State<on_going_detail> {
       http.post(url, body: {
         "id_pemesanan": _selectedId[a],
       });
+      // print(_selectedId[a]);
     }
   }
 
@@ -398,6 +395,7 @@ class _on_going_detailState extends State<on_going_detail> {
     http.post(url, body: {
       "id_pengiriman": widget.id_pengiriman,
     });
+    // print(widget.id_pengiriman);
   }
 
   void konfirmasi_pemesanan() {
@@ -420,7 +418,7 @@ class _on_going_detailState extends State<on_going_detail> {
     });
   }
 
-  void id_hutang() {
+  void id_hutang(alamat) {
     id = tanggal +
         bulan +
         year +
@@ -428,7 +426,8 @@ class _on_going_detailState extends State<on_going_detail> {
         menit +
         detik +
         widget.id_pengiriman.length.toString() +
-        widget.id_pegawai.length.toString();
+        widget.id_pegawai.length.toString() +
+        alamat;
   }
 
   void tambah_hutang() {
@@ -438,6 +437,7 @@ class _on_going_detailState extends State<on_going_detail> {
         for (int c = 0; c < _dataPengiriman.length; c++) {
           if (_dataPengirimanFilteredDetail[a].id_pemesanan == _selectedId[b] &&
               _dataPengirimanFilteredDetail[a].id_pengiriman == _dataPengiriman[c].id_pengiriman) {
+            id_hutang(_dataPengirimanFilteredDetail[a].alamat);
             http.post(url, body: {
               "id_hutang": id,
               "id_pemesanan": _dataPengirimanFilteredDetail[a].id_pemesanan,
@@ -452,6 +452,7 @@ class _on_going_detailState extends State<on_going_detail> {
             });
             // print(id);
             // print(_dataPengirimanFilteredDetail[a].id_pemesanan);
+            // print(_dataPengirimanFilteredDetail[a].id_pengiriman);
             // print(_dataPengiriman[c].id_pegawai);
             // print(_dataPengirimanFilteredDetail[a].alamat);
             // print(_dataPengiriman[c].nama_pegawai);
@@ -562,7 +563,7 @@ class _on_going_detailState extends State<on_going_detail> {
                           style: new TextStyle(fontSize: 18.0),
                         ),
                         Text(
-                          "Rp. ${widget.total.toString()}",
+                          oCcy.format(widget.total),
                           style: new TextStyle(fontSize: 18.0),
                         ),
                       ]),
@@ -576,7 +577,7 @@ class _on_going_detailState extends State<on_going_detail> {
                           style: new TextStyle(fontSize: 18.0),
                         ),
                         Text(
-                          "Rp. ${widget.kembalian.toString()}",
+                          oCcy.format(widget.kembalian),
                           style: new TextStyle(fontSize: 18.0),
                         ),
                       ]),
@@ -590,7 +591,7 @@ class _on_going_detailState extends State<on_going_detail> {
                           style: new TextStyle(fontSize: 18.0),
                         ),
                         Text(
-                          "Rp. ${widget.modal.toString()}",
+                          oCcy.format(widget.modal),
                           style: new TextStyle(fontSize: 18.0),
                         ),
                       ]),
@@ -621,6 +622,9 @@ class _on_going_detailState extends State<on_going_detail> {
                                     alamat: _dataPengirimanFilteredDetail[i].alamat,
                                     tanggal: _dataPengirimanFilteredDetail[i].tanggal,
                                     catatan: _dataPengirimanFilteredDetail[i].catatan,
+                                    modal: _dataPengirimanFilteredDetail[i].modal,
+                                    kembalian: _dataPengirimanFilteredDetail[i].kembalian,
+                                    total: _dataPengirimanFilteredDetail[i].total,
                                   )));
                         },
                         child: Card(
@@ -631,7 +635,7 @@ class _on_going_detailState extends State<on_going_detail> {
                                 title: new Text(_dataPengirimanFilteredDetail[i].alamat,
                                     style: TextStyle(fontSize: 18)),
                                 subtitle: Text(
-                                  _dataPengirimanFilteredDetail[i].kembalian.toString(),
+                                  'Kembalian : ${oCcy.format(_dataPengirimanFilteredDetail[i].kembalian)}',
                                   style: TextStyle(fontSize: 15.0),
                                 ),
                               ),

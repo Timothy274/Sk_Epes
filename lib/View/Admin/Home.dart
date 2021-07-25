@@ -86,8 +86,8 @@ class _Home_AdminState extends State<Home_Admin> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.timelapse),
-            label: 'Progress',
+            icon: Icon(Icons.lock),
+            label: 'Akun',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),

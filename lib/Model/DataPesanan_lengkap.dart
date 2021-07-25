@@ -9,6 +9,7 @@ class DataPesananLengkap {
   int total;
   int kembalian;
   int modal;
+  int harga;
   int jumlah;
 
   DataPesananLengkap(
@@ -22,6 +23,7 @@ class DataPesananLengkap {
       this.total,
       this.kembalian,
       this.modal,
+      this.harga,
       this.jumlah});
 
   factory DataPesananLengkap.fromJson(Map<dynamic, dynamic> json) {
@@ -36,6 +38,7 @@ class DataPesananLengkap {
       total: int.parse(json['total']),
       kembalian: int.parse(json['kembalian']),
       modal: int.parse(json['modal']),
+      harga: int.parse(json['harga']),
       jumlah: int.parse(json['jumlah']),
     );
   }

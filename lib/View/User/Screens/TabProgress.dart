@@ -5,11 +5,11 @@ import 'package:http/http.dart' as http;
 import 'package:kios_epes/Model/DataHutang.dart';
 import 'package:kios_epes/Model/DataPesanan.dart';
 import 'package:kios_epes/Model/DataPesananSelesai.dart';
-import 'package:kios_epes/View/User/Finish/finish_detail.dart';
 import 'package:kios_epes/View/User/Hutang/hutang_detail.dart';
 import 'package:kios_epes/View/User/Ongoing/on_going_detail.dart';
 import 'package:kios_epes/View/User/Progress/on_queue_detail.dart';
 import 'package:kios_epes/View/User/Progress/on_queue_kirim.dart';
+import 'package:kios_epes/View/User/Selesai/selesai_detail.dart';
 
 class TabProgress extends StatefulWidget {
   const TabProgress({Key key}) : super(key: key);
@@ -282,6 +282,9 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
                                 alamat: _filteredPesanan[i].alamat,
                                 tanggal: _filteredPesanan[i].tanggal,
                                 catatan: _filteredPesanan[i].catatan,
+                                total: _filteredPesanan[i].total,
+                                modal: _filteredPesanan[i].modal,
+                                kembalian: _filteredPesanan[i].kembalian,
                               )));
                     },
                     child: new Card(
@@ -476,13 +479,12 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
                   child: new GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(new MaterialPageRoute(
-                          builder: (BuildContext context) => new finish_list(
+                          builder: (BuildContext context) => new Selesai_Detail(
                                 id_pemesanan: _dataPengirimanSelesai[i].id_pemesanan,
                                 alamat: _dataPengirimanSelesai[i].alamat,
                                 tanggal: _dataPengirimanSelesai[i].tanggal,
                                 catatan: _dataPengirimanSelesai[i].status,
                                 id_pengiriman: _dataPengirimanSelesai[i].id_pengiriman,
-                                status: _dataPengirimanSelesai[i].status,
                                 total: _dataPengirimanSelesai[i].total,
                                 modal: _dataPengirimanSelesai[i].modal,
                                 kembalian: _dataPengirimanSelesai[i].kembalian,

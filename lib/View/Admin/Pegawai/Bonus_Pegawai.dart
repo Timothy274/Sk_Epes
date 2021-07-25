@@ -1,32 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:http/http.dart' as http;
 import 'package:kios_epes/View/Admin/Home.dart';
 
-class Tambah_Pegawai extends StatefulWidget {
-  const Tambah_Pegawai({Key key}) : super(key: key);
+class Bonus_Pegawai extends StatefulWidget {
+  String id_pegawai;
+  int bonus_thr, bonus_bulanan, bonus_barang, bonus_pengiriman;
+  Bonus_Pegawai(
+      {Key key,
+      this.id_pegawai,
+      this.bonus_barang,
+      this.bonus_pengiriman,
+      this.bonus_bulanan,
+      this.bonus_thr})
+      : super(key: key);
 
   @override
-  _Tambah_PegawaiState createState() => _Tambah_PegawaiState();
+  _Bonus_PegawaiState createState() => _Bonus_PegawaiState();
 }
 
-class _Tambah_PegawaiState extends State<Tambah_Pegawai> {
+class _Bonus_PegawaiState extends State<Bonus_Pegawai> {
   final _formKey = new GlobalKey<FormState>();
-  TextEditingController nama = TextEditingController();
-  TextEditingController nama_lengkap = TextEditingController();
   TextEditingController bonus_thr = TextEditingController();
   TextEditingController bonus_bulanan = TextEditingController();
   TextEditingController bonus_barang = TextEditingController();
   TextEditingController bonus_pengiriman = TextEditingController();
 
-  var tahun = Jiffy().format("yyyy-MM-dd");
-  var waktu = Jiffy().format("HH:mm:SS");
-  var year = Jiffy().format("yyyy");
-  var bulan = Jiffy().format("MM");
-  var tanggal = Jiffy().format("dd");
-  var jam = Jiffy().format("HH");
-  var menit = Jiffy().format("mm");
-  var detik = Jiffy().format("SS");
+  void initState() {
+    super.initState();
+    bonus_thr = new TextEditingController(text: widget.bonus_thr.toString());
+    bonus_bulanan = new TextEditingController(text: widget.bonus_bulanan.toString());
+    bonus_barang = new TextEditingController(text: widget.bonus_barang.toString());
+    bonus_pengiriman = new TextEditingController(text: widget.bonus_pengiriman.toString());
+  }
 
   void push_db() {
     if (bonus_thr.text == "") {
@@ -35,13 +40,9 @@ class _Tambah_PegawaiState extends State<Tambah_Pegawai> {
     if (bonus_bulanan.text == "") {
       bonus_bulanan.text = "0";
     }
-    String id;
-    id = tanggal + bulan + year + nama.text;
-    var url = (Uri.parse("https://timothy.buzz/kios_epes/Pegawai/add_pegawai.php"));
+    var url = (Uri.parse("https://timothy.buzz/kios_epes/Pegawai/update_pegawai_bonus.php"));
     http.post(url, body: {
-      "id_pegawai": id,
-      "nama_lengkap_pegawai": nama_lengkap.text,
-      "nama_pegawai": nama.text,
+      "id_pegawai": widget.id_pegawai,
       "bonus_thr": bonus_thr.text,
       "bonus_bulanan": bonus_bulanan.text,
       "bonus_barang": bonus_barang.text,
@@ -54,7 +55,7 @@ class _Tambah_PegawaiState extends State<Tambah_Pegawai> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: const Text('Tambah Pegawai'),
+        title: const Text('Bonus Pegawai'),
       ),
       body: new Form(
           key: _formKey,
@@ -70,32 +71,6 @@ class _Tambah_PegawaiState extends State<Tambah_Pegawai> {
                         child:
                             Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                           TextFormField(
-                            textCapitalization: TextCapitalization.words,
-                            controller: nama_lengkap,
-                            keyboardType: TextInputType.text,
-                            decoration: new InputDecoration(labelText: "Nama Lengkap Pegawai"),
-                            validator: (val1) {
-                              if (val1 == null || val1.isEmpty) {
-                                return "Masukkan Nama Lengkap Pegawai";
-                              }
-                              return null;
-                            },
-                          ),
-                          Divider(height: 50.0),
-                          TextFormField(
-                            textCapitalization: TextCapitalization.sentences,
-                            controller: nama,
-                            keyboardType: TextInputType.text,
-                            decoration: new InputDecoration(labelText: "Nama Pegawai"),
-                            validator: (val2) {
-                              if (val2 == null || val2.isEmpty) {
-                                return "Masukkan Nama Pegawai";
-                              }
-                              return null;
-                            },
-                          ),
-                          Divider(height: 50.0),
-                          TextFormField(
                             controller: bonus_thr,
                             keyboardType: TextInputType.number,
                             decoration: new InputDecoration(labelText: "Bonus THR"),
@@ -104,7 +79,7 @@ class _Tambah_PegawaiState extends State<Tambah_Pegawai> {
                           TextFormField(
                             controller: bonus_bulanan,
                             keyboardType: TextInputType.number,
-                            decoration: new InputDecoration(labelText: "Bonus Bulanan"),
+                            decoration: new InputDecoration(labelText: "Bonus Tahunan"),
                           ),
                           Divider(height: 50.0),
                           TextFormField(
@@ -154,11 +129,11 @@ class _Tambah_PegawaiState extends State<Tambah_Pegawai> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                Icons.add,
+                                Icons.edit,
                                 color: Colors.white,
                               ),
                               Text(
-                                "Tambah Pegawai",
+                                "Konfirmasi Perubahan",
                                 style: TextStyle(fontSize: 15),
                               )
                             ],

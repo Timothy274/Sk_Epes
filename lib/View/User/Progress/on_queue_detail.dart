@@ -8,10 +8,20 @@ import 'package:kios_epes/Model/DataPesanan_lengkap.dart';
 import 'package:kios_epes/View/User/Home.dart';
 import 'package:kios_epes/View/User/Progress/on_queue_detail_edit_alamat.dart';
 import 'package:kios_epes/View/User/Progress/on_queue_detail_edit_pesanan.dart';
+import 'package:intl/intl.dart';
 
 class on_queue_detail extends StatefulWidget {
   String id_pemesanan, alamat, tanggal, catatan;
-  on_queue_detail({Key key, this.id_pemesanan, this.alamat, this.tanggal, this.catatan})
+  int total, kembalian, modal;
+  on_queue_detail(
+      {Key key,
+      this.id_pemesanan,
+      this.alamat,
+      this.tanggal,
+      this.catatan,
+      this.kembalian,
+      this.modal,
+      this.total})
       : super(key: key);
 
   @override
@@ -19,15 +29,18 @@ class on_queue_detail extends StatefulWidget {
 }
 
 class _on_queue_detailState extends State<on_queue_detail> {
+  final oCcy = new NumberFormat.currency(locale: 'id');
   List<DataPesananLengkap> _dataPesanan = [];
   List<DataPesananLengkap> _dataPesananFiltered = [];
   List<DataBarang> _dataBarang = [];
   Map<String, int> array_barang = {};
+  TextEditingController catatan = TextEditingController();
 
   void initState() {
     super.initState();
     getData();
     getDataBarang();
+    catatan = new TextEditingController(text: widget.catatan);
   }
 
   Future<List<DataBarang>> getDataBarang() async {
@@ -41,6 +54,14 @@ class _on_queue_detailState extends State<on_queue_detail> {
       _dataBarang.forEach((DataBarang) {
         array_barang[DataBarang.id_barang] = DataBarang.nilai_awal;
       });
+    });
+  }
+
+  void update_catatan() {
+    var url = (Uri.parse("http://timothy.buzz/kios_epes/Pesanan/update_catatan.php"));
+    http.post(url, body: {
+      "id_pemesanan": widget.id_pemesanan,
+      "catatan": catatan.text,
     });
   }
 
@@ -138,7 +159,7 @@ class _on_queue_detailState extends State<on_queue_detail> {
       body: Column(
         children: [
           Expanded(
-              flex: 2,
+              flex: 4,
               child: Center(
                 child: Container(
                   decoration: BoxDecoration(
@@ -168,15 +189,57 @@ class _on_queue_detailState extends State<on_queue_detail> {
                       TableRow(children: [
                         Text(
                           'Tanggal',
-                          style: new TextStyle(fontSize: 25.0),
+                          style: new TextStyle(fontSize: 18.0),
                         ),
                         Text(
                           ':',
-                          style: new TextStyle(fontSize: 25.0),
+                          style: new TextStyle(fontSize: 18.0),
                         ),
                         Text(
                           widget.tanggal,
-                          style: new TextStyle(fontSize: 25.0),
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                      ]),
+                      TableRow(children: [
+                        Text(
+                          'Total',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          ':',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          oCcy.format(widget.total),
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                      ]),
+                      TableRow(children: [
+                        Text(
+                          'Kembalian',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          ':',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          oCcy.format(widget.kembalian),
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                      ]),
+                      TableRow(children: [
+                        Text(
+                          'Modal',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          ':',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          oCcy.format(widget.modal),
+                          style: new TextStyle(fontSize: 18.0),
                         ),
                       ]),
                     ],
@@ -203,9 +266,11 @@ class _on_queue_detailState extends State<on_queue_detail> {
                           children: <Widget>[
                             Expanded(
                               child: ListTile(
-                                title: new Text(_dataPesananFiltered[i].nama_barang,
-                                    style: TextStyle(fontSize: 18)),
-                              ),
+                                  title: new Text(_dataPesananFiltered[i].nama_barang,
+                                      style: TextStyle(fontSize: 18)),
+                                  subtitle: Text(
+                                      'Total : ${oCcy.format(_dataPesananFiltered[i].harga)}')),
+                              // subtitle: Text('Kembalian : ${_dataPengirimanFilteredDetail[i].kembalian.toString()}',),
                             ),
                             Container(
                               margin: const EdgeInsets.only(right: 20.0),
@@ -221,6 +286,43 @@ class _on_queue_detailState extends State<on_queue_detail> {
                     );
                   },
                 )),
+          ),
+          Expanded(
+            flex: 2,
+            child: Container(
+              margin: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(color: Colors.blue, width: 2.0)),
+              child: Container(
+                  margin: EdgeInsets.all(15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Catatan',
+                        style: new TextStyle(fontSize: 18.0),
+                      ),
+                      Text(
+                        ':',
+                        style: new TextStyle(fontSize: 18.0),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => _catatanDialog(context),
+                            barrierDismissible: false,
+                          );
+                        },
+                        child: Text(
+                          "Lihat",
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                      )
+                    ],
+                  )),
+            ),
           ),
           Expanded(
               flex: 1,
@@ -307,6 +409,49 @@ class _on_queue_detailState extends State<on_queue_detail> {
               ))
         ],
       ),
+    );
+  }
+
+  Widget _catatanDialog(BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Edit Data'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _build_catatanDialog(),
+        ],
+      ),
+      actions: <Widget>[
+        new ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Cancel'),
+        ),
+        new ElevatedButton(
+          onPressed: () {
+            update_catatan();
+            Navigator.pop(context);
+          },
+          child: const Text('Simpan'),
+        )
+      ],
+    );
+  }
+
+  Widget _build_catatanDialog() {
+    return new Column(
+      children: <Widget>[
+        new Container(
+          child: TextField(
+              textCapitalization: TextCapitalization.sentences,
+              controller: catatan,
+              maxLength: 100,
+              maxLines: 4,
+              decoration: new InputDecoration(labelText: "Catatan")),
+        ),
+      ],
     );
   }
 }

@@ -6,7 +6,9 @@ import 'dart:async';
 import 'dart:convert';
 // import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:kios_epes/View/User/Stok/Edit_Stok.dart';
 import 'package:kios_epes/View/User/Stok/Tambah_Stok.dart';
+import 'package:intl/intl.dart';
 
 class TabStok extends StatefulWidget {
   final List<DataBarang> data;
@@ -17,6 +19,7 @@ class TabStok extends StatefulWidget {
 }
 
 class _TabStokState extends State<TabStok> {
+  final oCcy = new NumberFormat.currency(locale: 'id');
   List<DataBarang> _dataBarang = [];
   List<DataBarang> _filtered = [];
   List<DataBarang> _null_filtered = [];
@@ -44,6 +47,7 @@ class _TabStokState extends State<TabStok> {
   }
 
   void _alterfilter(String query) {
+    query = query.toLowerCase();
     List<DataBarang> dummySearchList = [];
     dummySearchList.addAll(_null_filtered);
     if (query.isNotEmpty) {
@@ -133,6 +137,9 @@ class _TabStokState extends State<TabStok> {
                     label: Text('Harga'),
                   ),
                   DataColumn(
+                    label: Text('Edit'),
+                  ),
+                  DataColumn(
                     label: Text('Hapus'),
                   ),
                 ],
@@ -148,13 +155,26 @@ class _TabStokState extends State<TabStok> {
                             onTap: () {},
                           ),
                           DataCell(
-                            Text(_filtered[i].Harga_Tetap.toString()),
+                            Text(oCcy.format(_filtered[i].Harga_Tetap)),
                             onTap: () {},
                           ),
                           DataCell(TextButton(
+                            child: Text('Edit'),
+                            onPressed: () {
+                              Navigator.of(context).push(new MaterialPageRoute(
+                                builder: (BuildContext context) => new Edit_Stok(
+                                  id_barang: _filtered[i].id_barang,
+                                  nama_barang: _filtered[i].Nama,
+                                  harga: _filtered[i].Harga,
+                                  stok: _filtered[i].Stock,
+                                ),
+                              ));
+                            },
+                          )),
+                          DataCell(TextButton(
                             child: Text('Hapus'),
                             onPressed: () {},
-                          ))
+                          )),
                         ]))),
           ),
         ),

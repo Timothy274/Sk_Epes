@@ -1,128 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:kios_epes/Model/DataHutang.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import 'package:kios_epes/Model/DataPesanan_lengkap.dart';
-import 'package:kios_epes/View/User/Home.dart';
 import 'package:intl/intl.dart';
 
-class hutang_detail extends StatefulWidget {
-  String id_pemesanan,
-      id_pengiriman,
-      id_hutang,
-      nama_pegawai,
-      alamat,
-      tanggal_pemesanan,
-      tanggal_pengiriman,
-      waktu_pengiriman,
-      catatan;
-  int total;
-  hutang_detail(
-      {Key key,
-      this.id_pemesanan,
-      this.id_pengiriman,
-      this.id_hutang,
-      this.nama_pegawai,
-      this.alamat,
-      this.tanggal_pemesanan,
-      this.tanggal_pengiriman,
-      this.waktu_pengiriman,
-      this.catatan,
-      this.total})
-      : super(key: key);
+import 'package:kios_epes/Model/DataPengiriman.dart';
+import 'package:kios_epes/Model/DataPesanan_lengkap.dart';
+
+class Selesai_Detail extends StatefulWidget {
+  String id_pengiriman, id_pemesanan, alamat, catatan, tanggal;
+  int total, kembalian, modal;
+  Selesai_Detail({
+    Key key,
+    this.id_pengiriman,
+    this.id_pemesanan,
+    this.kembalian,
+    this.modal,
+    this.alamat,
+    this.tanggal,
+    this.total,
+    this.catatan,
+  }) : super(key: key);
 
   @override
-  _hutang_detailState createState() => _hutang_detailState();
+  _Selesai_DetailState createState() => _Selesai_DetailState();
 }
 
-class _hutang_detailState extends State<hutang_detail> {
+class _Selesai_DetailState extends State<Selesai_Detail> {
   final oCcy = new NumberFormat.currency(locale: 'id');
-  List<DataHutang> _dataHutang = [];
-  List<DataPesananLengkap> _dataPesananDetail = [];
+  List<DataPesananLengkap> _dataPesanan = [];
   TextEditingController catatan = TextEditingController();
 
   void initState() {
-    getBarang();
+    super.initState();
+    getPengirimanDetail();
     catatan = new TextEditingController(text: widget.catatan);
   }
 
-  void confirm_selesai() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text("Hutang Selesai"),
-          content: new Text("Apakah anda yakin ingin menyelesaikan pengiriman berikut ?"),
-          actions: <Widget>[
-            new ElevatedButton(
-              child: new Text("Tutup"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            new ElevatedButton(
-              child: new Text("Konfirmasi"),
-              onPressed: () {
-                update_status_pesanan();
-                update_status_pengiriman();
-                delete_hutang();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (BuildContext context) => new Home_User()),
-                  (Route<dynamic> route) => false,
-                );
-
-                // hapus_pesanan();
-                // hapus_pesanan_detail();
-                // hapus_pengiriman_semua();
-                // hapus_pengiriman_detail();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void update_status_pesanan() {
-    var url = (Uri.parse("http://timothy.buzz/kios_epes/Hutang/update_status_hutang_pesanan.php"));
-    http.post(url, body: {
-      "id_pemesanan": widget.id_pemesanan,
-    });
-  }
-
-  void update_status_pengiriman() {
-    var url =
-        (Uri.parse("http://timothy.buzz/kios_epes/Hutang/update_status_hutang_pengiriman.php"));
-    http.post(url, body: {
-      "id_pengiriman": widget.id_pemesanan,
-    });
-  }
-
-  void delete_hutang() {
-    var url = (Uri.parse("http://timothy.buzz/kios_epes/Hutang/delete_hutang.php"));
-    http.post(url, body: {
-      "id_hutang": widget.id_hutang,
-    });
-  }
-
-  void update_catatan_hutang() {
-    var url = (Uri.parse("http://timothy.buzz/kios_epes/Hutang/update_catatan_hutang.php"));
-    http.post(url, body: {
-      "id_hutang": widget.id_hutang,
-      "catatan": catatan.text,
-    });
-  }
-
-  Future<List> getBarang() async {
+  Future<List> getPengirimanDetail() async {
     final response = await http.get(
         Uri.parse("http://timothy.buzz/kios_epes/Pesanan/get_pesanan_join_pesanan_detail.php"));
     final responseJson = json.decode(response.body);
+
     setState(() {
       for (Map Data in responseJson) {
         if (DataPesananLengkap.fromJson(Data).id_pemesanan == widget.id_pemesanan) {
-          _dataPesananDetail.add(DataPesananLengkap.fromJson(Data));
+          _dataPesanan.add(DataPesananLengkap.fromJson(Data));
         }
       }
     });
@@ -132,12 +54,12 @@ class _hutang_detailState extends State<hutang_detail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detail Hutang'),
+        title: const Text('Detail Pengiriman'),
       ),
       body: Column(
         children: [
           Expanded(
-              flex: 3,
+              flex: 4,
               child: Center(
                 child: Container(
                   decoration: BoxDecoration(
@@ -166,7 +88,7 @@ class _hutang_detailState extends State<hutang_detail> {
                       ]),
                       TableRow(children: [
                         Text(
-                          'Pengirim',
+                          'Tanggal',
                           style: new TextStyle(fontSize: 18.0),
                         ),
                         Text(
@@ -174,49 +96,7 @@ class _hutang_detailState extends State<hutang_detail> {
                           style: new TextStyle(fontSize: 18.0),
                         ),
                         Text(
-                          widget.nama_pegawai,
-                          style: new TextStyle(fontSize: 18.0),
-                        ),
-                      ]),
-                      TableRow(children: [
-                        Text(
-                          'Tanggal Pemesanan',
-                          style: new TextStyle(fontSize: 18.0),
-                        ),
-                        Text(
-                          ':',
-                          style: new TextStyle(fontSize: 18.0),
-                        ),
-                        Text(
-                          widget.tanggal_pemesanan,
-                          style: new TextStyle(fontSize: 18.0),
-                        ),
-                      ]),
-                      TableRow(children: [
-                        Text(
-                          'Tanggal Pengiriman',
-                          style: new TextStyle(fontSize: 18.0),
-                        ),
-                        Text(
-                          ':',
-                          style: new TextStyle(fontSize: 18.0),
-                        ),
-                        Text(
-                          widget.tanggal_pengiriman,
-                          style: new TextStyle(fontSize: 18.0),
-                        ),
-                      ]),
-                      TableRow(children: [
-                        Text(
-                          'Waktu Pengiriman',
-                          style: new TextStyle(fontSize: 18.0),
-                        ),
-                        Text(
-                          ':',
-                          style: new TextStyle(fontSize: 18.0),
-                        ),
-                        Text(
-                          widget.waktu_pengiriman,
+                          widget.tanggal,
                           style: new TextStyle(fontSize: 18.0),
                         ),
                       ]),
@@ -234,14 +114,42 @@ class _hutang_detailState extends State<hutang_detail> {
                           style: new TextStyle(fontSize: 18.0),
                         ),
                       ]),
+                      TableRow(children: [
+                        Text(
+                          'Kembalian',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          ':',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          oCcy.format(widget.kembalian),
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                      ]),
+                      TableRow(children: [
+                        Text(
+                          'Modal',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          ':',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          oCcy.format(widget.modal),
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                      ]),
                     ],
                   ),
                 ),
               )),
           Expanded(
-            flex: 3,
+            flex: 6,
             child: Container(
-                margin: const EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+                margin: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0, bottom: 10.0),
                 child: FutureBuilder(
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.none &&
@@ -249,7 +157,7 @@ class _hutang_detailState extends State<hutang_detail> {
                       return Container();
                     }
                     return ListView.builder(
-                      itemCount: _dataPesananDetail.length,
+                      itemCount: _dataPesanan.length,
                       itemBuilder: (context, i) {
                         return Container(
                             // padding: const EdgeInsets.all(10.0),
@@ -258,15 +166,15 @@ class _hutang_detailState extends State<hutang_detail> {
                           children: <Widget>[
                             Expanded(
                               child: ListTile(
-                                title: new Text(_dataPesananDetail[i].nama_barang,
+                                title: new Text(_dataPesanan[i].nama_barang,
                                     style: TextStyle(fontSize: 18)),
-                                subtitle: Text('Total : ${_dataPesananDetail[i].harga}'),
+                                subtitle: Text('Total : ${_dataPesanan[i].harga}'),
                               ),
                             ),
                             Container(
                               margin: const EdgeInsets.only(right: 20.0),
                               child: Text(
-                                _dataPesananDetail[i].jumlah.toString(),
+                                _dataPesanan[i].jumlah.toString(),
                                 style: TextStyle(fontSize: 20.0),
                               ),
                               alignment: Alignment.centerRight,
@@ -279,7 +187,7 @@ class _hutang_detailState extends State<hutang_detail> {
                 )),
           ),
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Container(
               margin: EdgeInsets.all(15),
               decoration: BoxDecoration(
@@ -302,7 +210,7 @@ class _hutang_detailState extends State<hutang_detail> {
                         onPressed: () {
                           showDialog(
                             context: context,
-                            builder: (BuildContext context) => _accDialog(context),
+                            builder: (BuildContext context) => _catatanDialog(context),
                             barrierDismissible: false,
                           );
                         },
@@ -315,44 +223,19 @@ class _hutang_detailState extends State<hutang_detail> {
                   )),
             ),
           ),
-          Expanded(
-              flex: 1,
-              child: Container(
-                width: double.infinity,
-                child: ElevatedButton(
-                    onPressed: () {
-                      confirm_selesai();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.check,
-                          color: Colors.white,
-                        ),
-                        new Container(
-                          width: 20.0,
-                        ),
-                        Text(
-                          "Selesai",
-                          style: TextStyle(fontSize: 15),
-                        )
-                      ],
-                    )),
-              )),
         ],
       ),
     );
   }
 
-  Widget _accDialog(BuildContext context) {
+  Widget _catatanDialog(BuildContext context) {
     return new AlertDialog(
-      title: const Text('Detail Catatan'),
+      title: const Text('Edit Data'),
       content: new Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _buildAccInput(),
+          _build_catatanDialog(),
         ],
       ),
       actions: <Widget>[
@@ -360,20 +243,13 @@ class _hutang_detailState extends State<hutang_detail> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text('Cancel'),
+          child: const Text('Tutup'),
         ),
-        new ElevatedButton(
-          onPressed: () {
-            update_catatan_hutang();
-            Navigator.pop(context);
-          },
-          child: const Text('Simpan'),
-        )
       ],
     );
   }
 
-  Widget _buildAccInput() {
+  Widget _build_catatanDialog() {
     return new Column(
       children: <Widget>[
         new Container(

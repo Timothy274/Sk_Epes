@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kios_epes/Model/DataBarang.dart';
 import 'package:kios_epes/View/User/Home.dart';
+import 'package:intl/intl.dart';
 
 class on_queue_detail_edit_pemesanan extends StatefulWidget {
   Map array_barang;
@@ -14,6 +15,7 @@ class on_queue_detail_edit_pemesanan extends StatefulWidget {
 }
 
 class _on_queue_detail_edit_pemesananState extends State<on_queue_detail_edit_pemesanan> {
+  final oCcy = new NumberFormat.currency(locale: 'id');
   List<DataBarang> _data_pesanan = [];
   List<DataBarang> _dataBarang = [];
   List<DataBarang> _filtered = [];
@@ -364,7 +366,7 @@ class _on_queue_detail_edit_pemesananState extends State<on_queue_detail_edit_pe
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Harga : ${_filtered[i].Harga_Tetap.toString()}",
+                                    oCcy.format(_filtered[i].Harga_Tetap),
                                   ),
                                   Text(
                                     "Stok : ${_filtered[i].Stock.toString()}",

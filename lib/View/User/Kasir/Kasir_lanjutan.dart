@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kios_epes/Model/DataBarang.dart';
 import 'package:kios_epes/Model/DataPegawai.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:intl/intl.dart';
 
 import '../Home.dart';
 
@@ -17,6 +18,7 @@ class User_kasir_Lanjutan extends StatefulWidget {
 }
 
 class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
+  final oCcy = new NumberFormat.currency(locale: 'id');
   int total_hitung = 0;
   int kembalian_hitung = 0;
   int modal_hitung = 0;
@@ -283,7 +285,7 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Harga : ${widget.data[i].Harga_Tetap.toString()}",
+                                    oCcy.format(widget.data[i].Harga_Tetap),
                                   ),
                                   Text(
                                     "Stok : ${widget.data[i].Stock.toString()}",

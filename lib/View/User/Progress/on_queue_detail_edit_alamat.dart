@@ -35,81 +35,81 @@ class _on_queue_detail_edit_alamatState extends State<on_queue_detail_edit_alama
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: true,
+        // resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: const Text('Detail Pesanan'),
         ),
         body: Form(
           key: _formKey,
-          child: Center(
-              child: Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                    flex: 6,
-                    child: Container(
-                      margin: EdgeInsets.only(left: 15, right: 15),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextFormField(
-                            textCapitalization: TextCapitalization.words,
-                            controller: alamat,
-                            keyboardType: TextInputType.text,
-                            decoration: new InputDecoration(labelText: "Alamat"),
-                            validator: (val1) {
-                              if (val1 == null || val1.isEmpty) {
-                                return "Masukkan Alamat";
-                              }
-                              return null;
-                            },
-                          ),
-                          new Container(
-                            height: 50.0,
-                          ),
-                          TextField(
-                              controller: catatan,
-                              maxLength: 100,
-                              maxLines: 4,
-                              decoration: new InputDecoration(labelText: "Catatan")),
-                        ],
-                      ),
-                    )),
-                Expanded(
-                    flex: 1,
-                    child: Container(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState.validate()) {
-                              kirim();
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) => new Home_User()),
-                                (Route<dynamic> route) => false,
-                              );
-                            }
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                              ),
-                              new Container(
-                                width: 20.0,
-                              ),
-                              Text(
-                                "Ubah Alamat",
-                                style: TextStyle(fontSize: 15),
-                              )
-                            ],
-                          )),
-                    ))
-              ],
-            ),
-          )),
+          child: Column(
+            children: [
+              Expanded(
+                  flex: 6,
+                  child: Center(
+                      child: Container(
+                          margin: EdgeInsets.only(left: 15, right: 15),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextFormField(
+                                  textCapitalization: TextCapitalization.words,
+                                  controller: alamat,
+                                  keyboardType: TextInputType.text,
+                                  decoration: new InputDecoration(labelText: "Alamat"),
+                                  validator: (val1) {
+                                    if (val1 == null || val1.isEmpty) {
+                                      return "Masukkan Alamat";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                new Container(
+                                  height: 50.0,
+                                ),
+                                TextField(
+                                    controller: catatan,
+                                    maxLength: 100,
+                                    maxLines: 4,
+                                    decoration: new InputDecoration(labelText: "Catatan")),
+                              ],
+                            ),
+                          )))),
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            kirim();
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (BuildContext context) => new Home_User()),
+                              (Route<dynamic> route) => false,
+                            );
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                            new Container(
+                              width: 20.0,
+                            ),
+                            Text(
+                              "Ubah Alamat",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        )),
+                  ))
+            ],
+          ),
         ));
   }
 }

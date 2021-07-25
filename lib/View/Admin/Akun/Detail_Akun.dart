@@ -1,0 +1,217 @@
+import 'package:flutter/material.dart';
+
+class Detail_Akun extends StatefulWidget {
+  const Detail_Akun({Key key}) : super(key: key);
+
+  @override
+  _Detail_AkunState createState() => _Detail_AkunState();
+}
+
+class _Detail_AkunState extends State<Detail_Akun> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        color: Color(0xffffff),
+        child: Stack(
+          children: <Widget>[
+            SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    margin:
+                        const EdgeInsets.only(top: 100.0, left: 20.0, right: 20.0, bottom: 20.0),
+                    child: Card(
+                      color: Color.fromRGBO(76, 177, 247, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Center(
+                            child: Container(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: Icon(
+                                Icons.account_circle,
+                                size: 100,
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: Container(
+                              padding: const EdgeInsets.only(top: 20, bottom: 25),
+                              child: Text(
+                                "nama",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                      width: 500,
+                      padding: const EdgeInsets.only(top: 20, left: 20.0, right: 20.0),
+                      margin:
+                          const EdgeInsets.only(top: 40.0, left: 20.0, right: 20.0, bottom: 20.0),
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(76, 177, 247, 1),
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 20.0),
+                                alignment: Alignment(-1.0, -1.0),
+                                child: Text(
+                                  'User Data',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  // Navigator.push(
+                                  // context,
+                                  // MaterialPageRoute(
+                                  // builder: (context) => editProfile(
+                                  // username: nama,
+                                  // email: email,
+                                  // id: id,
+                                  // )));
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(bottom: 20.0, left: 20),
+                                  alignment: Alignment(-1.0, -1.0),
+                                  child: Icon(
+                                    Icons.edit,
+                                    size: 24.0,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 20.0),
+                            child: Table(
+                              columnWidths: {
+                                0: FlexColumnWidth(0.6),
+                                1: FlexColumnWidth(0.1),
+                              },
+                              children: [
+                                TableRow(children: [
+                                  Text(
+                                    'Username',
+                                    style: new TextStyle(fontSize: 20.0),
+                                  ),
+                                  Text(
+                                    ':',
+                                    style: new TextStyle(fontSize: 20.0),
+                                  ),
+                                  Text(
+                                    "nama",
+                                    style: new TextStyle(fontSize: 20.0),
+                                  ),
+                                ]),
+                                TableRow(children: [
+                                  Text(
+                                    'Email',
+                                    style: new TextStyle(fontSize: 20.0),
+                                  ),
+                                  Text(
+                                    ':',
+                                    style: new TextStyle(fontSize: 20.0),
+                                  ),
+                                  Text(
+                                    "email",
+                                    style: new TextStyle(fontSize: 20.0),
+                                  ),
+                                ]),
+                              ],
+                            ),
+                          )
+                        ],
+                      )),
+                  Container(
+                      padding: const EdgeInsets.only(top: 20),
+                      margin:
+                          const EdgeInsets.only(top: 40.0, left: 20.0, right: 20.0, bottom: 20.0),
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(76, 177, 247, 1),
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.only(left: 40),
+                            alignment: Alignment(-1.0, -1.0),
+                            child: Text(
+                              'More',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 20, bottom: 20),
+                            padding: const EdgeInsets.only(left: 40, right: 40),
+                            alignment: Alignment(-1.0, -1.0),
+                            child: new Table(
+                              children: [
+                                TableRow(children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(bottom: 20),
+                                    child: Text(
+                                      'Password',
+                                      style: new TextStyle(fontSize: 25.0),
+                                    ),
+                                  ),
+                                  Container(
+                                      margin: const EdgeInsets.only(bottom: 25),
+                                      child: RaisedButton(
+                                        color: Colors.lightBlueAccent,
+                                        onPressed: () {
+                                          // Navigator.push(
+                                          // context,
+                                          // MaterialPageRoute(
+                                          // builder: (context) =>
+                                          // ResetPass(
+                                          // pass: Password,
+                                          // username: nama,
+                                          // )));
+                                        },
+                                        child: const Text('Ubah', style: TextStyle(fontSize: 20)),
+                                      ))
+                                ]),
+                                TableRow(children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(bottom: 25),
+                                    child: Text(
+                                      'Akun',
+                                      style: new TextStyle(fontSize: 25.0),
+                                    ),
+                                  ),
+                                  Container(
+                                      margin: const EdgeInsets.only(bottom: 25),
+                                      child: RaisedButton(
+                                        color: Colors.red,
+                                        onPressed: () {
+                                          // _showdialogNama();
+                                        },
+                                        child: const Text('Keluar', style: TextStyle(fontSize: 20)),
+                                      ))
+                                ]),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:kios_epes/Model/DataPegawai.dart';
+import 'package:kios_epes/View/Admin/Pegawai/Detail_Pegawai.dart';
 import 'package:kios_epes/View/Admin/Pegawai/Tambah_Pegawai.dart';
 import 'package:http/http.dart' as http;
 
@@ -110,7 +111,14 @@ class _Tab_Pegawai_DartState extends State<Tab_Pegawai_Dart> {
                   return new Container(
                     padding: const EdgeInsets.all(10.0),
                     child: new GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) => new Detail_Pegawai(
+                                  id_pegawai: _filtered[i].id_pegawai,
+                                  nama: _filtered[i].nama_pegawai,
+                                  nama_lengkap: _filtered[i].nama_lengkap_pegawai,
+                                )));
+                      },
                       child: new Card(
                           child: Container(
                         child: Row(

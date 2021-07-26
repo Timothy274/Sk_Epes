@@ -1,55 +1,33 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:kios_epes/Model/DataPegawai.dart';
-import 'package:kios_epes/Model/DataPengiriman.dart';
 import 'package:kios_epes/View/Admin/Home.dart';
 
-class Edit_Profil_Pegawai extends StatefulWidget {
-  String id_pegawai, nama, nama_lengkap;
-  Edit_Profil_Pegawai({Key key, this.id_pegawai, this.nama, this.nama_lengkap}) : super(key: key);
+class Edit_Password_Akun extends StatefulWidget {
+  String id_user, password;
+  Edit_Password_Akun({Key key, this.id_user, this.password}) : super(key: key);
 
   @override
-  _Edit_Profil_PegawaiState createState() => _Edit_Profil_PegawaiState();
+  _Edit_Password_AkunState createState() => _Edit_Password_AkunState();
 }
 
-class _Edit_Profil_PegawaiState extends State<Edit_Profil_Pegawai> {
+class _Edit_Password_AkunState extends State<Edit_Password_Akun> {
   final _formKey = new GlobalKey<FormState>();
-  TextEditingController nama = TextEditingController();
-  TextEditingController nama_lengkap = TextEditingController();
-  List<DataPegawai> _dataPegawai = [];
+  TextEditingController password = TextEditingController();
+  TextEditingController password_konfirmasi = TextEditingController();
 
-  void initState() {
-    super.initState();
-    getDataPegawai();
-    nama = TextEditingController(text: widget.nama);
-    nama_lengkap = TextEditingController(text: widget.nama_lengkap);
-  }
-
-  Future<List> getDataPegawai() async {
-    final response =
-        await http.get(Uri.parse("http://timothy.buzz/kios_epes/Pegawai/get_pegawai.php"));
-    final responseJson = json.decode(response.body);
-    setState(() {
-      for (Map Data in responseJson) {
-        _dataPegawai.add(DataPegawai.fromJson(Data));
-      }
-    });
-  }
-
-  void konfirmasi_perubahan() {
-    for (int a = 0; a < _dataPegawai.length; a++) {
-      if (_dataPegawai[a].nama_lengkap_pegawai == nama_lengkap.text ||
-          _dataPegawai[a].nama_pegawai == nama.text) {
-        _showDialogerror();
+  void konfirmasi() {
+    if (password.text == widget.password) {
+      _showDialogerrorlama();
+    } else {
+      if (password.text != password_konfirmasi.text) {
+        _showDialogerrorsama();
       } else {
         push_db();
       }
     }
   }
 
-  void _showDialogerror() {
+  void _showDialogerrorlama() {
 // flutter defined function
     showDialog(
       context: context,
@@ -58,7 +36,7 @@ class _Edit_Profil_PegawaiState extends State<Edit_Profil_Pegawai> {
         return AlertDialog(
           title: new Text("Perubahan Tertunda"),
           content: new Text(
-              "Ada nama atau nama lengkap pegawai yang sama, jika ini pegawai baru bisa dilanjutkan untuk konfirmasi perubahan, namun jika bukan pegawai baru disarankan untuk tidak memasukkan nama pegawai yang sama"),
+              "Password yang anda masukkan, sama dengan password anda sebelumnya. Mohon untuk merubah kembali password baru anda"),
           actions: <Widget>[
 // usually buttons at the bottom of the dialog
             new ElevatedButton(
@@ -67,10 +45,27 @@ class _Edit_Profil_PegawaiState extends State<Edit_Profil_Pegawai> {
                 Navigator.of(context).pop();
               },
             ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDialogerrorsama() {
+// flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+// return object of type Dialog
+        return AlertDialog(
+          title: new Text("Perubahan Tertunda"),
+          content: new Text("Password yang anda masukkan tidak sama mohon periksa kembali"),
+          actions: <Widget>[
+// usually buttons at the bottom of the dialog
             new ElevatedButton(
-              child: new Text("Konfirmasi"),
+              child: new Text("Close"),
               onPressed: () {
-                push_db();
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -80,11 +75,10 @@ class _Edit_Profil_PegawaiState extends State<Edit_Profil_Pegawai> {
   }
 
   void push_db() {
-    var url = (Uri.parse("https://timothy.buzz/kios_epes/Pegawai/update_pegawai_nama.php"));
+    var url = (Uri.parse("https://timothy.buzz/kios_epes/Akun/update_profil_password.php"));
     http.post(url, body: {
-      "id_pegawai": widget.id_pegawai,
-      "nama_lengkap_pegawai": nama_lengkap.text,
-      "nama_pegawai": nama.text,
+      "id_akun": widget.id_user,
+      "password": password.text,
     });
     Navigator.pushAndRemoveUntil(
       context,
@@ -98,7 +92,7 @@ class _Edit_Profil_PegawaiState extends State<Edit_Profil_Pegawai> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: const Text('Ubah Profil Pegawai'),
+        title: const Text('Ubah Password'),
       ),
       body: new Form(
           key: _formKey,
@@ -114,26 +108,25 @@ class _Edit_Profil_PegawaiState extends State<Edit_Profil_Pegawai> {
                         child:
                             Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                           TextFormField(
-                            textCapitalization: TextCapitalization.words,
-                            controller: nama_lengkap,
-                            keyboardType: TextInputType.text,
-                            decoration: new InputDecoration(labelText: "Nama Lengkap Pegawai"),
+                            controller: password,
+                            decoration: new InputDecoration(labelText: "Password"),
+                            maxLength: 10,
                             validator: (val1) {
                               if (val1 == null || val1.isEmpty) {
-                                return "Masukkan Nama Lengkap Pegawai";
+                                return "Masukkan Password";
                               }
                               return null;
                             },
                           ),
                           Divider(height: 50.0),
                           TextFormField(
-                            textCapitalization: TextCapitalization.sentences,
-                            controller: nama,
+                            controller: password_konfirmasi,
                             keyboardType: TextInputType.text,
-                            decoration: new InputDecoration(labelText: "Nama Pegawai"),
+                            decoration: new InputDecoration(labelText: "Konfirmasi Password"),
+                            maxLength: 10,
                             validator: (val2) {
                               if (val2 == null || val2.isEmpty) {
-                                return "Masukkan Nama Pegawai";
+                                return "Masukkan Password";
                               }
                               return null;
                             },
@@ -148,7 +141,7 @@ class _Edit_Profil_PegawaiState extends State<Edit_Profil_Pegawai> {
                       child: ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState.validate()) {
-                              konfirmasi_perubahan();
+                              konfirmasi();
                             }
                           },
                           child: Row(

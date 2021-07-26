@@ -666,7 +666,12 @@ class _Detail_PegawaiState extends State<Detail_Pegawai> {
                 child: new SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                      ),
+                      onPressed: () {
+                        validasihapus();
+                      },
                       child: const Text('Hapus Akun', style: TextStyle(fontSize: 30)),
                     ))),
           ],

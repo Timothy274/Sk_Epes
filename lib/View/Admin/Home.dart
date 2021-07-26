@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:kios_epes/View/Admin/Screens/TabHome.dart';
 import 'package:kios_epes/View/Admin/Screens/TabPegawai.dart';
-import 'package:kios_epes/View/Admin/Screens/TabProgress.dart';
+import 'package:kios_epes/View/Admin/Screens/TabAkun.dart';
 import 'package:kios_epes/View/Admin/Screens/TabSettings.dart';
 import 'package:kios_epes/View/Admin/Screens/TabStok.dart';
 import 'package:kios_epes/Model/DataBarang.dart';
@@ -27,10 +27,10 @@ class _Home_AdminState extends State<Home_Admin> {
     super.initState();
     listScreen = [
       Tab_Home_Admin(),
-      Tab_Progress_Admin(),
+      Tab_Akun_Admin(),
       Tab_Pegawai_Dart(),
-      Tab_Settings_Admin(),
-      Tab_Stok_Admin()
+      Tab_Stok_Admin(),
+      Tab_Settings_Admin()
     ];
   }
 

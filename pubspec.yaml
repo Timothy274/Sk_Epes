@@ -33,6 +33,9 @@ dependencies:
   horizontal_data_table: ^3.4.1
   data_table_2: ^2.0.4
   intl: 
+  shared_preferences:
+  pdf:
+  printing:
 
 dev_dependencies:
   flutter_test:

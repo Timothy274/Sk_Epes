@@ -74,7 +74,7 @@ class _Home_AdminState extends State<Home_Admin> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Kios Epes'),
+        title: const Text('Kios Epes Admin'),
       ),
       body: Center(
         child: listScreen[tabIndex],

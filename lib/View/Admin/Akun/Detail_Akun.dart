@@ -253,6 +253,8 @@ class _Detail_AkunState extends State<Detail_Akun> {
                               child: Column(
                                 children: [
                                   Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisSize: MainAxisSize.max,
                                     children: <Widget>[
                                       Container(
                                           padding: const EdgeInsets.only(top: 20, left: 40),
@@ -286,6 +288,8 @@ class _Detail_AkunState extends State<Detail_Akun> {
                                     ],
                                   ),
                                   Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisSize: MainAxisSize.max,
                                     children: <Widget>[
                                       Container(
                                           padding: const EdgeInsets.only(top: 20, left: 40),

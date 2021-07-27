@@ -19,12 +19,13 @@ class _Tab_Pegawai_DartState extends State<Tab_Pegawai_Dart> {
   List<DataPegawai> _null_filtered = [];
 
   void _alterfilter(String query) {
+    query = query.toLowerCase();
     List<DataPegawai> dummySearchList = [];
     dummySearchList.addAll(_null_filtered);
     if (query.isNotEmpty) {
       List<DataPegawai> dummyListData = [];
       dummySearchList.forEach((item) {
-        if (item.nama_pegawai.contains(query)) {
+        if (item.nama_pegawai.toLowerCase().contains(query)) {
           dummyListData.add(item);
         }
       });
@@ -82,6 +83,7 @@ class _Tab_Pegawai_DartState extends State<Tab_Pegawai_Dart> {
                     margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                     child: TextField(
                       textAlign: TextAlign.left,
+                      textCapitalization: TextCapitalization.words,
                       // controller: search,
                       onChanged: (value) {
                         _alterfilter(value);

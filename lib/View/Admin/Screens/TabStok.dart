@@ -53,11 +53,12 @@ class _Tab_Stok_AdminState extends State<Tab_Stok_Admin> {
     if (query.isNotEmpty) {
       List<DataBarang> dummyListData = [];
       dummySearchList.forEach((item) {
-        if (item.Nama.contains(query)) {
+        if (item.Nama.toLowerCase().contains(query)) {
           dummyListData.add(item);
         }
       });
       setState(() {
+        print(dummyListData.length);
         _filtered.clear();
         _filtered.addAll(dummyListData);
       });
@@ -98,7 +99,8 @@ class _Tab_Stok_AdminState extends State<Tab_Stok_Admin> {
                     margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                     child: TextField(
                       textAlign: TextAlign.left,
-                      controller: search,
+                      // controller: search,
+                      textCapitalization: TextCapitalization.words,
                       onChanged: (value) {
                         _alterfilter(value);
                       },
@@ -106,6 +108,7 @@ class _Tab_Stok_AdminState extends State<Tab_Stok_Admin> {
                           contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                           filled: true,
                           fillColor: Colors.white,
+
                           // prefixIcon: Icon(
                           //   Icons.qr_code_scanner,
                           //   color: Colors.black,

@@ -36,12 +36,13 @@ class _Tab_Akun_AdminState extends State<Tab_Akun_Admin> {
   }
 
   void _alterfilter(String query) {
+    query = query.toLowerCase();
     List<DataAkun> dummySearchList = [];
     dummySearchList.addAll(_null_filtered);
     if (query.isNotEmpty) {
       List<DataAkun> dummyListData = [];
       dummySearchList.forEach((item) {
-        if (item.nama.contains(query)) {
+        if (item.nama.toLowerCase().contains(query)) {
           dummyListData.add(item);
         }
       });
@@ -81,6 +82,7 @@ class _Tab_Akun_AdminState extends State<Tab_Akun_Admin> {
                     margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                     child: TextField(
                       textAlign: TextAlign.left,
+                      textCapitalization: TextCapitalization.words,
                       // controller: search,
                       onChanged: (value) {
                         _alterfilter(value);

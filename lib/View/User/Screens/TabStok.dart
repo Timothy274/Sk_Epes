@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:convert';
 // import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:kios_epes/View/Login.dart';
 import 'package:kios_epes/View/User/Stok/Edit_Stok.dart';
 import 'package:kios_epes/View/User/Stok/Tambah_Stok.dart';
 import 'package:intl/intl.dart';

@@ -3,7 +3,6 @@ import 'package:jiffy/jiffy.dart';
 import 'package:http/http.dart' as http;
 import 'package:kios_epes/Model/DataAkun.dart';
 import 'package:kios_epes/View/Admin/Home.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class Tambah_Akun extends StatefulWidget {

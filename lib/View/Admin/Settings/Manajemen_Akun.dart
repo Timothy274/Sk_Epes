@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kios_epes/Model/DataAkun.dart';
+import 'package:http/http.dart' as http;
 import 'package:kios_epes/View/Admin/Home.dart';
-import 'package:kios_epes/View/User/Akun/manajemen_password.dart';
-import 'package:kios_epes/View/User/Akun/manajemen_username.dart';
-import 'package:kios_epes/View/User/Home.dart';
+import 'package:kios_epes/View/Admin/Settings/Manajemen_Password.dart';
+import 'package:kios_epes/View/Admin/Settings/Manajemen_Username.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class Manajemen_Akun extends StatefulWidget {
   const Manajemen_Akun({Key key}) : super(key: key);
@@ -17,11 +16,11 @@ class Manajemen_Akun extends StatefulWidget {
 }
 
 class _Manajemen_AkunState extends State<Manajemen_Akun> {
+  List<DataAkun> _dataAkun = [];
   TextEditingController nama_lengkap = TextEditingController();
   TextEditingController nama = TextEditingController();
   TextEditingController no_telp = TextEditingController();
   final _formKey = new GlobalKey<FormState>();
-  List<DataAkun> _dataAkun = [];
   String id_user, username, password;
 
   void initState() {
@@ -103,7 +102,7 @@ class _Manajemen_AkunState extends State<Manajemen_Akun> {
     });
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (BuildContext context) => new Home_User()),
+      MaterialPageRoute(builder: (BuildContext context) => new Home_Admin()),
       (Route<dynamic> route) => false,
     );
   }

@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:kios_epes/Model/DataAkun.dart';
 
 import 'package:kios_epes/Model/DataPengiriman.dart';
 import 'package:kios_epes/Model/DataPesanan_lengkap.dart';
 
 class Selesai_Detail extends StatefulWidget {
-  String id_pengiriman, id_pemesanan, alamat, catatan, tanggal;
+  String id_pengiriman, id_pemesanan, alamat, catatan, tanggal, id_user;
   int total, kembalian, modal;
   Selesai_Detail({
     Key key,
     this.id_pengiriman,
+    this.id_user,
     this.id_pemesanan,
     this.kembalian,
     this.modal,
@@ -28,11 +30,13 @@ class Selesai_Detail extends StatefulWidget {
 class _Selesai_DetailState extends State<Selesai_Detail> {
   final oCcy = new NumberFormat.currency(locale: 'id');
   List<DataPesananLengkap> _dataPesanan = [];
+  String kasir = "";
   TextEditingController catatan = TextEditingController();
 
   void initState() {
     super.initState();
     getPengirimanDetail();
+    getDataUser();
     catatan = new TextEditingController(text: widget.catatan);
   }
 
@@ -45,6 +49,19 @@ class _Selesai_DetailState extends State<Selesai_Detail> {
       for (Map Data in responseJson) {
         if (DataPesananLengkap.fromJson(Data).id_pemesanan == widget.id_pemesanan) {
           _dataPesanan.add(DataPesananLengkap.fromJson(Data));
+        }
+      }
+    });
+  }
+
+  Future<List<DataAkun>> getDataUser() async {
+    final response = await http.get(Uri.parse("http://timothy.buzz/kios_epes/Akun/get_user.php"));
+    final responseJson = json.decode(response.body);
+
+    setState(() {
+      for (Map Data in responseJson) {
+        if (DataAkun.fromJson(Data).id_user == widget.id_user) {
+          kasir = DataAkun.fromJson(Data).nama;
         }
       }
     });
@@ -84,6 +101,20 @@ class _Selesai_DetailState extends State<Selesai_Detail> {
                         Text(
                           widget.alamat,
                           style: new TextStyle(fontSize: 25.0),
+                        ),
+                      ]),
+                      TableRow(children: [
+                        Text(
+                          'Kasir',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          ':',
+                          style: new TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          kasir,
+                          style: new TextStyle(fontSize: 18.0),
                         ),
                       ]),
                       TableRow(children: [

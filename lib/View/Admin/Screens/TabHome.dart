@@ -9,6 +9,10 @@ import 'package:kios_epes/Model/DataPesananSelesai.dart';
 import 'package:http/http.dart' as http;
 import 'package:jiffy/jiffy.dart';
 import 'package:intl/intl.dart';
+import 'package:kios_epes/View/Admin/Finish/List_Finish.dart';
+import 'package:kios_epes/View/Admin/Hutang/List_Hutang.dart';
+import 'package:kios_epes/View/Admin/Onprogress/List_Onprogress.dart';
+import 'package:kios_epes/View/Admin/Onqueue/List_Onqueue.dart';
 
 class Tab_Home_Admin extends StatefulWidget {
   const Tab_Home_Admin({Key key}) : super(key: key);
@@ -40,13 +44,6 @@ class _Tab_Home_AdminState extends State<Tab_Home_Admin> {
   }
 
   var tahun = Jiffy().format("yyyy-MM-dd");
-  var waktu = Jiffy().format("HH:mm:SS");
-  var year = Jiffy().format("yyyy");
-  var bulan = Jiffy().format("MM");
-  var tanggal = Jiffy().format("dd");
-  var jam = Jiffy().format("HH");
-  var menit = Jiffy().format("mm");
-  var detik = Jiffy().format("SS");
 
   Future<List> getData() async {
     final response =
@@ -128,51 +125,61 @@ class _Tab_Home_AdminState extends State<Tab_Home_Admin> {
               Flexible(
                   flex: 2,
                   fit: FlexFit.tight,
-                  child: Container(
-                      margin: const EdgeInsets.all(20),
-                      height: 100,
-                      child: Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Antrian Pesanan",
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              _dataPesanan.length.toString(),
-                              style: TextStyle(fontSize: 50),
-                            ),
-                          ),
-                        ],
-                      ))),
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) => new List_Onqueue()));
+                      },
+                      child: Container(
+                          margin: const EdgeInsets.all(20),
+                          height: 100,
+                          child: Column(
+                            children: [
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Antrian Pesanan",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  _dataPesanan.length.toString(),
+                                  style: TextStyle(fontSize: 50),
+                                ),
+                              ),
+                            ],
+                          )))),
               Flexible(
                   flex: 2,
                   fit: FlexFit.tight,
-                  child: Container(
-                      margin: const EdgeInsets.all(20),
-                      height: 100,
-                      child: Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Sedang Pengiriman",
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              _dataPengiriman.length.toString(),
-                              style: TextStyle(fontSize: 50),
-                            ),
-                          ),
-                        ],
-                      )))
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) => new List_Onprogress()));
+                      },
+                      child: Container(
+                          margin: const EdgeInsets.all(20),
+                          height: 100,
+                          child: Column(
+                            children: [
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Sedang Pengiriman",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  _dataPengiriman.length.toString(),
+                                  style: TextStyle(fontSize: 50),
+                                ),
+                              ),
+                            ],
+                          ))))
             ],
           ),
           Row(
@@ -180,51 +187,61 @@ class _Tab_Home_AdminState extends State<Tab_Home_Admin> {
               Flexible(
                   flex: 2,
                   fit: FlexFit.tight,
-                  child: Container(
-                      margin: const EdgeInsets.all(20),
-                      height: 100,
-                      child: Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Pesanan Selesai",
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              _dataPengirimanSelesai.length.toString(),
-                              style: TextStyle(fontSize: 50),
-                            ),
-                          ),
-                        ],
-                      ))),
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) => new List_Finish()));
+                      },
+                      child: Container(
+                          margin: const EdgeInsets.all(20),
+                          height: 100,
+                          child: Column(
+                            children: [
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Pesanan Selesai",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  _dataPengirimanSelesai.length.toString(),
+                                  style: TextStyle(fontSize: 50),
+                                ),
+                              ),
+                            ],
+                          )))),
               Flexible(
                   flex: 2,
                   fit: FlexFit.tight,
-                  child: Container(
-                      margin: const EdgeInsets.all(20),
-                      height: 100,
-                      child: Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Hutang",
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              _dataHutang.length.toString(),
-                              style: TextStyle(fontSize: 50),
-                            ),
-                          ),
-                        ],
-                      )))
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) => new List_Hutang()));
+                      },
+                      child: Container(
+                          margin: const EdgeInsets.all(20),
+                          height: 100,
+                          child: Column(
+                            children: [
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Hutang",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  _dataHutang.length.toString(),
+                                  style: TextStyle(fontSize: 50),
+                                ),
+                              ),
+                            ],
+                          ))))
             ],
           ),
           Row(

@@ -56,6 +56,19 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
     return json.decode(response.body);
   }
 
+  // Future<List> getdataPengirimanList() async {
+  //   final response =
+  //       await http.get(Uri.parse("http://timothy.buzz/kios_epes/Pengiriman/get_pengiriman.php"));
+  //   final responseJson = json.decode(response.body);
+  //   setState(() {
+  //     for (Map Data in responseJson) {
+  //       _dataPengirimanSelesai.add(DataPesananSelesai.fromJson(Data));
+  //     }
+  //     _filteredPengirimanSelesai.addAll(_dataPengirimanSelesai);
+  //     _null_filteredPengirimanSelesai.addAll(_dataPengirimanSelesai);
+  //   });
+  // }
+
   Future<List> getdataPengirimanSelesai() async {
     final response = await http.get(Uri.parse(
         "http://timothy.buzz/kios_epes/Selesai/get_pesanan_join_pengiriman_only_finish.php"));
@@ -87,6 +100,7 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
     getData();
     getdataPengirimanSelesai();
     getdataPesananHutang();
+    // getdataPengirimanList();
     _nestedTabController = new TabController(length: 4, vsync: this);
   }
 
@@ -285,6 +299,7 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
                                 total: _filteredPesanan[i].total,
                                 modal: _filteredPesanan[i].modal,
                                 kembalian: _filteredPesanan[i].kembalian,
+                                kasir: _filteredPesanan[i].id_user,
                               )));
                     },
                     child: new Card(
@@ -389,6 +404,7 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
                                             total: int.parse(snapshot.data[i]['total']),
                                             kembalian: int.parse(snapshot.data[i]['kembalian']),
                                             modal: int.parse(snapshot.data[i]['modal']),
+                                            id_user: snapshot.data[i]['id_user'],
                                           )));
                                 },
                                 child: new Card(
@@ -472,7 +488,7 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
             flex: 8,
             child: Container(
                 child: ListView.builder(
-              itemCount: _dataPengirimanSelesai.length,
+              itemCount: _filteredPengirimanSelesai.length,
               itemBuilder: (context, i) {
                 return new Container(
                   padding: const EdgeInsets.all(10.0),
@@ -480,14 +496,15 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
                     onTap: () {
                       Navigator.of(context).push(new MaterialPageRoute(
                           builder: (BuildContext context) => new Selesai_Detail(
-                                id_pemesanan: _dataPengirimanSelesai[i].id_pemesanan,
-                                alamat: _dataPengirimanSelesai[i].alamat,
-                                tanggal: _dataPengirimanSelesai[i].tanggal,
-                                catatan: _dataPengirimanSelesai[i].status,
-                                id_pengiriman: _dataPengirimanSelesai[i].id_pengiriman,
-                                total: _dataPengirimanSelesai[i].total,
-                                modal: _dataPengirimanSelesai[i].modal,
-                                kembalian: _dataPengirimanSelesai[i].kembalian,
+                                id_pemesanan: _filteredPengirimanSelesai[i].id_pemesanan,
+                                alamat: _filteredPengirimanSelesai[i].alamat,
+                                tanggal: _filteredPengirimanSelesai[i].tanggal,
+                                catatan: _filteredPengirimanSelesai[i].status,
+                                id_pengiriman: _filteredPengirimanSelesai[i].id_pengiriman,
+                                total: _filteredPengirimanSelesai[i].total,
+                                modal: _filteredPengirimanSelesai[i].modal,
+                                kembalian: _filteredPengirimanSelesai[i].kembalian,
+                                // id_user: _dataPengirimanSelesai[i].id_user,
                               )));
                     },
                     child: new Card(
@@ -498,7 +515,7 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
                           Expanded(
                             child: new ListTile(
                               title: new Text(
-                                _dataPengirimanSelesai[i].alamat,
+                                _filteredPengirimanSelesai[i].alamat,
                                 style: TextStyle(fontSize: 25.0, color: Colors.black),
                               ),
                               // subtitle: new Text(
@@ -506,19 +523,6 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
                               //   style: TextStyle(fontSize: 20.0, color: Colors.black),
                               // ),
                             ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(right: 20.0),
-                            child: Checkbox(
-                              value: _selectedId.contains(_dataPengirimanSelesai[i].id_pemesanan),
-                              onChanged: (bool selected) {
-                                _onCategorySelectedonQueue(
-                                  selected,
-                                  (_dataPengirimanSelesai[i].id_pemesanan),
-                                );
-                              },
-                            ),
-                            alignment: Alignment.centerRight,
                           ),
                         ],
                       ),

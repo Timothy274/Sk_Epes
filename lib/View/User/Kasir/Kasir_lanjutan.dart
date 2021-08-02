@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:kios_epes/Model/DataBarang.dart';
 import 'package:kios_epes/Model/DataPegawai.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:intl/intl.dart';
 
@@ -24,6 +25,7 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
   int modal_hitung = 0;
   List<DataBarang> _dataBarang = [];
   String id;
+  String id_user;
 
   var tahun = Jiffy().format("yyyy-MM-dd");
   var waktu = Jiffy().format("HH:mm:SS");
@@ -39,6 +41,12 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
     // getSWData();
     total();
     id_pemesanan();
+    cek();
+  }
+
+  Future cek() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    id_user = pref.getString("id_user");
   }
 
   Future<String> getSWData() async {
@@ -196,6 +204,7 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
     var url = (Uri.parse("https://timothy.buzz/kios_epes/Pesanan/add_pesanan.php"));
     http.post(url, body: {
       "id_pemesanan": id,
+      "id_user": id_user,
       "alamat": widget.alamat,
       "tanggal": tahun,
       "total": total_hitung.toString(),

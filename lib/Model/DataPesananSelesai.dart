@@ -1,6 +1,7 @@
 class DataPesananSelesai {
   String id_pemesanan;
   String id_pengiriman;
+  String id_user;
   String alamat;
   String tanggal;
   String catatan;
@@ -10,6 +11,8 @@ class DataPesananSelesai {
   int modal;
 
   DataPesananSelesai({
+    this.id_pengiriman,
+    this.id_user,
     this.id_pemesanan,
     this.alamat,
     this.tanggal,
@@ -23,6 +26,8 @@ class DataPesananSelesai {
   factory DataPesananSelesai.fromJson(Map<dynamic, dynamic> json) {
     return DataPesananSelesai(
       id_pemesanan: json['id_pemesanan'],
+      id_user: json['id_user'],
+      id_pengiriman: json['id_pengiriman'],
       alamat: json['alamat'],
       tanggal: json['tanggal'],
       catatan: json['catatan'],

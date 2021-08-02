@@ -1,4 +1,5 @@
 class DataPesanan {
+  String id_user;
   String id_pemesanan;
   String id_barang;
   String alamat;
@@ -13,6 +14,7 @@ class DataPesanan {
 
   DataPesanan(
       {this.id_pemesanan,
+      this.id_user,
       this.id_barang,
       this.alamat,
       this.nama_barang,
@@ -27,6 +29,7 @@ class DataPesanan {
   factory DataPesanan.fromJson(Map<dynamic, dynamic> json) {
     return DataPesanan(
       id_pemesanan: json['id_pemesanan'],
+      id_user: json['id_user'],
       id_barang: json['id_barang'],
       alamat: json['alamat'],
       nama_barang: json['nama_barang'],

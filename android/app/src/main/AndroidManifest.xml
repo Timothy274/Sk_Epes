@@ -2,7 +2,7 @@
     package="com.example.kios_epes">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="kios_epes"
+        android:label="Kasir"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
         

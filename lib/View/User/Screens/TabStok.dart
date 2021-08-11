@@ -6,7 +6,10 @@ import 'dart:async';
 import 'dart:convert';
 // import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:kios_epes/Model/DataPengiriman.dart';
+import 'package:kios_epes/Model/DataPesananDetail.dart';
 import 'package:kios_epes/View/Login.dart';
+import 'package:kios_epes/View/User/Home.dart';
 import 'package:kios_epes/View/User/Stok/Edit_Stok.dart';
 import 'package:kios_epes/View/User/Stok/Tambah_Stok.dart';
 import 'package:intl/intl.dart';
@@ -24,6 +27,8 @@ class _TabStokState extends State<TabStok> {
   List<DataBarang> _dataBarang = [];
   List<DataBarang> _filtered = [];
   List<DataBarang> _null_filtered = [];
+  List<DataPesananDetail> _dataPengiriman = [];
+  List<DataPesananDetail> _dataPesananDetail = [];
 
   static const int sortName = 0;
   static const int sortStatus = 1;
@@ -44,6 +49,25 @@ class _TabStokState extends State<TabStok> {
       }
       _filtered.addAll(_dataBarang);
       _null_filtered.addAll(_dataBarang);
+    });
+  }
+
+  Future<List> getdataPengiriman() async {
+    final responseA = await http.get(Uri.parse(
+        "https://timothy.buzz/kios_epes/Pengiriman/get_pengiriman_join_pengiriman_detail_only_proses.php"));
+    final responseB =
+        await http.get(Uri.parse("https://timothy.buzz/kios_epes/Pesanan/get_pesanan_detail.php"));
+    final responseAJson = json.decode(responseA.body);
+    final responseBJson = json.decode(responseB.body);
+    setState(() {
+      for (Map DataA in responseAJson) {
+        for (Map DataB in responseBJson) {
+          if (DataPengiriman.fromJson(DataA).id_pemesanan ==
+              DataPesananDetail.fromJson(DataB).id_pemesanan) {
+            _dataPengiriman.add(DataPesananDetail.fromJson(DataB));
+          }
+        }
+      }
     });
   }
 
@@ -71,9 +95,75 @@ class _TabStokState extends State<TabStok> {
     }
   }
 
+  void test_peringatan(id_barang) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Peringatan"),
+          content: new Text("Apakah anda yakin ingin menghapus barang ini dari stok ?"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("Hapus"),
+              onPressed: () {
+                hapus(id_barang);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void peringatan_hapus_barang() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Peringatan"),
+          content: new Text(
+              "Data yang ingin anda hapus sedang digunakan dalam pengiriman, mohon selesaikan pengiriman dahulu"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void hapus(id_barang) {
+    var url = (Uri.parse("https://timothy.buzz/kios_epes/Stok/delete_barang.php"));
+    http.post(url, body: {
+      "id_barang": id_barang,
+    });
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (BuildContext context) => new Home_User()),
+      (Route<dynamic> route) => false,
+    );
+  }
+
   void initState() {
     super.initState();
     getBarang();
+    getdataPengiriman();
   }
 
   @override
@@ -174,7 +264,19 @@ class _TabStokState extends State<TabStok> {
                           )),
                           DataCell(TextButton(
                             child: Text('Hapus'),
-                            onPressed: () {},
+                            onPressed: () {
+                              int b = 0;
+                              for (int a = 0; a < _dataPengiriman.length; a++) {
+                                if (_dataPengiriman[a].id_barang == _filtered[i].id_barang) {
+                                  b = b + 1;
+                                }
+                              }
+                              if (b == 0) {
+                                test_peringatan(_filtered[i].id_barang);
+                              } else {
+                                peringatan_hapus_barang();
+                              }
+                            },
                           )),
                         ]))),
           ),

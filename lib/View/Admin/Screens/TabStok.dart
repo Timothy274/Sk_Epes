@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:convert';
 // import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:kios_epes/View/Admin/Home.dart';
 import 'package:kios_epes/View/Admin/Stok/Edit_Stok.dart';
 import 'package:kios_epes/View/Admin/Stok/Tambah_Stok.dart';
 import 'package:intl/intl.dart';
@@ -69,6 +70,47 @@ class _Tab_Stok_AdminState extends State<Tab_Stok_Admin> {
         _filtered.addAll(_null_filtered);
       });
     }
+  }
+
+  void test_peringatan(id_barang) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Peringatan"),
+          content: new Text("Apakah anda yakin ingin menghapus barang ini dari stok ?"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("Hapus"),
+              onPressed: () {
+                hapus(id_barang);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void hapus(id_barang) {
+    var url = (Uri.parse("https://timothy.buzz/kios_epes/Stok/delete_barang.php"));
+    http.post(url, body: {
+      "id_barang": id_barang,
+    });
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (BuildContext context) => new Home_Admin()),
+      (Route<dynamic> route) => false,
+    );
   }
 
   void initState() {
@@ -176,7 +218,9 @@ class _Tab_Stok_AdminState extends State<Tab_Stok_Admin> {
                           )),
                           DataCell(TextButton(
                             child: Text('Hapus'),
-                            onPressed: () {},
+                            onPressed: () {
+                              test_peringatan(_filtered[i].id_barang);
+                            },
                           )),
                         ]))),
           ),

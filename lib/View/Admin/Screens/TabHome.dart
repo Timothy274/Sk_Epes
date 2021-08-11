@@ -68,8 +68,8 @@ class _Tab_Home_AdminState extends State<Tab_Home_Admin> {
   }
 
   Future<List> getdataPengirimanSelesai() async {
-    final response = await http.get(Uri.parse(
-        "http://timothy.buzz/kios_epes/Selesai/get_pesanan_join_pengiriman_only_finish.php"));
+    final response = await http
+        .get(Uri.parse("http://timothy.buzz/kios_epes/Pengiriman/get_pengiriman_only_finish.php"));
     final responseJson = json.decode(response.body);
     setState(() {
       for (Map Data in responseJson) {

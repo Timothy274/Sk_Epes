@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:kios_epes/Model/DataBarang.dart';
@@ -6,7 +7,8 @@ import 'package:kios_epes/Model/DataPegawai.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:intl/intl.dart';
-
+import 'package:flutter/services.dart';
+import 'package:esc_pos_utils_plus/esc_pos_utils.dart';
 import '../Home.dart';
 
 class User_kasir_Lanjutan extends StatefulWidget {
@@ -43,6 +45,64 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
     id_pemesanan();
     cek();
   }
+
+  // Future<void> test() async {
+  //   final profile = await CapabilityProfile.load();
+  //   final generator = Generator(PaperSize.mm80, profile);
+  //   List<int> bytes = [];
+
+  //   bytes += generator.text(
+  //       'Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
+  //   bytes +=
+  //       generator.text('Special 1: àÀ èÈ éÉ ûÛ üÜ çÇ ôÔ', styles: PosStyles(codeTable: 'CP1252'));
+  //   bytes += generator.text('Special 2: blåbærgrød', styles: PosStyles(codeTable: 'CP1252'));
+
+  //   bytes += generator.text('Bold text', styles: PosStyles(bold: true));
+  //   bytes += generator.text('Reverse text', styles: PosStyles(reverse: true));
+  //   bytes += generator.text('Underlined text', styles: PosStyles(underline: true), linesAfter: 1);
+  //   bytes += generator.text('Align left', styles: PosStyles(align: PosAlign.left));
+  //   bytes += generator.text('Align center', styles: PosStyles(align: PosAlign.center));
+  //   bytes += generator.text('Align right', styles: PosStyles(align: PosAlign.right), linesAfter: 1);
+
+  //   bytes += generator.row([
+  //     PosColumn(
+  //       text: 'col3',
+  //       width: 3,
+  //       styles: PosStyles(align: PosAlign.center, underline: true),
+  //     ),
+  //     PosColumn(
+  //       text: 'col6',
+  //       width: 6,
+  //       styles: PosStyles(align: PosAlign.center, underline: true),
+  //     ),
+  //     PosColumn(
+  //       text: 'col3',
+  //       width: 3,
+  //       styles: PosStyles(align: PosAlign.center, underline: true),
+  //     ),
+  //   ]);
+
+  //   bytes += generator.text('Text size 200%',
+  //       styles: PosStyles(
+  //         height: PosTextSize.size2,
+  //         width: PosTextSize.size2,
+  //       ));
+
+  //   bytes += generator.feed(2);
+  //   bytes += generator.cut();
+  //   return bytes;
+  // }
+
+  // launchWhatsApp() async {
+  //   final link = WhatsAppUnilink(
+  //     phoneNumber: '+6288808106020',
+  //     text: "Hey! I'm inquiring about the apartment listing",
+  //   );
+  //   // Convert the WhatsAppUnilink instance to a string.
+  //   // Use either Dart's string interpolation or the toString() method.
+  //   // The "launch" method is part of "url_launcher".
+  //   await launch('$link');
+  // }
 
   Future cek() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -450,6 +510,8 @@ class _User_kasir_LanjutanState extends State<User_kasir_Lanjutan> {
                     onPressed: () {
                       kirim();
                       kirim_detail();
+                      // launchWhatsApp();
+                      // test();
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (BuildContext context) => new Home_User()),

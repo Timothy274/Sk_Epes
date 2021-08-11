@@ -8,6 +8,7 @@ import 'package:kios_epes/Model/DataPengiriman.dart';
 
 import 'package:kios_epes/Model/DataPesanan.dart';
 import 'package:kios_epes/View/User/Home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class On_Queue_Kirim extends StatefulWidget {
   List list;
@@ -24,6 +25,7 @@ class _On_Queue_KirimState extends State<On_Queue_Kirim> {
   List<DataPengiriman> _dataPengiriman = [];
   String _mySelection2;
   String id;
+  String id_user;
   int total = 0;
   int kembalian = 0;
   int modal = 0;
@@ -37,8 +39,14 @@ class _On_Queue_KirimState extends State<On_Queue_Kirim> {
   var menit = Jiffy().format("mm");
   var detik = Jiffy().format("SS");
 
+  Future cek() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    id_user = pref.getString("id_user");
+  }
+
   void initState() {
     super.initState();
+    cek();
     getDataPesanan();
     getDataPegawai();
     getdataPengiriman();
@@ -119,6 +127,7 @@ class _On_Queue_KirimState extends State<On_Queue_Kirim> {
     http.post(url, body: {
       "id_pengiriman": id,
       "id_pegawai": _mySelection2,
+      "id_user": id_user,
       "nama_pegawai": nama_pegawai,
       "tanggal": tahun,
       "waktu": waktu,

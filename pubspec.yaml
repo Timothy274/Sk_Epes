@@ -36,6 +36,9 @@ dependencies:
   shared_preferences:
   pdf:
   printing:
+  url_launcher:
+  whatsapp_unilink:
+  esc_pos_utils_plus:
 
 dev_dependencies:
   flutter_test:

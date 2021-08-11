@@ -72,6 +72,11 @@ class _Edit_StokState extends State<Edit_Stok> {
         "stok": stok.text,
         "harga": harga.text,
       });
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => new Home_User()),
+        (Route<dynamic> route) => false,
+      );
     }
   }
 
@@ -185,11 +190,6 @@ class _Edit_StokState extends State<Edit_Stok> {
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
                             kirim();
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (BuildContext context) => new Home_User()),
-                              (Route<dynamic> route) => false,
-                            );
                           }
                         },
                         child: Row(

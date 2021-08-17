@@ -79,7 +79,7 @@ class _Bonus_PegawaiState extends State<Bonus_Pegawai> {
                           TextFormField(
                             controller: bonus_bulanan,
                             keyboardType: TextInputType.number,
-                            decoration: new InputDecoration(labelText: "Bonus Tahunan"),
+                            decoration: new InputDecoration(labelText: "Bonus Bulanan"),
                           ),
                           Divider(height: 50.0),
                           TextFormField(

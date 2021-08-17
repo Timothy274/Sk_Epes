@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:kios_epes/Model/DataBarang.dart';
 import 'package:kios_epes/Model/DataHutang.dart';
+import 'package:kios_epes/Model/DataJsonBarang.dart';
 import 'package:kios_epes/Model/DataJsonPegawai.dart';
 import 'package:kios_epes/Model/DataJsonPengirimanLaporan.dart';
+import 'package:kios_epes/Model/DataJsonTest.dart';
+import 'package:kios_epes/Model/DataLaporan.dart';
 import 'package:kios_epes/Model/DataPegawai.dart';
 import 'package:kios_epes/Model/DataPengiriman.dart';
 import 'dart:convert';
@@ -13,6 +17,8 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
 import 'package:kios_epes/Model/DataPesananSelesai.dart';
 import 'package:printing/printing.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class Laporan_Detail extends StatefulWidget {
   String tanggal;
@@ -27,25 +33,33 @@ class _Laporan_DetailState extends State<Laporan_Detail> {
   List<DataPengiriman> _dataPengirimanSelesai = [];
   List<DataPesananLengkap> _dataJumlahPesanan = [];
   List<DataPegawai> _dataPegawai = [];
+  List<DataBarang> _dataBarang = [];
   List<DataPengiriman> _filterdataPesanan = [];
   List<DataPengiriman> _null_filterdataPesanan = [];
+  List<Barang_Json> array_barang = [];
   List<Pegawai_Json> array_laporan_pegawai = [];
   List<Pengiriman_Json> array_laporan_pengiriman = [];
   List<DataHutang> _dataHutang = [];
+  List<Test_JSON> _testJson = [];
+  List<DataLaporan> _dataLaporan = [];
   // List<array_report_detail> array_laporan_detail = [];
   TextEditingController search_pesanan_selesai = new TextEditingController();
   String date_sum, tahun, bulan;
   int pendapatan_bersih = 0;
   int pendapatan_tertahan = 0;
+  int pendapatan = 0;
+  final List detailsDataset = [];
   final oCcy = new NumberFormat.currency(locale: 'id');
 
   void initState() {
     super.initState();
     getdataPengirimanSelesai();
     getDataPegawai();
+    getDataPesanan();
     getdataPesananHutang();
     tahun = widget.tanggal.substring(0, 4);
     bulan = widget.tanggal.substring(5);
+    pra_array_pegawai();
   }
 
   void tanggal_converter() {
@@ -116,39 +130,69 @@ class _Laporan_DetailState extends State<Laporan_Detail> {
   // }
 
   void pra_array_pegawai() {
-    int total_barang = 0;
-    int total_pengiriman = 0;
-    int bonus_barang_pesanan = 0;
-    int bonus_pengiriman = 0;
-    int absensi;
-    int kalkulasi = 0;
-    int kalk = 0;
-    int tokalk = 0;
-    int jumlah_kiriman = 0;
-    int gaji;
-    List<String> tanggal_satuan = [];
     array_laporan_pegawai.clear();
     // array_laporan_pegawai.add(Pegawai_Json(
     //     'id', 'Nama Pegawai', 'Gaji', 'Absensi', 'Jumlah Kiriman'));
     for (int a = 0; a < _dataPegawai.length; a++) {
+      int total_barang = 0;
+      int total_pengiriman = 0;
+      int bonus_barang_pesanan = 0;
+      int bonus_absensi = 0;
+      int absensi = 0;
+      int kalkulasi = 0;
+      int kalk = 0;
+      int tokalk = 0;
+      int jumlah_kiriman = 0;
+      int gaji;
+      pendapatan = 0;
+      List<String> tanggal_satuan = [];
       for (int b = 0; b < _dataPengirimanSelesai.length; b++) {
         if (_dataPegawai[a].id_pegawai == _dataPengirimanSelesai[b].id_pegawai) {
-          for (int c = 0; c < _dataJumlahPesanan.length; c++) {
-            for (int d = 0; d < _null_filterdataPesanan.length; d++) {
-              if (_dataJumlahPesanan[c].id_pemesanan == _null_filterdataPesanan[d].id_pemesanan) {
-                total_barang = total_barang + _dataJumlahPesanan[c].jumlah;
-              }
-            }
-          }
-          total_pengiriman = total_pengiriman + 1;
-          tanggal_satuan.add(_dataPengirimanSelesai[a].tanggal);
+          tanggal_satuan.add(_dataPengirimanSelesai[b].tanggal);
         }
       }
-      bonus_barang_pesanan = total_barang * _dataPegawai[a].bonus_barang;
-      bonus_pengiriman = total_pengiriman * _dataPegawai[a].bonus_pengiriman;
+
+      // for (int c = 0; c < _null_filterdataPesanan.length; c++) {
+      //   if (_dataPegawai[a].id_pegawai == _null_filterdataPesanan[c].id_pegawai) {
+      //     for (int d = 0; d < _dataJumlahPesanan.length; d++) {
+      //       if (_dataJumlahPesanan[d].id_pemesanan == _null_filterdataPesanan[c].id_pemesanan) {
+      //         total_barang = total_barang + _dataJumlahPesanan[d].jumlah;
+      //       }
+      //     }
+      //   }
+      // }
+      // for (int c = 0; c < _dataPengirimanSelesai.length; c++) {
+      //   if (_dataPengirimanSelesai[c].id_pegawai == _dataPegawai[a].id_pegawai) {
+      //     for (int d = 0; d < _null_filterdataPesanan.length; d++) {
+      //       if (_dataPengirimanSelesai[c].id_pengiriman ==
+      //           _null_filterdataPesanan[d].id_pengiriman) {
+      //         for (int f = 0; f < _dataJumlahPesanan.length; f++) {
+      //           if (_null_filterdataPesanan[c].id_pemesanan == _dataJumlahPesanan[f].id_pemesanan) {
+      //             total_barang = total_barang + _dataJumlahPesanan[f].jumlah;
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
+      for (int f = 0; f < _dataLaporan.length; f++) {
+        if (_dataLaporan[f].id_pegawai == _dataPegawai[a].id_pegawai &&
+            _dataLaporan[f].tanggal.contains(date_sum)) {
+          total_barang = total_barang + _dataLaporan[f].jumlah;
+        }
+      }
+      for (int g = 0; g < _dataPengirimanSelesai.length; g++) {
+        if (_dataPengirimanSelesai[g].id_pegawai == _dataPegawai[a].id_pegawai) {
+          pendapatan = pendapatan + 1;
+        }
+      }
       tanggal_satuan = tanggal_satuan.toSet().toList();
       absensi = tanggal_satuan.length;
-      gaji = bonus_barang_pesanan + bonus_pengiriman;
+      print(total_barang);
+      bonus_barang_pesanan = total_barang * _dataPegawai[a].bonus_barang;
+      bonus_absensi = absensi * _dataPegawai[a].bonus_absensi;
+
+      gaji = bonus_barang_pesanan + bonus_absensi;
 
       // var gaji = bonus_brg + bonus_absen;
       // final oCcy = new NumberFormat.currency(locale: 'id');
@@ -158,7 +202,18 @@ class _Laporan_DetailState extends State<Laporan_Detail> {
       // var absensi = Absensi[a];
       // var jmlkirim = _jmlkirim[a];
       array_laporan_pegawai.add(Pegawai_Json(_dataPegawai[a].nama_pegawai,
-          _dataPegawai[a].nama_lengkap_pegawai, gaji, absensi, total_pengiriman));
+          _dataPegawai[a].nama_lengkap_pegawai, gaji, absensi, pendapatan));
+    }
+    // print(_dataBarang.length);
+    for (int a = 0; a < _dataBarang.length; a++) {
+      var nil = 0;
+      for (int b = 0; b < _dataJumlahPesanan.length; b++) {
+        if (_dataJumlahPesanan[b].id_barang == _dataBarang[a].id_barang) {
+          nil = nil + _dataJumlahPesanan[b].jumlah;
+        }
+      }
+      int tot = nil * _dataBarang[a].Harga_Tetap;
+      array_barang.add(Barang_Json(_dataBarang[a].Nama, nil.toString(), tot));
     }
   }
 
@@ -195,11 +250,15 @@ class _Laporan_DetailState extends State<Laporan_Detail> {
         "https://timothy.buzz/kios_epes/Pengiriman/get_pengiriman_detail_join_pesanan.php"));
     final responseC = await http.get(
         Uri.parse("https://timothy.buzz/kios_epes/Pesanan/get_pesanan_join_pesanan_detail.php"));
+    final responseD =
+        await http.get(Uri.parse("http://timothy.buzz/kios_epes/Stok/get_barang.php"));
+
     // final responseD = await http.get(Uri.parse(
     //     "https://timothy.buzz/kios_epes/Pengiirman/get_pengiriman_join_pengiriman_detail.php"));
     final responseJsonA = json.decode(responseA.body);
     final responseJsonB = json.decode(responseB.body);
     final responseJsonC = json.decode(responseC.body);
+    final responseJsonD = json.decode(responseD.body);
     // final responseJsonD = json.decode(responseD.body);
     setState(() {
       tanggal_converter();
@@ -208,6 +267,7 @@ class _Laporan_DetailState extends State<Laporan_Detail> {
           _dataPengirimanSelesai.add(DataPengiriman.fromJson(Data));
         }
       }
+
       for (Map Data in responseJsonB) {
         for (int a = 0; a < _dataPengirimanSelesai.length; a++) {
           if (_dataPengirimanSelesai[a].id_pengiriman ==
@@ -223,6 +283,7 @@ class _Laporan_DetailState extends State<Laporan_Detail> {
               waktu = _dataPengirimanSelesai[a].waktu;
               pengirim = _dataPengirimanSelesai[a].nama_pegawai;
               total = DataPengiriman.fromJson(Data).total;
+              detailsDataset.add(alamat);
               array_laporan_pengiriman
                   .add(Pengiriman_Json(alamat, tanggal_kirim, waktu, pengirim, total));
             }
@@ -238,6 +299,10 @@ class _Laporan_DetailState extends State<Laporan_Detail> {
             _dataJumlahPesanan.add(DataPesananLengkap.fromJson(Data));
           }
         }
+      }
+
+      for (Map Data in responseJsonD) {
+        _dataBarang.add(DataBarang.fromJson(Data));
       }
 
       // for (int a = 0; a < _dataPengirimanSelesai.length; a++) {
@@ -262,7 +327,16 @@ class _Laporan_DetailState extends State<Laporan_Detail> {
     });
   }
 
-  Future<List> getDataPemesanan() async {}
+  Future<List> getDataPesanan() async {
+    final response = await http.get(Uri.parse(
+        "https://timothy.buzz/kios_epes/Laporan/get_laporan_pengiriman_join_pengiriman_detail_join_pesanan_detail.php"));
+    final responseJson = json.decode(response.body);
+    setState(() {
+      for (Map Data in responseJson) {
+        _dataLaporan.add(DataLaporan.fromJson(Data));
+      }
+    });
+  }
 
   Future<List> getDataPegawai() async {
     final response =
@@ -398,13 +472,38 @@ class _Laporan_DetailState extends State<Laporan_Detail> {
     );
   }
 
-  void _printDocument() {
+  Future<void> _printDocument() async {
     pra_array_pegawai();
+
+    // for (int a = 0; a < 5; a++) {
+    //   _testJson.add(Test_JSON("apa", "ini", "itu"));
+    // }
+    // String encode = jsonEncode(_testJson);
+    // print(encode);
+    // http.Response response = await http.post(
+    //   Uri.parse("http://timothy.buzz/pdf_generate.php"),
+    //   // headers: <String, String>{
+    //   //   'Content-Type': 'application/json',
+    //   // },
+    //   body: {"formname": encode},
+    // );
+
+    // debugPrint("Response: " + response.body);
+    // debugPrint("Status: " + (response.statusCode).toString());
+    // const url = 'http://timothy.buzz/pdf_generate.php';
+    // if (await canLaunch(url)) {
+    //   await launch(url);
+    // } else {
+    //   throw 'Could not launch $url';
+    // }
+    // print(array_laporan_pegawai.length);
+    // print(array_laporan_pengiriman.length);
+    // print(_dataJumlahPesanan.length);
     var list = array_laporan_pegawai
         .map((item) => pw.TableRow(children: [
               pw.Text(item.nama_lengkap.toString()),
-              pw.Text(item.absensi.toString()),
               pw.Text(item.jmlkirim.toString()),
+              pw.Text(item.absensi.toString()),
               pw.Text(oCcy.format(item.gaji)),
             ]))
         .toList();
@@ -448,10 +547,23 @@ class _Laporan_DetailState extends State<Laporan_Detail> {
     list_pesanan.insert(
         0,
         pw.TableRow(children: [
-          pw.Text("Alamat"),
-          pw.Text("Tanggal Pemesanan"),
           pw.Text("Barang"),
-          pw.Text("Jumlah"),
+          pw.Text("Terjual"),
+          pw.Text("Total"),
+        ]));
+
+    var list_barang = array_barang
+        .map((item) => pw.TableRow(children: [
+              pw.Text(item.nama.toString()),
+              pw.Text(item.terjual.toString()),
+              pw.Text(oCcy.format(item.jual_total)),
+            ]))
+        .toList();
+    list_barang.insert(
+        0,
+        pw.TableRow(children: [
+          pw.Text("Barang"),
+          pw.Text("Terjual"),
           pw.Text("Total"),
         ]));
 
@@ -479,6 +591,7 @@ class _Laporan_DetailState extends State<Laporan_Detail> {
     Printing.layoutPdf(onLayout: (pageFormat) {
       final doc = pw.Document();
       doc.addPage(pw.MultiPage(
+          maxPages: 100,
           build: (pw.Context context) => <pw.Widget>[
                 pw.Header(
                     level: 0,
@@ -497,67 +610,88 @@ class _Laporan_DetailState extends State<Laporan_Detail> {
                 pw.Paragraph(text: 'Jumlah Pesanan Masuk : ${_null_filterdataPesanan.length}'),
                 pw.Paragraph(text: 'Jumlah Pendapatan Masuk : ${pendapatan_bersih}'),
                 pw.Paragraph(text: 'Jumlah Pendapatan Tertahan : ${pendapatan_bersih}'),
+                pw.Paragraph(text: 'Jumlah Pengiriman : ${list_pengiriman.length}'),
                 pw.Container(height: 10),
                 // pw.Paragraph(text: 'Pegawai Terbaik : ${widget.PegawaiTerbaik}'),
                 pw.Header(level: 1, child: pw.Text('Laporan Pegawai')),
-                pw.Column(children: <pw.Widget>[
-                  pw.Table(
-                    children: list,
-                    border: pw.TableBorder.all(),
-                    columnWidths: {
-                      0: pw.FractionColumnWidth(.4),
-                      1: pw.FractionColumnWidth(.2),
-                      2: pw.FractionColumnWidth(.1),
-                      3: pw.FractionColumnWidth(.3)
-                    },
-                  )
+                pw.Wrap(children: [
+                  pw.Column(children: <pw.Widget>[
+                    pw.Table(
+                      children: list,
+                      border: pw.TableBorder.all(),
+                      columnWidths: {
+                        0: pw.FractionColumnWidth(.4),
+                        1: pw.FractionColumnWidth(.2),
+                        2: pw.FractionColumnWidth(.1),
+                        3: pw.FractionColumnWidth(.3)
+                      },
+                    )
+                  ]),
                 ]),
-                pw.Header(level: 1, child: pw.Text('Laporan Pengiriman')),
-                pw.Column(children: <pw.Widget>[
-                  pw.Table(
-                    children: list_pengiriman,
-                    border: pw.TableBorder.all(),
-                    columnWidths: {
-                      0: pw.FractionColumnWidth(.4),
-                      1: pw.FractionColumnWidth(.2),
-                      2: pw.FractionColumnWidth(.2),
-                      3: pw.FractionColumnWidth(.2),
-                      4: pw.FractionColumnWidth(.3)
-                    },
-                  )
-                ]),
-                pw.Header(level: 1, child: pw.Text('Laporan Detail Pesanan')),
-                pw.Column(children: <pw.Widget>[
-                  pw.Table(
-                    children: list_pesanan,
-                    border: pw.TableBorder.all(),
-                    columnWidths: {
-                      0: pw.FractionColumnWidth(.4),
-                      1: pw.FractionColumnWidth(.2),
-                      2: pw.FractionColumnWidth(.4),
-                      // 3: pw.FractionColumnWidth(.1),
-                      4: pw.FractionColumnWidth(.2)
-                    },
-                  )
+                pw.Container(height: 10),
+                pw.Header(level: 1, child: pw.Text('Laporan Barang')),
+                pw.Wrap(children: [
+                  pw.Column(children: <pw.Widget>[
+                    pw.Table(
+                      children: list_barang,
+                      border: pw.TableBorder.all(),
+                      columnWidths: {
+                        // 0: pw.FractionColumnWidth(.3),
+                        // 1: pw.FractionColumnWidth(.2),
+                        // 2: pw.FractionColumnWidth(.2),
+                        // 3: pw.FractionColumnWidth(.2),
+                        // 4: pw.FractionColumnWidth(.2),
+                        // 5: pw.FractionColumnWidth(.2)
+                      },
+                    )
+                  ]),
                 ]),
                 pw.Container(height: 10),
                 pw.Header(level: 1, child: pw.Text('Laporan Hutang')),
-                pw.Column(children: <pw.Widget>[
+                pw.Wrap(children: [
                   pw.Table(
                     children: list_hutang,
                     border: pw.TableBorder.all(),
-                    columnWidths: {
-                      0: pw.FractionColumnWidth(.3),
-                      1: pw.FractionColumnWidth(.2),
-                      2: pw.FractionColumnWidth(.2),
-                      3: pw.FractionColumnWidth(.2),
-                      4: pw.FractionColumnWidth(.2),
-                      5: pw.FractionColumnWidth(.2)
-                    },
+                    columnWidths: {},
                   )
                 ]),
-                pw.Container(height: 10),
+                // pw.Header(level: 1, child: pw.Text('Laporan Detail Pesanan')),
+                // pw.Wrap(children: [
+                //   pw.Column(children: <pw.Widget>[
+                //     pw.Table(
+                //       children: list_pesanan,
+                //       border: pw.TableBorder.all(),
+                //       columnWidths: {
+                //         0: pw.FractionColumnWidth(.4),
+                //         1: pw.FractionColumnWidth(.2),
+                //         2: pw.FractionColumnWidth(.4),
+                //         // 3: pw.FractionColumnWidth(.1),
+                //         4: pw.FractionColumnWidth(.2)
+                //       },
+                //     )
+                //   ]),
+                // ]),
+                // pw.Container(height: 10),
+                // pw.Header(level: 1, child: pw.Text('Laporan Hutang')),
+                // pw.Wrap(children: [
+                //   pw.Column(children: <pw.Widget>[
+                //     pw.Table(
+                //       children: list_hutang,
+                //       border: pw.TableBorder.all(),
+                //       columnWidths: {
+                //         0: pw.FractionColumnWidth(.3),
+                //         1: pw.FractionColumnWidth(.2),
+                //         2: pw.FractionColumnWidth(.2),
+                //         3: pw.FractionColumnWidth(.2),
+                //         4: pw.FractionColumnWidth(.2),
+                //         5: pw.FractionColumnWidth(.2)
+                //       },
+                //     )
+                //   ]),
+                // ]),
+                // pw.Container(height: 10),
               ]));
+
       return doc.save();
     });
   }

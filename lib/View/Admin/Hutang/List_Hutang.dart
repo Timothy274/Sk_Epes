@@ -65,7 +65,7 @@ class _List_HutangState extends State<List_Hutang> {
       appBar: AppBar(
         title: const Text('List Hutang'),
       ),
-      body: Expanded(
+      body: Container(
           child: Column(
         children: [
           Expanded(

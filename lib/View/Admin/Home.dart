@@ -73,6 +73,7 @@ class _Home_AdminState extends State<Home_Admin> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomPadding : false,
       appBar: AppBar(
         title: const Text('Kios Epes Admin'),
       ),

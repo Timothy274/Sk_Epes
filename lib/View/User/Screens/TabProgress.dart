@@ -504,7 +504,7 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
                                 total: _filteredPengirimanSelesai[i].total,
                                 modal: _filteredPengirimanSelesai[i].modal,
                                 kembalian: _filteredPengirimanSelesai[i].kembalian,
-                                // id_user: _dataPengirimanSelesai[i].id_user,
+                                id_user: _dataPengirimanSelesai[i].id_user,
                               )));
                     },
                     child: new Card(

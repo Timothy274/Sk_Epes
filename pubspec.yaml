@@ -39,6 +39,8 @@ dependencies:
   url_launcher:
   whatsapp_unilink:
   esc_pos_utils_plus:
+  invoiceninja:
+  charts_flutter:
 
 dev_dependencies:
   flutter_test:

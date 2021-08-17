@@ -73,14 +73,19 @@ class _Tab_Home_AdminState extends State<Tab_Home_Admin> {
     final responseJson = json.decode(response.body);
     setState(() {
       for (Map Data in responseJson) {
-        _dataPengirimanSelesai.add(DataPesananSelesai.fromJson(Data));
+        if (DataPesananSelesai.fromJson(Data).tanggal == tahun) {
+          print(DataPesananSelesai.fromJson(Data).tanggal);
+          print(tahun);
+          _dataPengirimanSelesai_harian.add(DataPesananSelesai.fromJson(Data));
+        }
+        // _dataPengirimanSelesai.add(DataPesananSelesai.fromJson(Data));
       }
 
-      for (int a = 0; a < _dataPengirimanSelesai.length; a++) {
-        if (_dataPengirimanSelesai[a].tanggal.contains(tahun)) {
-          _dataPengirimanSelesai_harian.add(_dataPengirimanSelesai[a]);
-        }
-      }
+      // for (int a = 0; a < _dataPengirimanSelesai.length; a++) {
+      //   if (_dataPengirimanSelesai[a].tanggal.contains(tahun)) {
+      //     _dataPengirimanSelesai_harian.add(_dataPengirimanSelesai[a]);
+      //   }
+      // }
 
       for (int b = 0; b < _dataPengirimanSelesai_harian.length; b++) {
         pendapatan_bersih = pendapatan_bersih + _dataPengirimanSelesai_harian[b].total;
@@ -207,7 +212,7 @@ class _Tab_Home_AdminState extends State<Tab_Home_Admin> {
                               Container(
                                 alignment: Alignment.centerRight,
                                 child: Text(
-                                  _dataPengirimanSelesai.length.toString(),
+                                  _dataPengirimanSelesai_harian.length.toString(),
                                   style: TextStyle(fontSize: 50),
                                 ),
                               ),

@@ -7,6 +7,7 @@ import 'package:kios_epes/Model/DataPesanan.dart';
 import 'package:kios_epes/Model/DataPesananSelesai.dart';
 import 'package:kios_epes/View/User/Kasir/Kasir.dart';
 import 'package:http/http.dart' as http;
+import 'package:jiffy/jiffy.dart';
 
 class TabHome extends StatefulWidget {
   @override
@@ -22,6 +23,7 @@ class _TabHomeState extends State<TabHome> {
   List<DataPesananSelesai> _dataPengirimanSelesai = [];
   List<DataHutang> _dataHutang = [];
   List<DataPengiriman> _dataPengiriman = [];
+  var tahun = Jiffy().format("yyyy-MM-dd");
   void dispose() {
 // Clean up the controller when the widget is disposed.
     alamat.dispose();
@@ -98,7 +100,9 @@ class _TabHomeState extends State<TabHome> {
     final responseJson = json.decode(response.body);
     setState(() {
       for (Map Data in responseJson) {
-        _dataPengirimanSelesai.add(DataPesananSelesai.fromJson(Data));
+        if (DataPesananSelesai.fromJson(Data).tanggal == tahun) {
+          _dataPengirimanSelesai.add(DataPesananSelesai.fromJson(Data));
+        }
       }
     });
   }

@@ -65,7 +65,7 @@ class _List_FinishState extends State<List_Finish> {
       appBar: AppBar(
         title: const Text('List Pengiriman Selesai'),
       ),
-      body: Expanded(
+      body: Container(
           child: Column(
         children: [
           Expanded(

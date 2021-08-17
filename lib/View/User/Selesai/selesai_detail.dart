@@ -59,6 +59,7 @@ class _Selesai_DetailState extends State<Selesai_Detail> {
     final responseJson = json.decode(response.body);
 
     setState(() {
+      print(widget.id_user);
       for (Map Data in responseJson) {
         if (DataAkun.fromJson(Data).id_user == widget.id_user) {
           kasir = DataAkun.fromJson(Data).nama;

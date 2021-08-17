@@ -69,8 +69,7 @@ class _List_OnqueueState extends State<List_Onqueue> {
         title: const Text('List Antrian'),
       ),
       body: Container(
-          child: Expanded(
-              child: Column(
+          child: Column(
         children: [
           Expanded(
             flex: 2,
@@ -189,7 +188,7 @@ class _List_OnqueueState extends State<List_Onqueue> {
           //           )),
           //     ))
         ],
-      ))),
+      )),
     );
   }
 }

@@ -24,7 +24,7 @@ class _List_OnprogressState extends State<List_Onprogress> {
       appBar: AppBar(
         title: const Text('List Pengiriman'),
       ),
-      body: Expanded(
+      body: Container(
           child: Column(
         children: [
           Expanded(

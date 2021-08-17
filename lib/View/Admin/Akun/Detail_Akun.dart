@@ -84,6 +84,9 @@ class _Detail_AkunState extends State<Detail_Akun> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Detail Akun'),
+      ),
       body: Container(
         color: Color(0xffffff),
         child: Stack(

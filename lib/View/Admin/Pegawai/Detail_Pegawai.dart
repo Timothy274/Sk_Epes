@@ -22,11 +22,9 @@ class Detail_Pegawai extends StatefulWidget {
 class _Detail_PegawaiState extends State<Detail_Pegawai> {
   String _mySelection2;
   String date_sum;
-  int bonus_bulanan = 0;
-  int bonus_thr = 0;
   int bonus_barang = 0;
-  int bonus_pengiriman = 0;
-  int pendapatan = 0;
+  int bonus_absensi = 0;
+  List<String> pendapatan = [];
   int absensi = 0;
   String gaji = "0";
   List<DataPegawai> _dataPegawai = [];
@@ -83,10 +81,8 @@ class _Detail_PegawaiState extends State<Detail_Pegawai> {
         }
       }
       for (int a = 0; a < _dataPegawai.length; a++) {
-        bonus_thr = _dataPegawai[a].bonus_thr;
-        bonus_bulanan = _dataPegawai[a].bonus_bulanan;
         bonus_barang = _dataPegawai[a].bonus_barang;
-        bonus_pengiriman = _dataPegawai[a].bonus_pengiriman;
+        bonus_absensi = _dataPegawai[a].bonus_absensi;
       }
     });
   }
@@ -174,6 +170,7 @@ class _Detail_PegawaiState extends State<Detail_Pegawai> {
 
   void absen(selection2) {
     setState(() {
+      absensi = 0;
       tanggal_satuan.clear();
       for (int a = 0; a < _dataPengiriman.length; a++) {
         if (_dataPengiriman[a].tanggal.contains(date_sum)) {
@@ -189,11 +186,11 @@ class _Detail_PegawaiState extends State<Detail_Pegawai> {
 
   void order(selection2) {
     setState(() {
-      pendapatan = 0;
+      pendapatan.clear();
       for (int a = 0; a < _dataPengiriman.length; a++) {
         if (_dataPengiriman[a].tanggal.contains(date_sum)) {
           if (_dataPengiriman[a].id_pegawai == widget.id_pegawai) {
-            pendapatan = pendapatan + 1;
+            pendapatan.add(_dataPengiriman[a].id_pegawai);
           }
         }
       }
@@ -208,12 +205,11 @@ class _Detail_PegawaiState extends State<Detail_Pegawai> {
     setState(() {
       for (int a = 0; a < _dataLaporan.length; a++) {
         if (_dataLaporan[a].tanggal.contains(date_sum)) {
-          jumlah_kiriman = jumlah_kiriman + 1;
+          jumlah_kiriman = jumlah_kiriman + _dataLaporan[a].jumlah;
         }
       }
-      kalk = pendapatan * bonus_pengiriman;
-      kalkulasi = jumlah_kiriman * bonus_barang;
-      tokalk = kalk + kalkulasi;
+      kalk = jumlah_kiriman * bonus_barang;
+      tokalk = (absensi * bonus_absensi) + kalk;
       final oCcy = new NumberFormat.currency(locale: 'id');
       gaji = oCcy.format(tokalk);
     });
@@ -395,7 +391,7 @@ class _Detail_PegawaiState extends State<Detail_Pegawai> {
                                 Container(
                                   margin: const EdgeInsets.only(bottom: 20),
                                   child: Text(
-                                    pendapatan.toString(),
+                                    pendapatan.length.toString(),
                                     style: TextStyle(fontSize: 18),
                                   ),
                                 ),
@@ -553,48 +549,48 @@ class _Detail_PegawaiState extends State<Detail_Pegawai> {
                         alignment: Alignment(-1.0, -1.0),
                         child: Column(
                           children: [
-                            Column(
-                              children: <Widget>[
-                                Container(
-                                  padding: const EdgeInsets.only(top: 20, left: 40),
-                                  alignment: Alignment(-1.0, -1.0),
-                                  child: Text(
-                                    'Bonus Bulanan',
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.only(top: 20, bottom: 10),
-                                  padding: const EdgeInsets.only(left: 40),
-                                  alignment: Alignment(-1.0, -1.0),
-                                  child: Text(
-                                    oCcy.format(bonus_bulanan),
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                )
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Container(
-                                  padding: const EdgeInsets.only(top: 20, left: 40),
-                                  alignment: Alignment(-1.0, -1.0),
-                                  child: Text(
-                                    'Bonus THR',
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.only(top: 20, bottom: 10),
-                                  padding: const EdgeInsets.only(left: 40),
-                                  alignment: Alignment(-1.0, -1.0),
-                                  child: Text(
-                                    oCcy.format(bonus_thr),
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                )
-                              ],
-                            ),
+                            // Column(
+                            //   children: <Widget>[
+                            //     Container(
+                            //       padding: const EdgeInsets.only(top: 20, left: 40),
+                            //       alignment: Alignment(-1.0, -1.0),
+                            //       child: Text(
+                            //         'Bonus Bulanan',
+                            //         style: TextStyle(fontSize: 20),
+                            //       ),
+                            //     ),
+                            //     Container(
+                            //       margin: const EdgeInsets.only(top: 20, bottom: 10),
+                            //       padding: const EdgeInsets.only(left: 40),
+                            //       alignment: Alignment(-1.0, -1.0),
+                            //       child: Text(
+                            //         oCcy.format(bonus_bulanan),
+                            //         style: TextStyle(fontSize: 18),
+                            //       ),
+                            //     )
+                            //   ],
+                            // ),
+                            // Column(
+                            //   children: <Widget>[
+                            //     Container(
+                            //       padding: const EdgeInsets.only(top: 20, left: 40),
+                            //       alignment: Alignment(-1.0, -1.0),
+                            //       child: Text(
+                            //         'Bonus THR',
+                            //         style: TextStyle(fontSize: 20),
+                            //       ),
+                            //     ),
+                            //     Container(
+                            //       margin: const EdgeInsets.only(top: 20, bottom: 10),
+                            //       padding: const EdgeInsets.only(left: 40),
+                            //       alignment: Alignment(-1.0, -1.0),
+                            //       child: Text(
+                            //         oCcy.format(bonus_thr),
+                            //         style: TextStyle(fontSize: 18),
+                            //       ),
+                            //     )
+                            //   ],
+                            // ),
                             Column(
                               children: <Widget>[
                                 Container(
@@ -622,7 +618,7 @@ class _Detail_PegawaiState extends State<Detail_Pegawai> {
                                   padding: const EdgeInsets.only(top: 20, left: 40),
                                   alignment: Alignment(-1.0, -1.0),
                                   child: Text(
-                                    'Bonus Pengiriman',
+                                    'Bonus Absensi',
                                     style: TextStyle(fontSize: 20),
                                   ),
                                 ),
@@ -631,7 +627,7 @@ class _Detail_PegawaiState extends State<Detail_Pegawai> {
                                   padding: const EdgeInsets.only(left: 40),
                                   alignment: Alignment(-1.0, -1.0),
                                   child: Text(
-                                    oCcy.format(bonus_pengiriman),
+                                    oCcy.format(bonus_absensi),
                                     style: TextStyle(fontSize: 18),
                                   ),
                                 )
@@ -647,9 +643,7 @@ class _Detail_PegawaiState extends State<Detail_Pegawai> {
                                 builder: (BuildContext context) => new Bonus_Pegawai(
                                       id_pegawai: widget.id_pegawai,
                                       bonus_barang: bonus_barang,
-                                      bonus_bulanan: bonus_barang,
-                                      bonus_thr: bonus_thr,
-                                      bonus_pengiriman: bonus_pengiriman,
+                                      bonus_bulanan: bonus_absensi,
                                     )));
                           },
                           child: Text(

@@ -73,7 +73,7 @@ class _Tab_Akun_AdminState extends State<Tab_Akun_Admin> {
                   child: Container(
                     margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                     child: Text(
-                      'Pegawai',
+                      'Akun',
                       style: new TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                     ),
                   ),

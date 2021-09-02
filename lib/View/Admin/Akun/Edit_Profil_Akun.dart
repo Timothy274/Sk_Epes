@@ -103,84 +103,83 @@ class _Edit_Profil_AkunState extends State<Edit_Profil_Akun> {
       ),
       body: new Form(
           key: _formKey,
-          child: Center(
-            child: Expanded(
-                child: Column(
-              children: [
-                Expanded(
+          child: Column(
+            children: [
+              Expanded(
                   flex: 6,
-                  child: Container(
-                      margin: EdgeInsets.only(top: 20, left: 15, right: 15),
-                      child: new SingleChildScrollView(
-                        child:
-                            Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                          TextFormField(
-                            textCapitalization: TextCapitalization.words,
-                            controller: nama_lengkap,
-                            keyboardType: TextInputType.text,
-                            decoration: new InputDecoration(labelText: "Nama Lengkap"),
-                            validator: (val1) {
-                              if (val1 == null || val1.isEmpty) {
-                                return "Masukkan Nama Lengkap";
-                              }
-                              return null;
-                            },
-                          ),
-                          Divider(height: 50.0),
-                          TextFormField(
-                            textCapitalization: TextCapitalization.sentences,
-                            controller: nama,
-                            keyboardType: TextInputType.text,
-                            decoration: new InputDecoration(labelText: "Nama"),
-                            validator: (val2) {
-                              if (val2 == null || val2.isEmpty) {
-                                return "Masukkan Nama";
-                              }
-                              return null;
-                            },
-                          ),
-                          Divider(height: 50.0),
-                          TextFormField(
-                            controller: no_telp,
-                            keyboardType: TextInputType.phone,
-                            decoration: new InputDecoration(labelText: "Nomor Telepon"),
-                            maxLength: 14,
-                            validator: (val3) {
-                              if (val3 == null || val3.isEmpty) {
-                                return "Masukkan Nomor Telepon";
-                              }
-                              return null;
-                            },
-                          ),
-                        ]),
-                      )),
-                ),
-                Expanded(
-                    flex: 1,
+                  child: Center(
                     child: Container(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState.validate()) {
-                              konfirmasi_perubahan();
-                            }
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.check,
-                                color: Colors.white,
-                              ),
-                              Text(
-                                "Konfirmasi Perubahan",
-                                style: TextStyle(fontSize: 15),
-                              )
-                            ],
-                          )),
-                    ))
-              ],
-            )),
+                        margin: EdgeInsets.only(top: 20, left: 15, right: 15),
+                        child: new SingleChildScrollView(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                TextFormField(
+                                  textCapitalization: TextCapitalization.words,
+                                  controller: nama_lengkap,
+                                  keyboardType: TextInputType.text,
+                                  decoration: new InputDecoration(labelText: "Nama Lengkap"),
+                                  validator: (val1) {
+                                    if (val1 == null || val1.isEmpty) {
+                                      return "Masukkan Nama Lengkap";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                Divider(height: 50.0),
+                                TextFormField(
+                                  textCapitalization: TextCapitalization.sentences,
+                                  controller: nama,
+                                  keyboardType: TextInputType.text,
+                                  decoration: new InputDecoration(labelText: "Nama"),
+                                  validator: (val2) {
+                                    if (val2 == null || val2.isEmpty) {
+                                      return "Masukkan Nama";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                Divider(height: 50.0),
+                                TextFormField(
+                                  controller: no_telp,
+                                  keyboardType: TextInputType.phone,
+                                  decoration: new InputDecoration(labelText: "Nomor Telepon"),
+                                  maxLength: 14,
+                                  validator: (val3) {
+                                    if (val3 == null || val3.isEmpty) {
+                                      return "Masukkan Nomor Telepon";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ]),
+                        )),
+                  )),
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            konfirmasi_perubahan();
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.check,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              "Konfirmasi Perubahan",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        )),
+                  ))
+            ],
           )),
     );
   }

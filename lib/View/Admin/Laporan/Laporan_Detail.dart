@@ -646,15 +646,15 @@ class _Laporan_DetailState extends State<Laporan_Detail> {
                     )
                   ]),
                 ]),
-                pw.Container(height: 10),
-                pw.Header(level: 1, child: pw.Text('Laporan Hutang')),
-                pw.Wrap(children: [
-                  pw.Table(
-                    children: list_hutang,
-                    border: pw.TableBorder.all(),
-                    columnWidths: {},
-                  )
-                ]),
+                // pw.Container(height: 10),
+                // pw.Header(level: 1, child: pw.Text('Laporan Hutang')),
+                // pw.Wrap(children: [
+                //   pw.Table(
+                //     children: list_hutang,
+                //     border: pw.TableBorder.all(),
+                //     columnWidths: {},
+                //   )
+                // ]),
                 // pw.Header(level: 1, child: pw.Text('Laporan Detail Pesanan')),
                 // pw.Wrap(children: [
                 //   pw.Column(children: <pw.Widget>[

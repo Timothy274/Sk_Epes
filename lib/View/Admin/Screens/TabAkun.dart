@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kios_epes/Model/DataAkun.dart';
 import 'package:kios_epes/View/Admin/Akun/Detail_Akun.dart';
 import 'package:kios_epes/View/Admin/Akun/Tambah_Akun.dart';
@@ -17,10 +17,21 @@ class _Tab_Akun_AdminState extends State<Tab_Akun_Admin> {
   List<DataAkun> _dataAkun = [];
   List<DataAkun> _filtered = [];
   List<DataAkun> _null_filtered = [];
+  String id_user;
 
   void initState() {
     super.initState();
+    cekuser();
     getAkun();
+  }
+
+  Future cekuser() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (pref.getString("id_user") != null) {
+      setState(() {
+        id_user = pref.getString("id_user");
+      });
+    }
   }
 
   Future<List> getAkun() async {
@@ -28,7 +39,9 @@ class _Tab_Akun_AdminState extends State<Tab_Akun_Admin> {
     final responseJson = json.decode(response.body);
     setState(() {
       for (Map Data in responseJson) {
-        _dataAkun.add(DataAkun.fromJson(Data));
+        if (DataAkun.fromJson(Data).id_user != id_user) {
+          _dataAkun.add(DataAkun.fromJson(Data));
+        }
       }
       _filtered.addAll(_dataAkun);
       _null_filtered.addAll(_dataAkun);

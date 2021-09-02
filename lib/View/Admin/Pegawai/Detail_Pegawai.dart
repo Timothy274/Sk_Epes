@@ -643,7 +643,7 @@ class _Detail_PegawaiState extends State<Detail_Pegawai> {
                                 builder: (BuildContext context) => new Bonus_Pegawai(
                                       id_pegawai: widget.id_pegawai,
                                       bonus_barang: bonus_barang,
-                                      bonus_bulanan: bonus_absensi,
+                                      bonus_absensi: bonus_absensi,
                                     )));
                           },
                           child: Text(

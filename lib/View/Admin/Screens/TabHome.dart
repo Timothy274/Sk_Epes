@@ -218,35 +218,35 @@ class _Tab_Home_AdminState extends State<Tab_Home_Admin> {
                               ),
                             ],
                           )))),
-              Flexible(
-                  flex: 2,
-                  fit: FlexFit.tight,
-                  child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(new MaterialPageRoute(
-                            builder: (BuildContext context) => new List_Hutang()));
-                      },
-                      child: Container(
-                          margin: const EdgeInsets.all(20),
-                          height: 100,
-                          child: Column(
-                            children: [
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Hutang",
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  _dataHutang.length.toString(),
-                                  style: TextStyle(fontSize: 50),
-                                ),
-                              ),
-                            ],
-                          ))))
+              // Flexible(
+              //     flex: 2,
+              //     fit: FlexFit.tight,
+              //     child: GestureDetector(
+              //         onTap: () {
+              //           Navigator.of(context).push(new MaterialPageRoute(
+              //               builder: (BuildContext context) => new List_Hutang()));
+              //         },
+              //         child: Container(
+              //             margin: const EdgeInsets.all(20),
+              //             height: 100,
+              //             child: Column(
+              //               children: [
+              //                 Container(
+              //                   alignment: Alignment.centerLeft,
+              //                   child: Text(
+              //                     "Hutang",
+              //                     style: TextStyle(fontSize: 18),
+              //                   ),
+              //                 ),
+              //                 Container(
+              //                   alignment: Alignment.centerRight,
+              //                   child: Text(
+              //                     _dataHutang.length.toString(),
+              //                     style: TextStyle(fontSize: 50),
+              //                   ),
+              //                 ),
+              //               ],
+              //             ))))
             ],
           ),
           Row(
@@ -344,27 +344,27 @@ class _Tab_Home_AdminState extends State<Tab_Home_Admin> {
                               )
                             ],
                           ),
-                          Column(
-                            children: <Widget>[
-                              Container(
-                                padding: const EdgeInsets.only(top: 20, left: 40),
-                                alignment: Alignment(-1.0, -1.0),
-                                child: Text(
-                                  'Pendapatan Tertunda',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(top: 20, bottom: 10),
-                                padding: const EdgeInsets.only(left: 40),
-                                alignment: Alignment(-1.0, -1.0),
-                                child: Text(
-                                  oCcy.format(pendapatan_tertahan),
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              )
-                            ],
-                          ),
+                          // Column(
+                          //   children: <Widget>[
+                          //     Container(
+                          //       padding: const EdgeInsets.only(top: 20, left: 40),
+                          //       alignment: Alignment(-1.0, -1.0),
+                          //       child: Text(
+                          //         'Pendapatan Tertunda',
+                          //         style: TextStyle(fontSize: 20),
+                          //       ),
+                          //     ),
+                          //     Container(
+                          //       margin: const EdgeInsets.only(top: 20, bottom: 10),
+                          //       padding: const EdgeInsets.only(left: 40),
+                          //       alignment: Alignment(-1.0, -1.0),
+                          //       child: Text(
+                          //         oCcy.format(pendapatan_tertahan),
+                          //         style: TextStyle(fontSize: 18),
+                          //       ),
+                          //     )
+                          //   ],
+                          // ),
                         ],
                       )),
                   Container(height: 20)

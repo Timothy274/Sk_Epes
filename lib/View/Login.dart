@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
     String susername = "";
     String spassword = "";
     String id_user = "";
-    String akses;
+    String akses = "";
 
     for (int a = 0; a < _dataAkun.length; a++) {
       if (_dataAkun[a].username.toLowerCase() == _username.toLowerCase() &&
@@ -99,22 +99,26 @@ class _MyHomePageState extends State<MyHomePage> {
         spassword = _password;
         akses = _dataAkun[a].akses;
         id_user = _dataAkun[a].id_user;
-        if (akses == "Admin") {
-          SharedPreferences pref = await SharedPreferences.getInstance();
-          pref.setBool("isLogin", true);
-          pref.setString("id_user", id_user);
-          pref.setString("username", susername);
-          pref.setString("akses", akses);
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home_Admin()));
-        } else if (akses == "Non-Admin") {
-          SharedPreferences pref = await SharedPreferences.getInstance();
-          pref.setBool("isLogin", true);
-          pref.setString("id_user", id_user);
-          pref.setString("username", susername);
-          pref.setString("akses", akses);
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home_User()));
-        }
       }
+    }
+    if ((susername.isNotEmpty && spassword.isNotEmpty) || (susername != "" && spassword != "")) {
+      if (akses == "Admin") {
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.setBool("isLogin", true);
+        pref.setString("id_user", id_user);
+        pref.setString("username", susername);
+        pref.setString("akses", akses);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home_Admin()));
+      } else if (akses == "Non-Admin") {
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.setBool("isLogin", true);
+        pref.setString("id_user", id_user);
+        pref.setString("username", susername);
+        pref.setString("akses", akses);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home_User()));
+      }
+    } else {
+      _showdialogerror();
     }
   }
 
@@ -140,9 +144,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Column(
                       children: <Widget>[
                         Container(
-                            margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 70.0),
-                            child: FlutterLogo(
-                              size: 100,
+                            margin: const EdgeInsets.only(left: 50.0, right: 50.0, bottom: 70.0),
+                            child: Image(
+                              image: AssetImage('assets/LOGOG.jpg'),
                             )),
                         Container(
                           margin: const EdgeInsets.only(left: 20.0, right: 20.0),

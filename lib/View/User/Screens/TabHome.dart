@@ -203,30 +203,30 @@ class _TabHomeState extends State<TabHome> {
                           ),
                         ],
                       ))),
-              Flexible(
-                  flex: 2,
-                  fit: FlexFit.tight,
-                  child: Container(
-                      margin: const EdgeInsets.all(20),
-                      height: 100,
-                      child: Column(
-                        children: [
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Hutang",
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              _dataHutang.length.toString(),
-                              style: TextStyle(fontSize: 50),
-                            ),
-                          ),
-                        ],
-                      )))
+              // Flexible(
+              //     flex: 2,
+              //     fit: FlexFit.tight,
+              //     child: Container(
+              //         margin: const EdgeInsets.all(20),
+              //         height: 100,
+              //         child: Column(
+              //           children: [
+              //             Container(
+              //               alignment: Alignment.centerLeft,
+              //               child: Text(
+              //                 "Hutang",
+              //                 style: TextStyle(fontSize: 18),
+              //               ),
+              //             ),
+              //             Container(
+              //               alignment: Alignment.centerRight,
+              //               child: Text(
+              //                 _dataHutang.length.toString(),
+              //                 style: TextStyle(fontSize: 50),
+              //               ),
+              //             ),
+              //           ],
+              //         )))
             ],
           ),
           Center(

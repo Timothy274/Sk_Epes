@@ -96,70 +96,69 @@ class _Edit_Password_AkunState extends State<Edit_Password_Akun> {
       ),
       body: new Form(
           key: _formKey,
-          child: Center(
-            child: Expanded(
-                child: Column(
-              children: [
-                Expanded(
+          child: Column(
+            children: [
+              Expanded(
                   flex: 6,
-                  child: Container(
-                      margin: EdgeInsets.only(top: 20, left: 15, right: 15),
-                      child: new SingleChildScrollView(
-                        child:
-                            Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                          TextFormField(
-                            controller: password,
-                            decoration: new InputDecoration(labelText: "Password"),
-                            maxLength: 10,
-                            validator: (val1) {
-                              if (val1 == null || val1.isEmpty) {
-                                return "Masukkan Password";
-                              }
-                              return null;
-                            },
-                          ),
-                          Divider(height: 50.0),
-                          TextFormField(
-                            controller: password_konfirmasi,
-                            keyboardType: TextInputType.text,
-                            decoration: new InputDecoration(labelText: "Konfirmasi Password"),
-                            maxLength: 10,
-                            validator: (val2) {
-                              if (val2 == null || val2.isEmpty) {
-                                return "Masukkan Password";
-                              }
-                              return null;
-                            },
-                          ),
-                        ]),
-                      )),
-                ),
-                Expanded(
-                    flex: 1,
+                  child: Center(
                     child: Container(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState.validate()) {
-                              konfirmasi();
-                            }
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.check,
-                                color: Colors.white,
-                              ),
-                              Text(
-                                "Konfirmasi Perubahan",
-                                style: TextStyle(fontSize: 15),
-                              )
-                            ],
-                          )),
-                    ))
-              ],
-            )),
+                        margin: EdgeInsets.only(top: 20, left: 15, right: 15),
+                        child: new SingleChildScrollView(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                TextFormField(
+                                  controller: password,
+                                  decoration: new InputDecoration(labelText: "Password"),
+                                  maxLength: 10,
+                                  validator: (val1) {
+                                    if (val1 == null || val1.isEmpty) {
+                                      return "Masukkan Password";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                Divider(height: 50.0),
+                                TextFormField(
+                                  controller: password_konfirmasi,
+                                  keyboardType: TextInputType.text,
+                                  decoration: new InputDecoration(labelText: "Konfirmasi Password"),
+                                  maxLength: 10,
+                                  validator: (val2) {
+                                    if (val2 == null || val2.isEmpty) {
+                                      return "Masukkan Password";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ]),
+                        )),
+                  )),
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            konfirmasi();
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.check,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              "Konfirmasi Perubahan",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        )),
+                  ))
+            ],
           )),
     );
   }

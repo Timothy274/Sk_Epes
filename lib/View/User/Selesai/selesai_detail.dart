@@ -31,16 +31,42 @@ class _Selesai_DetailState extends State<Selesai_Detail> {
   final oCcy = new NumberFormat.currency(locale: 'id');
   List<DataPesananLengkap> _dataPesanan = [];
   String kasir = "";
+  String nama_kasir = "";
+  String alamat = "";
+  String tanggal_pengiriman = "";
+  int modal = 0;
+  int total = 0;
+  int kembalian = 0;
   TextEditingController catatan = TextEditingController();
 
   void initState() {
     super.initState();
     getPengirimanDetail();
+    getPesananDetail();
     getDataUser();
     catatan = new TextEditingController(text: widget.catatan);
   }
 
   Future<List> getPengirimanDetail() async {
+    final response = await http.get(Uri.parse(
+        "http://timothy.buzz/kios_epes/Selesai/get_pengiriman_join_pengiriman_detail_only_finish.php"));
+    final responseJson = json.decode(response.body);
+
+    setState(() {
+      for (Map Data in responseJson) {
+        if (DataPengiriman.fromJson(Data).id_pemesanan == widget.id_pemesanan) {
+          modal = DataPengiriman.fromJson(Data).modal;
+          kembalian = DataPengiriman.fromJson(Data).kembalian;
+          total = DataPengiriman.fromJson(Data).total;
+          kasir = DataPengiriman.fromJson(Data).id_user;
+          tanggal_pengiriman = DataPengiriman.fromJson(Data).tanggal;
+        }
+      }
+      print(kasir);
+    });
+  }
+
+  Future<List> getPesananDetail() async {
     final response = await http.get(
         Uri.parse("http://timothy.buzz/kios_epes/Pesanan/get_pesanan_join_pesanan_detail.php"));
     final responseJson = json.decode(response.body);
@@ -48,6 +74,8 @@ class _Selesai_DetailState extends State<Selesai_Detail> {
     setState(() {
       for (Map Data in responseJson) {
         if (DataPesananLengkap.fromJson(Data).id_pemesanan == widget.id_pemesanan) {
+          alamat = DataPesananLengkap.fromJson(Data).alamat;
+          catatan = new TextEditingController(text: DataPesananLengkap.fromJson(Data).catatan);
           _dataPesanan.add(DataPesananLengkap.fromJson(Data));
         }
       }
@@ -59,10 +87,10 @@ class _Selesai_DetailState extends State<Selesai_Detail> {
     final responseJson = json.decode(response.body);
 
     setState(() {
-      print(widget.id_user);
+      print(widget.id_pemesanan);
       for (Map Data in responseJson) {
-        if (DataAkun.fromJson(Data).id_user == widget.id_user) {
-          kasir = DataAkun.fromJson(Data).nama;
+        if (DataAkun.fromJson(Data).id_user == kasir) {
+          nama_kasir = DataAkun.fromJson(Data).nama;
         }
       }
     });
@@ -100,7 +128,7 @@ class _Selesai_DetailState extends State<Selesai_Detail> {
                           style: new TextStyle(fontSize: 25.0),
                         ),
                         Text(
-                          widget.alamat,
+                          alamat,
                           style: new TextStyle(fontSize: 25.0),
                         ),
                       ]),
@@ -114,7 +142,7 @@ class _Selesai_DetailState extends State<Selesai_Detail> {
                           style: new TextStyle(fontSize: 18.0),
                         ),
                         Text(
-                          kasir,
+                          nama_kasir,
                           style: new TextStyle(fontSize: 18.0),
                         ),
                       ]),
@@ -128,7 +156,7 @@ class _Selesai_DetailState extends State<Selesai_Detail> {
                           style: new TextStyle(fontSize: 18.0),
                         ),
                         Text(
-                          widget.tanggal,
+                          tanggal_pengiriman,
                           style: new TextStyle(fontSize: 18.0),
                         ),
                       ]),
@@ -142,7 +170,7 @@ class _Selesai_DetailState extends State<Selesai_Detail> {
                           style: new TextStyle(fontSize: 18.0),
                         ),
                         Text(
-                          oCcy.format(widget.total),
+                          oCcy.format(total),
                           style: new TextStyle(fontSize: 18.0),
                         ),
                       ]),
@@ -156,7 +184,7 @@ class _Selesai_DetailState extends State<Selesai_Detail> {
                           style: new TextStyle(fontSize: 18.0),
                         ),
                         Text(
-                          oCcy.format(widget.kembalian),
+                          oCcy.format(kembalian),
                           style: new TextStyle(fontSize: 18.0),
                         ),
                       ]),
@@ -170,7 +198,7 @@ class _Selesai_DetailState extends State<Selesai_Detail> {
                           style: new TextStyle(fontSize: 18.0),
                         ),
                         Text(
-                          oCcy.format(widget.modal),
+                          oCcy.format(modal),
                           style: new TextStyle(fontSize: 18.0),
                         ),
                       ]),

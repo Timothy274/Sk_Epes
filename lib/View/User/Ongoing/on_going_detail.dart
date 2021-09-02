@@ -721,15 +721,15 @@ class _on_going_detailState extends State<on_going_detail> {
                             child: new Text("Hapus"),
                           ),
                         ),
-                        new Container(
-                          margin: const EdgeInsets.all(10.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              confirm_hutang();
-                            },
-                            child: new Text("Hutang"),
-                          ),
-                        ),
+                        // new Container(
+                        //   margin: const EdgeInsets.all(10.0),
+                        //   child: ElevatedButton(
+                        //     onPressed: () {
+                        //       confirm_hutang();
+                        //     },
+                        //     child: new Text("Hutang"),
+                        //   ),
+                        // ),
                         new Container(
                           margin: const EdgeInsets.all(10.0),
                           child: ElevatedButton(

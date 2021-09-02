@@ -106,6 +106,8 @@ class _Manajemen_PasswordState extends State<Manajemen_Password> {
                             Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                           TextFormField(
                             controller: password,
+                            obscureText: true,
+                            keyboardType: TextInputType.visiblePassword,
                             decoration: new InputDecoration(labelText: "Password"),
                             maxLength: 10,
                             validator: (val1) {
@@ -118,7 +120,8 @@ class _Manajemen_PasswordState extends State<Manajemen_Password> {
                           Divider(height: 50.0),
                           TextFormField(
                             controller: password_konfirmasi,
-                            keyboardType: TextInputType.text,
+                            obscureText: true,
+                            keyboardType: TextInputType.visiblePassword,
                             decoration: new InputDecoration(labelText: "Konfirmasi Password"),
                             maxLength: 10,
                             validator: (val2) {

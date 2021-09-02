@@ -41,78 +41,77 @@ class _Edit_Akun_AksesState extends State<Edit_Akun_Akses> {
       ),
       body: new Form(
           key: _formKey,
-          child: Center(
-            child: Expanded(
-                child: Column(
-              children: [
-                Expanded(
+          child: Column(
+            children: [
+              Expanded(
                   flex: 6,
-                  child: Container(
-                      margin: EdgeInsets.only(top: 20, left: 15, right: 15),
-                      child: new SingleChildScrollView(
-                        child:
-                            Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                          TextFormField(
-                            controller: akses_lama,
-                            decoration: new InputDecoration(labelText: "Akses"),
-                            enabled: false,
-                          ),
-                          Divider(height: 50.0),
-                          Container(
-                            width: screenWidth,
-                            // margin:
-                            //     const EdgeInsets.only(top: 10, bottom: 20, left: 40.0, right: 40.0),
-                            child: DropdownButtonFormField<String>(
-                              items: akses.map((item) {
-                                return DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(item),
-                                );
-                              }).toList(),
-                              onChanged: (String newValueSelected) {
-                                setState(() {
-                                  this._mySelection2 = newValueSelected;
-                                });
-                              },
-                              hint: Text('Pilih Akses'),
-                              value: _mySelection2,
-                              validator: (val6) {
-                                if (val6 == null || val6.isEmpty) {
-                                  return "Masukkan Akses";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                        ]),
-                      )),
-                ),
-                Expanded(
-                    flex: 1,
+                  child: Center(
                     child: Container(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState.validate()) {
-                              push_db();
-                            }
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.check,
-                                color: Colors.white,
-                              ),
-                              Text(
-                                "Konfirmasi Perubahan",
-                                style: TextStyle(fontSize: 15),
-                              )
-                            ],
-                          )),
-                    ))
-              ],
-            )),
+                        margin: EdgeInsets.only(top: 20, left: 15, right: 15),
+                        child: new SingleChildScrollView(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                TextFormField(
+                                  controller: akses_lama,
+                                  decoration: new InputDecoration(labelText: "Akses"),
+                                  enabled: false,
+                                ),
+                                Divider(height: 50.0),
+                                Container(
+                                  width: screenWidth,
+                                  // margin:
+                                  //     const EdgeInsets.only(top: 10, bottom: 20, left: 40.0, right: 40.0),
+                                  child: DropdownButtonFormField<String>(
+                                    items: akses.map((item) {
+                                      return DropdownMenuItem<String>(
+                                        value: item,
+                                        child: Text(item),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String newValueSelected) {
+                                      setState(() {
+                                        this._mySelection2 = newValueSelected;
+                                      });
+                                    },
+                                    hint: Text('Pilih Akses'),
+                                    value: _mySelection2,
+                                    validator: (val6) {
+                                      if (val6 == null || val6.isEmpty) {
+                                        return "Masukkan Akses";
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ]),
+                        )),
+                  )),
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            push_db();
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.check,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              "Konfirmasi Perubahan",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        )),
+                  ))
+            ],
           )),
     );
   }

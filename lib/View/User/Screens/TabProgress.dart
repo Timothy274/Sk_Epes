@@ -3,13 +3,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kios_epes/Model/DataHutang.dart';
+import 'package:kios_epes/Model/DataPengiriman.dart';
 import 'package:kios_epes/Model/DataPesanan.dart';
+import 'package:kios_epes/Model/DataPesananDetail.dart';
 import 'package:kios_epes/Model/DataPesananSelesai.dart';
 import 'package:kios_epes/View/User/Hutang/hutang_detail.dart';
 import 'package:kios_epes/View/User/Ongoing/on_going_detail.dart';
 import 'package:kios_epes/View/User/Progress/on_queue_detail.dart';
 import 'package:kios_epes/View/User/Progress/on_queue_kirim.dart';
 import 'package:kios_epes/View/User/Selesai/selesai_detail.dart';
+import 'package:jiffy/jiffy.dart';
 
 class TabProgress extends StatefulWidget {
   const TabProgress({Key key}) : super(key: key);
@@ -27,15 +30,16 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
   List<DataPesanan> _dataPesanan = [];
   List<DataPesananSelesai> _filteredPengirimanSelesai = [];
   List<DataPesananSelesai> _null_filteredPengirimanSelesai = [];
-  List<DataPesananSelesai> _dataPengirimanSelesai = [];
+  List<DataPesananSelesai> _dataPesananSelesai = [];
+  List<DataPengiriman> _dataPengirimanSelesai = [];
   List<DataHutang> _filteredHutang = [];
   List<DataHutang> _null_filteredHutang = [];
   List<DataHutang> _dataHutang = [];
   List<DataHutang> _dataHutang_Satuan = [];
-
   TextEditingController search_pesanan = new TextEditingController();
   TextEditingController search_pengiriman_selesai = new TextEditingController();
   TextEditingController search_hutang = new TextEditingController();
+  var tahun = Jiffy().format("yyyy-MM-dd");
 
   Future<List> getData() async {
     final response =
@@ -70,15 +74,29 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
   // }
 
   Future<List> getdataPengirimanSelesai() async {
-    final response = await http.get(Uri.parse(
-        "http://timothy.buzz/kios_epes/Selesai/get_pesanan_join_pengiriman_only_finish.php"));
-    final responseJson = json.decode(response.body);
+    final responseA = await http.get(Uri.parse(
+        "http://timothy.buzz/kios_epes/Selesai/get_pengiriman_join_pengiriman_detail_only_finish.php"));
+    final responseB = await http.get(
+        Uri.parse("http://timothy.buzz/kios_epes/Pesanan/get_pesanan_join_pesanan_detail.php"));
+    final responseJsonA = json.decode(responseA.body);
+    final responseJsonB = json.decode(responseB.body);
     setState(() {
-      for (Map Data in responseJson) {
-        _dataPengirimanSelesai.add(DataPesananSelesai.fromJson(Data));
+      for (Map Data in responseJsonA) {
+        if (DataPengiriman.fromJson(Data).tanggal == tahun) {
+          _dataPengirimanSelesai.add(DataPengiriman.fromJson(Data));
+        }
       }
-      _filteredPengirimanSelesai.addAll(_dataPengirimanSelesai);
-      _null_filteredPengirimanSelesai.addAll(_dataPengirimanSelesai);
+
+      for (Map Data in responseJsonB) {
+        for (int a = 0; a < _dataPengirimanSelesai.length; a++) {
+          if (_dataPengirimanSelesai[a].id_pemesanan ==
+              DataPesananDetail.fromJson(Data).id_pemesanan) {
+            _dataPesananSelesai.add(DataPesananSelesai.fromJson(Data));
+          }
+        }
+      }
+      _filteredPengirimanSelesai.addAll(_dataPesananSelesai);
+      _null_filteredPengirimanSelesai.addAll(_dataPesananSelesai);
     });
   }
 
@@ -101,7 +119,7 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
     getdataPengirimanSelesai();
     getdataPesananHutang();
     // getdataPengirimanList();
-    _nestedTabController = new TabController(length: 4, vsync: this);
+    _nestedTabController = new TabController(length: 3, vsync: this);
   }
 
   void _alterfilterpesanan(String query) {
@@ -230,9 +248,9 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
             Tab(
               text: "Pesanan Selesai",
             ),
-            Tab(
-              text: "Hutang",
-            ),
+            // Tab(
+            //   text: "Hutang",
+            // ),
           ],
         ),
         Container(
@@ -244,7 +262,7 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
               _inheritedqueue(),
               _inheritongoing(),
               _inheritedselesai(),
-              _inheritedhutang(),
+              // _inheritedhutang(),
             ],
           ),
         )
@@ -253,8 +271,7 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
   }
 
   Widget _inheritedqueue() {
-    return Expanded(
-        child: Column(
+    return Column(
       children: [
         Expanded(
           child: Container(
@@ -372,12 +389,11 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
                   )),
             ))
       ],
-    ));
+    );
   }
 
   Widget _inheritongoing() {
-    return Expanded(
-        child: Column(
+    return Column(
       children: [
         Expanded(
             flex: 8,
@@ -453,12 +469,11 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
               ),
             )),
       ],
-    ));
+    );
   }
 
   Widget _inheritedselesai() {
-    return Expanded(
-        child: Column(
+    return Column(
       children: [
         Expanded(
           child: Container(
@@ -497,14 +512,14 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
                       Navigator.of(context).push(new MaterialPageRoute(
                           builder: (BuildContext context) => new Selesai_Detail(
                                 id_pemesanan: _filteredPengirimanSelesai[i].id_pemesanan,
-                                alamat: _filteredPengirimanSelesai[i].alamat,
-                                tanggal: _filteredPengirimanSelesai[i].tanggal,
-                                catatan: _filteredPengirimanSelesai[i].status,
+                                // alamat: _filteredPengirimanSelesai[i].alamat,
+                                // tanggal: _filteredPengirimanSelesai[i].tanggal,
+                                // catatan: _filteredPengirimanSelesai[i].status,
                                 id_pengiriman: _filteredPengirimanSelesai[i].id_pengiriman,
-                                total: _filteredPengirimanSelesai[i].total,
-                                modal: _filteredPengirimanSelesai[i].modal,
-                                kembalian: _filteredPengirimanSelesai[i].kembalian,
-                                id_user: _dataPengirimanSelesai[i].id_user,
+                                // total: _filteredPengirimanSelesai[i].total,
+                                // modal: _filteredPengirimanSelesai[i].modal,
+                                // kembalian: _filteredPengirimanSelesai[i].kembalian,
+                                // id_user: _dataPengirimanSelesai[i].id_user,
                               )));
                     },
                     child: new Card(
@@ -532,86 +547,86 @@ class _TabProgressState extends State<TabProgress> with TickerProviderStateMixin
               },
             ))),
       ],
-    ));
+    );
   }
 
-  Widget _inheritedhutang() {
-    return Expanded(
-        child: Column(
-      children: [
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
-            child: TextField(
-              textAlign: TextAlign.left,
-              controller: search_hutang,
-              textCapitalization: TextCapitalization.words,
-              onChanged: (value) {
-                _alterHutang(value);
-              },
-              decoration: InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  filled: true,
-                  fillColor: Colors.white,
-                  // prefixIcon: Icon(
-                  //   Icons.qr_code_scanner,
-                  //   color: Colors.black,
-                  // ),
-                  suffixIcon: Icon(Icons.search, color: Colors.black),
-                  hintStyle: new TextStyle(color: Colors.black38),
-                  hintText: "Search"),
-            ),
-          ),
-        ),
-        Expanded(
-            flex: 8,
-            child: Container(
-                child: ListView.builder(
-              itemCount: _filteredHutang.length,
-              itemBuilder: (context, i) {
-                return new Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: new GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(new MaterialPageRoute(
-                          builder: (BuildContext context) => new hutang_detail(
-                                id_pemesanan: _filteredHutang[i].id_pemesanan,
-                                id_hutang: _filteredHutang[i].id_hutang,
-                                id_pengiriman: _filteredHutang[i].id_pengiriman,
-                                nama_pegawai: _filteredHutang[i].nama_pegawai,
-                                alamat: _filteredHutang[i].alamat,
-                                tanggal_pemesanan: _filteredHutang[i].tanggal_pemesanan,
-                                tanggal_pengiriman: _filteredHutang[i].tanggal_pengiriman,
-                                waktu_pengiriman: _filteredHutang[i].waktu_pengiriman,
-                                catatan: _filteredHutang[i].catatan,
-                                total: _filteredHutang[i].total,
-                              )));
-                    },
-                    child: new Card(
-                        child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                            child: new ListTile(
-                              title: new Text(
-                                _filteredHutang[i].alamat,
-                                style: TextStyle(fontSize: 25.0, color: Colors.black),
-                              ),
-                              // subtitle: new Text(
-                              //   "Pengantar : ${snapshot.data[i]['nama_pegawai']}",
-                              //   style: TextStyle(fontSize: 20.0, color: Colors.black),
-                              // ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )),
-                  ),
-                );
-              },
-            ))),
-      ],
-    ));
-  }
+  // Widget _inheritedhutang() {
+  //   return Expanded(
+  //       child: Column(
+  //     children: [
+  //       Expanded(
+  //         child: Container(
+  //           margin: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+  //           child: TextField(
+  //             textAlign: TextAlign.left,
+  //             controller: search_hutang,
+  //             textCapitalization: TextCapitalization.words,
+  //             onChanged: (value) {
+  //               _alterHutang(value);
+  //             },
+  //             decoration: InputDecoration(
+  //                 contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+  //                 filled: true,
+  //                 fillColor: Colors.white,
+  //                 // prefixIcon: Icon(
+  //                 //   Icons.qr_code_scanner,
+  //                 //   color: Colors.black,
+  //                 // ),
+  //                 suffixIcon: Icon(Icons.search, color: Colors.black),
+  //                 hintStyle: new TextStyle(color: Colors.black38),
+  //                 hintText: "Search"),
+  //           ),
+  //         ),
+  //       ),
+  //       Expanded(
+  //           flex: 8,
+  //           child: Container(
+  //               child: ListView.builder(
+  //             itemCount: _filteredHutang.length,
+  //             itemBuilder: (context, i) {
+  //               return new Container(
+  //                 padding: const EdgeInsets.all(10.0),
+  //                 child: new GestureDetector(
+  //                   onTap: () {
+  //                     Navigator.of(context).push(new MaterialPageRoute(
+  //                         builder: (BuildContext context) => new hutang_detail(
+  //                               id_pemesanan: _filteredHutang[i].id_pemesanan,
+  //                               id_hutang: _filteredHutang[i].id_hutang,
+  //                               id_pengiriman: _filteredHutang[i].id_pengiriman,
+  //                               nama_pegawai: _filteredHutang[i].nama_pegawai,
+  //                               alamat: _filteredHutang[i].alamat,
+  //                               tanggal_pemesanan: _filteredHutang[i].tanggal_pemesanan,
+  //                               tanggal_pengiriman: _filteredHutang[i].tanggal_pengiriman,
+  //                               waktu_pengiriman: _filteredHutang[i].waktu_pengiriman,
+  //                               catatan: _filteredHutang[i].catatan,
+  //                               total: _filteredHutang[i].total,
+  //                             )));
+  //                   },
+  //                   child: new Card(
+  //                       child: Container(
+  //                     child: Row(
+  //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                       children: <Widget>[
+  //                         Expanded(
+  //                           child: new ListTile(
+  //                             title: new Text(
+  //                               _filteredHutang[i].alamat,
+  //                               style: TextStyle(fontSize: 25.0, color: Colors.black),
+  //                             ),
+  //                             // subtitle: new Text(
+  //                             //   "Pengantar : ${snapshot.data[i]['nama_pegawai']}",
+  //                             //   style: TextStyle(fontSize: 20.0, color: Colors.black),
+  //                             // ),
+  //                           ),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   )),
+  //                 ),
+  //               );
+  //             },
+  //           ))),
+  //     ],
+  //   ));
+  // }
 }

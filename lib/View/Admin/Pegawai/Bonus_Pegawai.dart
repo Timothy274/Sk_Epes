@@ -4,15 +4,13 @@ import 'package:kios_epes/View/Admin/Home.dart';
 
 class Bonus_Pegawai extends StatefulWidget {
   String id_pegawai;
-  int bonus_thr, bonus_bulanan, bonus_barang, bonus_pengiriman;
-  Bonus_Pegawai(
-      {Key key,
-      this.id_pegawai,
-      this.bonus_barang,
-      this.bonus_pengiriman,
-      this.bonus_bulanan,
-      this.bonus_thr})
-      : super(key: key);
+  int bonus_absensi, bonus_barang;
+  Bonus_Pegawai({
+    Key key,
+    this.id_pegawai,
+    this.bonus_barang,
+    this.bonus_absensi,
+  }) : super(key: key);
 
   @override
   _Bonus_PegawaiState createState() => _Bonus_PegawaiState();
@@ -20,33 +18,28 @@ class Bonus_Pegawai extends StatefulWidget {
 
 class _Bonus_PegawaiState extends State<Bonus_Pegawai> {
   final _formKey = new GlobalKey<FormState>();
-  TextEditingController bonus_thr = TextEditingController();
-  TextEditingController bonus_bulanan = TextEditingController();
+  TextEditingController bonus_absensi = TextEditingController();
   TextEditingController bonus_barang = TextEditingController();
-  TextEditingController bonus_pengiriman = TextEditingController();
 
   void initState() {
     super.initState();
-    bonus_thr = new TextEditingController(text: widget.bonus_thr.toString());
-    bonus_bulanan = new TextEditingController(text: widget.bonus_bulanan.toString());
+
+    bonus_absensi = new TextEditingController(text: widget.bonus_absensi.toString());
     bonus_barang = new TextEditingController(text: widget.bonus_barang.toString());
-    bonus_pengiriman = new TextEditingController(text: widget.bonus_pengiriman.toString());
   }
 
   void push_db() {
-    if (bonus_thr.text == "") {
-      bonus_thr.text = "0";
+    if (bonus_absensi.text == "") {
+      bonus_absensi.text = "0";
     }
-    if (bonus_bulanan.text == "") {
-      bonus_bulanan.text = "0";
+    if (bonus_barang.text == "") {
+      bonus_barang.text = "0";
     }
     var url = (Uri.parse("https://timothy.buzz/kios_epes/Pegawai/update_pegawai_bonus.php"));
     http.post(url, body: {
       "id_pegawai": widget.id_pegawai,
-      "bonus_thr": bonus_thr.text,
-      "bonus_bulanan": bonus_bulanan.text,
+      "bonus_absensi": bonus_absensi.text,
       "bonus_barang": bonus_barang.text,
-      "bonus_pengiriman": bonus_pengiriman.text,
     });
   }
 
@@ -71,18 +64,6 @@ class _Bonus_PegawaiState extends State<Bonus_Pegawai> {
                         child:
                             Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
                           TextFormField(
-                            controller: bonus_thr,
-                            keyboardType: TextInputType.number,
-                            decoration: new InputDecoration(labelText: "Bonus THR"),
-                          ),
-                          Divider(height: 50.0),
-                          TextFormField(
-                            controller: bonus_bulanan,
-                            keyboardType: TextInputType.number,
-                            decoration: new InputDecoration(labelText: "Bonus Bulanan"),
-                          ),
-                          Divider(height: 50.0),
-                          TextFormField(
                             controller: bonus_barang,
                             keyboardType: TextInputType.number,
                             decoration: new InputDecoration(labelText: "Bonus Barang"),
@@ -95,12 +76,12 @@ class _Bonus_PegawaiState extends State<Bonus_Pegawai> {
                           ),
                           Divider(height: 50.0),
                           TextFormField(
-                            controller: bonus_pengiriman,
+                            controller: bonus_absensi,
                             keyboardType: TextInputType.number,
-                            decoration: new InputDecoration(labelText: "Bonus Pengiriman"),
+                            decoration: new InputDecoration(labelText: "Bonus Absensi"),
                             validator: (val4) {
                               if (val4 == null || val4.isEmpty) {
-                                return "Masukkan Bonus Pengiriman";
+                                return "Masukkan Bonus Absensi";
                               }
                               return null;
                             },

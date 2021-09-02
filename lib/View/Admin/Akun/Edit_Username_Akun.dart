@@ -42,64 +42,63 @@ class _Edit_Username_AkunState extends State<Edit_Username_Akun> {
       ),
       body: new Form(
           key: _formKey,
-          child: Center(
-            child: Expanded(
-                child: Column(
-              children: [
-                Expanded(
+          child: Column(
+            children: [
+              Expanded(
                   flex: 6,
-                  child: Container(
-                      margin: EdgeInsets.only(top: 20, left: 15, right: 15),
-                      child: new SingleChildScrollView(
-                        child:
-                            Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-                          TextFormField(
-                            controller: username_lama,
-                            enabled: false,
-                            decoration: new InputDecoration(labelText: "Username Lama"),
-                          ),
-                          Divider(height: 50.0),
-                          TextFormField(
-                            controller: username_baru,
-                            keyboardType: TextInputType.text,
-                            decoration: new InputDecoration(labelText: "Username Baru"),
-                            maxLength: 15,
-                            validator: (val1) {
-                              if (val1 == null || val1.isEmpty) {
-                                return "Masukkan Username";
-                              }
-                              return null;
-                            },
-                          ),
-                        ]),
-                      )),
-                ),
-                Expanded(
-                    flex: 1,
+                  child: Center(
                     child: Container(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState.validate()) {
-                              push_db();
-                            }
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.check,
-                                color: Colors.white,
-                              ),
-                              Text(
-                                "Konfirmasi Perubahan",
-                                style: TextStyle(fontSize: 15),
-                              )
-                            ],
-                          )),
-                    ))
-              ],
-            )),
+                        margin: EdgeInsets.only(top: 20, left: 15, right: 15),
+                        child: new SingleChildScrollView(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                TextFormField(
+                                  controller: username_lama,
+                                  enabled: false,
+                                  decoration: new InputDecoration(labelText: "Username Lama"),
+                                ),
+                                Divider(height: 50.0),
+                                TextFormField(
+                                  controller: username_baru,
+                                  keyboardType: TextInputType.text,
+                                  decoration: new InputDecoration(labelText: "Username Baru"),
+                                  maxLength: 15,
+                                  validator: (val1) {
+                                    if (val1 == null || val1.isEmpty) {
+                                      return "Masukkan Username";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ]),
+                        )),
+                  )),
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            push_db();
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.check,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              "Konfirmasi Perubahan",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        )),
+                  ))
+            ],
           )),
     );
   }
